@@ -1,0 +1,933 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Titillium+Web:300,300i,400,400i,600,600i,700,700i&display=swap');/*imported Fonts*/
+/**/
+/*font-family: 'Titillium Web', sans-serif;*/
+
+h1,h2,h3,h4,p,label,a
+{
+	font-family: 'Roboto', sans-serif;/*applying font roboto*/
+}
+.landingPageErrMsgs /*errmsgs to display to the user code*/
+{
+	font-size: 13px;
+	position: absolute;
+}
+
+
+#landingImg /*landing img index page code*/
+/*https://css-tricks.com/almanac/properties/o/object-fit/*/
+{
+	width: 100%;
+	object-fit: cover;
+	height: 500px;
+}
+#mainTitle /*Main Page "DCB BOOKINGS" title code*/
+{
+	font-size: 50px;
+	padding-top: 0.5%;
+	font-weight:600;
+}
+.box /*code for the box with the text and the button ontop of the landing img*/
+{
+	position: relative;
+	display: inline-block; /* Make the width of box same as image */
+}
+.box .text /*code for the box with the text and the button ontop of the landing img*/
+/*https://css-tricks.com/design-considerations-text-images/*/
+{
+	position: absolute;
+	z-index: 1;
+	margin: 0 auto;
+	left: 0;
+	right: 0;        
+	text-align: center;
+	top: 37%; /* Adjust this value to move the positioned div up and down */
+	background:rgba(255,254,254,0.9);
+	color:black;
+	width: 40%; /* Set the width of the positioned div */
+	border-radius: 5px;
+	min-width: 420px;
+}
+#LandingImgText /*code for the text in side the box on top of the img*/
+{
+	font-style: italic;
+	font-weight: 300;
+}
+
+.landingBtn /*code for the buttom on the landing page, the big "make a booking"*/
+{ 
+	display: inline-block;
+	border-radius: 4px;
+	background-color:#555555;
+	border: none;
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 28px;
+	padding: 20px;
+	width: 400px;
+	transition: all 0.5s;
+	cursor: pointer;
+	margin-bottom: 5%;
+}
+
+.landingBtn span /*code for the buttom on the landing page, the big "make a booking"*/
+{
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+}
+
+.landingBtn span:after /*code for the buttom on the landing page, the big "make a booking"*/
+{
+	content: '\00bb';
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -20px;
+	transition: 0.5s;
+}
+
+.landingBtn:hover span /*code for the buttom on the landing page, the big "make a booking"*/
+{
+	padding-right: 25px;
+}
+
+.landingBtn:hover span:after /*code for the buttom on the landing page, the big "make a booking"*/
+{
+	opacity: 1;
+	right: 0;
+}
+
+/* The Modal (background) */
+.Modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 5; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* The Modal Close Button */
+.Modalclose {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+/* signup Modal The Close Button */
+.Modalclose:hover,
+.Modalclose:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+}
+.modal-body {padding: 2px 16px;}
+.modal-footer {
+  padding: 2px 16px;
+}
+
+/* signup Modal Content */
+.signInModal-content 
+{
+  	background-color:rgba(233,233,233,1.00);
+	margin: auto;
+	padding: 20px;
+	border-radius: 25px;
+	border: 3px solid black;
+	width: 300px;
+	height: 425px;
+}
+
+/*starter modal content*/
+.starterModal-content 
+{
+  	background-color:rgba(233,233,233,1.00);
+	margin:auto;
+	padding: 20px;
+	border-radius: 25px;
+	width: 500px;
+}
+
+/*add resource modal content*/
+.addResourceModal-content
+{
+	background-color:rgba(233,233,233,1.00);
+	margin: auto;
+	padding: 20px;
+	border-radius: 25px;
+	overflow-y: scroll;
+	position: relative;
+}
+.width700
+{
+	width: 700px;
+	height: 520px;
+}
+.width80Percent
+{
+	width:80%;
+	min-width: 900px;
+}
+.widthReviewInfo
+{
+	width:80%;
+	height: 520px;
+	min-width: 900px;
+}
+
+.starterWelcomeMsg
+{
+	font-size: 20px;
+}
+
+/*starter modal Error Message*/
+.StarterPageErrMsgs
+{
+	font-size: 12px;
+	position: absolute;
+	top:200px;
+}
+
+/* Full-width input fields for the Signup Modals content */ 
+.signInModal-content input[type=text], input[type=password] 
+{
+  width: 90%;
+  padding: 15px;
+  margin: 5px 0 10px 0;
+  display: inline-block;
+  border: none;
+  background:rgba(255,255,255,1.00);
+}
+
+/* Add a background color when the inputs get focus or the Signup Modals content*/
+.signInModal-content input[type=text]:focus, input[type=password]:focus 
+{
+  background-color:rgba(242,242,242,1.00);
+  outline: none;
+}
+
+/*start SignUpModal Buttons*/
+.LandingModalBtns
+{
+	background-color: #555555; /* gray */
+	border: none;
+	color: white;
+	padding: 16px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	cursor: pointer;
+	width: 100%;
+}
+.LandingModalBtns:hover 
+{
+	background-color:rgba(0,0,0,0.4);
+	color: white;
+}
+/*end SignUpModal Buttons*/
+
+/*HyperLink Inside Signupmodal the Signup hyperlink CSS*/
+#SignUpNow
+{
+	margin-left: 2px;
+	margin-top: 10px;
+	text-decoration: none;
+	color:black;
+	font-size: 13px;
+	display: inline-block;
+}
+/*HyperLink Inside Signupmodal the Signup hyperlink CSS*/
+#SignUpNow:hover
+{
+	color:rgba(0,162,155,1.00);
+	text-decoration: none;
+}
+
+/*HyperLink Inside Signupmodal the forgetpass hyperlink CSS*/
+#ForgotPass
+{
+	margin-left: 151px;
+	margin-top: 10px;
+	text-decoration: none;
+	color:black;
+	font-size: 13px;
+	display: inline-block;
+}
+/*HyperLink Inside Signupmodal the forgetpass hyperlink CSS*/
+#ForgotPass:hover
+{
+	color:rgba(0,162,155,1.00);
+	text-decoration: none;
+}
+
+/*Signup Modal Label CSS*/
+.signInModal-content label
+{
+	font-size: 13px;
+}
+
+/* Hide the slides by default for the Slideshow in the Signup Modal*/
+.SignUpSlides 
+{
+  display: none;
+}
+/* Hide the slides by default for the Slideshow in the addResos Modal*/
+.AddResosSlide 
+{
+  display: none;
+}
+
+/* BackBtn and many other ImgBtns' code*/
+.imgBtn
+{
+	cursor: pointer;
+}
+
+/*Start Custom Select Code*/
+.custom-select 
+{
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select 
+{
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected
+{
+  background-color:rgba(92,89,89,1.00);
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after 
+{
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after 
+{
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,.select-selected 
+{
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items 
+{
+  position: absolute;
+  background-color:rgba(182,179,179,1.00);
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide
+{
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected 
+{
+  background-color: rgba(0, 0, 0, 0.1);
+}
+/*end Custom Select Code*/
+
+.loader /*loader gif, fully white background*/
+{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top:0;
+	background-color: white;
+	/*background-color: rgb(24,24,31);*/
+	z-index: 5;
+}
+.loader img/*loader gif, prelim CSS centering img*/
+{
+	display: block;
+	margin: auto;
+	position: absolute;
+	top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+#loaderTxt /*loader text*/
+{
+	text-align: center;
+	font-size: 16px;
+}
+
+/*top Navbar Code Start-->*/
+#navBar /*navbar code for the top*/
+{
+	position: fixed;
+	height: 50px;
+	width:100%;
+	top:0;
+	left:0;
+	right:0;
+	color:white;
+	background-color: #0C1F3F;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 4;
+}
+#title p /*navbar code for the top, title code*/
+{
+	font-weight: 300;
+	font-size: 25px;
+}
+#title
+{
+	position: absolute;
+	left:20px;
+}
+
+/*Searchbar Code*/
+#searchBarContainer
+{
+	position: fixed;
+	height: 50px;
+	width:80%;
+	top:50px;
+	right:0;
+	color:black;
+	background-color:rgba(174,174,174,1.00);
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	overflow-x: scroll;
+	z-index: 2;
+}
+.search-container input[type=text] 
+{
+	width: 80%;
+	padding: 8px 20px;
+	box-sizing: border-box;
+	border: 3px solid rgba(174,174,174,1.00);
+	border-radius: 6px;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	outline: none;
+	font-size: 16px;
+	position: absolute;
+	top:3px;
+	left:110px;
+	color:black;
+}
+.search-container input[type=text]:focus 
+{
+  border: 3px solid #555;
+}
+
+/*dropdown Code*/
+.dropbtn
+{
+	width: 20px;
+	height: 20px;
+	background-color:#0C1F3F;
+	margin-right: 15px;
+	margin-left: 2px;
+	margin-top: 2px;
+}
+.dropdown 
+{
+	position: absolute;
+	right:0;
+	display: inline-block;
+}
+.dropdown-content 
+{
+	display: none;
+	position: absolute;
+	right:0px;
+	background-color: #f1f1f1;
+	min-width: 100px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+	z-index: 1;
+}
+.dropdown-content a 
+{
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	cursor: pointer;
+	font-weight: 300;
+}
+.dropdown-content a:hover 
+{
+	background-color: white;
+	text-decoration: none;
+}
+.dropdown-content a:visited 
+{
+	color: black;
+	text-decoration: none;
+}
+.dropdown:hover .dropdown-content 
+{display: block;}
+/*top Navbar Code end-->*/
+
+
+/*sideNav Code when Screen is big*/
+.sidenav 
+{
+	height: 100%;
+	width: 20%;
+	position: fixed;
+	z-index: 3;
+	top: 0;
+	left: 0;
+	background-color:rgba(48,48,48,1.00);
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding-top: 20px;
+	color: white;
+	margin-top: 40px;
+	transition: 0.5s;
+}
+.sideNavTitle
+{
+	font-size: 17px;
+}
+.sideMenuBox
+{
+	height: 44%;
+	width: 90%;
+	margin-left: 13px;
+	margin-bottom: 5px;
+	overflow-y: scroll;
+}
+.sidenav p
+{
+	margin: 0;
+}
+.listOfItems
+{
+	margin-top: 10px;
+}
+.listOfItems a
+{
+	text-decoration: none;
+	color:white;
+	font-size: 13px;
+	margin: 0 0 0 15px;
+}
+.listOfItems a:hover
+{
+	color:rgba(0,162,155,1.00);
+	text-decoration: none;
+}
+#HiddenMenuBtn/*menu button to open nav, wont show until screen gets small*/
+{
+	position: absolute;
+	left:20px;
+	font-size: 20px;
+	display: none;
+}
+.sidenav .closebtn 
+{
+	position: absolute;
+	top: 0;
+	right: 10px;
+	font-size: 36px;
+	margin-left: 50px;
+	cursor: pointer;
+	display: none;
+}
+.sidenav .closebtn:hover
+{
+	color:rgba(0,162,155,1.00);
+}
+#sideMenu 
+{
+  transition: margin-left .5s;
+}
+@media screen and (max-height: 450px) 
+{
+  .sidenavSmall {padding-top: 15px;}
+}
+
+/*add A resos Btn, Bookings Page, Your resos, and manage resos btn*/
+.ManageResosBtns
+{
+	border: none;
+	padding: 2px 5px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 10px;
+	margin: 4px 2px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 3px;
+	width: 80%;
+	height: 20px;
+}
+.ManageResosRightBtn
+{
+	float: right;
+}
+.ManageResosLeftBtn
+{
+	float: left;
+}
+#bottomBtns
+{
+	height: 20px;
+	width: 100%;
+	position: absolute;
+	left:0;
+	bottom:50px;
+	display: flex;
+ 	justify-content: center;
+}
+
+/*Put things on the same line*/
+.sameLine
+{
+	display: inline-block;
+}
+
+/*Buttons Color, same as bootstrap*/
+.btnSuccessOutline
+{
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	background-color: white;
+	border:solid 1px rgb(48,165,74);
+	color:rgb(48,165,74);
+}
+.btnSuccessOutline:hover
+{
+	background-color: rgb(48,165,74);
+	color:white;
+}
+.btnSecondaryOutline
+{
+	background-color: white;
+	border:solid 1px rgb(117,126,133);
+	color:rgb(117,126,133);
+}
+.btnSecondaryOutline:hover
+{
+	background-color: rgb(117,126,133);
+	color:white;
+}
+.btnSecondary
+{
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	background-color: #555555;
+	color:white;
+}
+.btnSecondary:hover
+{
+	background-color:rgba(223,223,223,1.00);
+	color:#555555;
+}
+
+/*Modal Btns for choosing big Options, Designed like setting btns, used in the add resos First Slide*/
+.settingsBtn
+{
+	height: 50px;
+	width: 100%;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.settingsBtn p
+{
+	text-align: center;
+	font-weight: 300;
+	font-size: 17px;
+	padding-top: 13px;
+}
+
+/*Add Resos slide input CSS*/
+.AddResosSlide input[type=text] 
+{
+	width: 100%;
+	padding: 12px 20px;
+	box-sizing: border-box;
+	border: 3px solid rgba(0,0,0,0.30);
+	border-radius: 3px;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	outline: none;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+.AddResosSlide input[type=text]:focus 
+{
+  border: 3px solid #555;
+}
+
+/*Add Resos, Nicedit Textarea Code*/
+#AddResosDescription
+{
+	width:660px;
+	height: 150px;
+}
+.nicEdit-main
+{
+     background-color: white;
+}
+
+/*add Resos err msg code*/
+.AddResosErrMsg
+{
+	margin: 0px;
+}
+
+/*add Resos, Skip or Upload Buttons*/
+.addResosUploadSkipBtn
+{
+	background-color: #555555; /* gray */
+	border: none;
+	color: white;
+	padding: 5px 32px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	margin: 4px 2px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	cursor: pointer;
+	width: 100%;
+	display: none;
+}
+.addResosUploadSkipBtn:hover 
+{
+	background-color:rgba(0,0,0,0.4);
+	color: white;
+}
+
+/*Create a Resos Button*/
+.createResosBtn
+{
+	background-color: #555555; /* gray */
+	border: none;
+	color: white;
+	padding: 5px 32px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	margin: 4px 2px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	cursor: pointer;
+	width: 100%;
+}
+.createResosBtn:hover 
+{
+	background-color:rgba(0,0,0,0.4);
+	color: white;
+}
+
+
+.AddResosSlide h1 
+{
+	margin: 0;
+}
+/*White Div that blocks the file upload btn*/
+#uploadBlock
+{
+	position:absolute;
+	background-color:rgba(233,233,233,1.00);
+	height: 170px;
+	width: 76%;
+	min-width: 970px;
+}
+.reviewInfo/*Information div that shifts everthing to the right*/
+{
+	margin-left: 20%;
+}
+.reviewTitles/*Titles in the Review info box*/
+{
+	font-size: 16px;
+	margin-bottom: 15px;
+	font-weight: 900;
+}
+.userInfo /*information in the review info box*/
+{
+	font-size: 12px;
+}
+
+/*Booking Colors*/
+.booked
+{
+	color:red;
+}
+.unbooked
+{
+	color:#08DD00;
+}
+.lesson
+{
+	color:orange;
+}
+.locked
+{
+	color: gray;
+}
+.bkd
+{
+	color:red;
+}
+.unb
+{
+	color:#08DD00;
+}
+.lsn
+{
+	color:orange;
+}
+.lck
+{
+	color: gray;
+}
+
+#allResosContainer/*Contains all the Resos*/
+{
+	margin-left: 23%;
+	margin-top: 120px;
+	height: 100%;
+	width: 77%;
+}
+/*Box for the front page, interacts with user, shows room subscription or device*/
+.Box
+{
+	height: 80px;
+	width: 130px;
+	border-radius: 5px;
+	position: relative;
+	display: inline-block;
+	margin: 5px;
+	text-align: center;
+}
+.Box p
+{
+	margin:15px 0 0 0;
+}
+.Box button
+{
+	padding: 0px 5px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 10px;
+	margin: 0px 2px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 3px;
+	width: 80%;
+	height: 20px;
+}
+.bookmark
+{
+	position: absolute;
+	right:10px;
+	top:4px;
+}
+
+/*Room, Subscription, and Device color for box*/
+.room
+{
+	background-color: #0E7C7B;
+	color:white;
+}
+.subscription
+{
+	background-color: #FF201B;
+	color:white;
+}
+.device
+{
+	background-color: #458AC2;
+	color:white;
+}
+
+/*Displays text in the main page such as Recently Booked rooms*/
+.MainPageP
+{
+	margin: 0;
+	font-size: 20px;
+	font-weight: lighter;
+}
+
+/*Error module, showing up when connection breaks in order to have the user reload page Start*/
+#ErrorBox /*the container*/
+{
+	height:70px;
+	width:160px;
+	background-color:rgba(255,179,180,0.87);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+	z-index: 5;
+}
+#ErrorBox p /*Text*/
+{
+	font-size: 10px;
+	margin-left: 2px;
+}
+#ErrorBox button /*Refresh Btn*/
+{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+#errorModule /*big outside red container*/
+{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top:0px;
+	bottom: 0px;
+	z-index: 8;
+	display: none;
+	background-color: rgba(0,0,0,0.5);
+}
+/*Error module, showing up when connection breaks in order to have the user reload page end*/
+

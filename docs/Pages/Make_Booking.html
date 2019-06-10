@@ -1,0 +1,581 @@
+<!doctype html>
+<html> <!--Need to Clear users from userpool and dynamo DB everyyear to prevent memory overflow-->
+	<head>
+		<meta charset="UTF-8">
+		<title>Make Booking</title>
+		<!--my own external stylesheets and JS-->
+		<link href="../CSS/main.css" rel="stylesheet">
+		<script src="../JS/main.js"></script>
+		<script src="../JS/GlobalStaticVars.js"></script>
+		<!--Imported Stylesheets and JS-->
+		<script src="../JS/aws-cognito.js"></script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.0.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../CSS/bootstrap.css">
+		<script src="../JS/NicEdit.js" type="text/javascript"></script><!--TextEdit-->
+		<script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
+	</head>
+	<body>
+		<!--Loader showing up when the site is loading in-->
+		<div id="Loader" class="loader">	
+			<img width="12.5%" src="../Images/loader.gif">
+			<br><br><br><br><br><br><br>
+			<p id="loaderTxt"></p>
+		</div>
+		
+		<!--Error Module--> 
+       	<div id="errorModule">
+			<div id="ErrorBox" class="ErrorColor">
+				<p align="center"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;REQUEST ERROR: <br>Connection Broken</p>
+				<button class="btnSuccessOutline" onClick="location.reload();">Reload</button>
+			</div>
+		</div>
+       	
+        <!-- Starter Modal enter information-->
+        <div id="StarterModal" class="Modal"> 
+    	 	<!--Starter Modal content -->
+      		<div class="starterModal-content">
+      			<p class="starterWelcomeMsg"><strong>Welcome to DCB Bookings!</strong><br>Some information appears to be incomplete<br><br><br></p>
+      			<p class="StarterPageErrMsgs" id="starterPgErrMsg"></p>
+      			<div class="custom-select">
+					<select id="whoAreYouSelect">
+						<option value="invalid">Who Are You:</option>
+						<option value="Student">I am a Student</option>
+						<option value="Teacher">I am a Teacher</option>
+					</select>
+				</div>
+				<br><br><br><br><br>
+				<button class="LandingModalBtns" onClick="completeSignUp();">Complete Sign Up</button>
+			</div>
+		</div>
+		
+		<!--Navigation panel Start-->
+		<div id="navBar" class="topnav">
+			<div id="title">
+				<p>DCB BOOKINGS</p>
+			</div>
+		  	<div class="dropdown">
+				<div class="dropbtn"><i style="font-size: 20px;" class="fa fa-bars imgBtn"></i></div>
+				<div class="dropdown-content">
+					<a href="#">Settings</a>
+					<a href="#">Sign Out</a>	
+			    </div>
+			</div>
+		</div>
+		
+		<div id="searchBarContainer">
+			<div id="HiddenMenuBtn"><i onClick="openNav('260px',($(window).width()-260).toString()+'px',($(window).width()-250).toString()+'px');" class="fa fa-bars imgBtn"></i></div>
+			<div class="search-container">
+			 	<input type="text" placeholder="Search... <Device, Room, Subscription, Email...>" name="search">
+		  	</div>
+		</div>
+		
+		<div id="sideMenu" class="sidenav">
+			<p class="closebtn" id="closeSideNav" onclick="closeNav()">&times;</p>
+			
+			<div id="UpcomingBookings" class="sideMenuBox">
+				<strong><p class="sideNavTitle">Your Upcoming Bookings:</p></strong>
+				
+				<div class="listOfItems" id="upcomingBookingsList">
+					<!--<a href="#">Empty List</a>-->
+				</div>
+				
+			</div>
+			<hr>
+			<div id="MyResos" class="sideMenuBox">
+				<strong><p class="sideNavTitle">Your Resources:</p></strong>
+				
+				<div class="listOfItems" id="MyResosList">
+					<!--<a href="#">Empty List</a>-->
+				</div>
+				
+				<div id="bottomBtns">
+					<button id="AddRoomBtn" class="btnSuccessOutline sameLine ManageResosBtns" onClick="openAddResos(); backToFirstAResosSlide();">Add a Resource</button>		
+				</div>
+			</div>
+		</div>
+		<!--Navigation panel end-->
+		
+		<!--Modal To Add a Resource start-->
+		<div id="addResourceModal" class="Modal">
+			<!--Add resourceModalContent Content-->
+			<div id="addresosContent" class="addResourceModal-content width700"> <span id="addResosModalCloseBtn" class="Modalclose">&times;</span>
+				<div class="addResourceSlideshowContainer">
+					<!--Choose Which Resource to add Slide, <Slide 1>-->
+					<div class="AddResosSlide">
+						<h1 align="center">Select an option:</h1>
+						<div id="addRoomBtn" class="settingsBtn btnSecondary" onClick="currentAResosSlide(2)">
+							<p>Add a Room</p>
+						</div>
+						<div id="addDeviceBtn" class="settingsBtn btnSecondary" onClick="">
+							<p>Add a Device</p>
+						</div>
+						<div id="addSubscriptionBtn" class="settingsBtn btnSecondary" onClick="">
+							<p>Add a Subscription</p>
+						</div>
+					</div>
+					
+					<!--Add Room Slide 1, <Slide 2>-->
+					<div class="AddResosSlide">
+						<img class="imgBtn" onClick="currentAResosSlide(1)" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+						<h1 align="center">Add Room</h1>
+						<br>
+						<input type="text" id="RoomID" placeholder="Room Name:" name="primaryKey">
+						<input type="text" id="department" placeholder="Department:" name="department">
+						<label>Description:</label>
+						<textarea id="AddResosDescription"></textarea>
+						<button class="LandingModalBtns" onClick="addRoomNext1();">Next</button>
+						<p id="AddResosAddRoomErrMsg1" class="AddResosErrMsg"></p>
+					</div>
+					
+					<!--Add Room Slide 2, <Slide 3>-->
+					<div class="AddResosSlide">
+						<img class="imgBtn" onClick="plusAResosSlides(-1)" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+						<h1 align="center">Add Room</h1>
+						<br>
+						<div class="custom-select">
+							<select id="AccessRightsSelect">
+								<option value="invalid">Access Rights:</option>
+								<option value="Student">Make room available to Students ONLY</option>
+								<option value="Teacher">Make room available to Teachers ONLY</option>
+								<option value="TeacherStudent">Make room available to both Teachers and Students</option>
+							</select>
+						</div>
+						<br><br><br>
+						<label>Room Admin:</label>
+						<input type="text" id="RoomAdmin1" name="Admin1" readonly>
+						
+						<label>Other Admins <em>[ Separate room admins emails with a ' ; ' ]  OPTIONAL </em></label>
+						<input type="text" id="RoomAdmin2" placeholder="Other Admins [ Enter Emails ]:" name="Admin2">
+						
+						<input type="checkbox" id="planAheadCB">&nbsp;Plan Ahead [Close booking ability 30 minutes ahead of time]<br>
+						<input type="checkbox" id="30MinPeriodCB">&nbsp;30 minute period [Split each period into 30 minute sections]<br><br>
+						
+						<button class="LandingModalBtns" onClick="addRoomNext2();">Next</button>
+						<p id="AddResosAddRoomErrMsg2" class="AddResosErrMsg"></p>
+					</div>
+					
+					<!--Add Room Slide 3 <Slide 4>-->
+					<div class="AddResosSlide">
+						<div class="modal-header">
+							<img class="imgBtn" onClick="plusAResosSlides(-1); preTimeableClasses();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+							<h1 align="center">Add Room</h1>
+						</div>
+						
+						<div class="modal-body">
+							<center>
+								<!--The upload options-->	
+								<div id="Options">
+									<strong><label>Choose a upload source:</label></strong>
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<strong><label>Choose a upload method:</label></strong>
+									<br>
+
+									<select onChange="checkAvailableUpload()" id="uploadSource">
+										<option selected value="invalid">UPLOAD SOURCE...</option>
+										<option value="sims">SIMS</option>
+										<option value="custom">CUSTOM</option>
+									</select>
+
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+									<select onChange="checkAvailableUpload()" id="uploadMethods">
+										<option selected value="invalid">UPLOAD METHOD...</option>
+										<option disabled value="merge">MERGE</option>
+										<option value="override">OVERRIDE</option>
+									</select>
+
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+								</div>
+								<!--If Cutom upload is chosen the doc will show-->
+								<div id="customUploadDocs">
+									<br><br>
+									<a href="../Documents/SE21_Upload_Template.zip" target="_blank">Download Template</a>
+									<label>&nbsp;||&nbsp;</label>
+									<a href="../Documents/SE21_README_UserDoc.pdf" target="_blank">Read User Documentation</a>
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+								</div>
+								<!--If SIm upload is chosen the doc will show-->
+								<div id="SimUploadDocs">
+									<br><br>
+									<em><label>[Save SIMS file as .CSV with UTF-8] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></em>
+								</div>
+							</center>
+							<div id="uploadBlock"></div>
+							<form id="fileLoadForm">
+								<input id="fileToLoad" type="file" accept=".csv" onChange="">
+							</form>
+							<br><br><br>
+							<center>
+								<div id="PreviewTable">
+									<em><p>[Preview Table]</p></em>
+								</div>
+								<table class="table table-hover">
+									<!--
+									<thead>
+										<tr>
+											<th>Day</th>
+											<th>P1</th>
+											<th>P1</th>
+											<th>P2</th>
+											<th>P2</th>
+											<th>Br</th>
+											<th>P3</th>
+											<th>P3</th>
+											<th>P4</th>
+											<th>P4</th>
+											<th>Lun</th>
+											<th>Lun</th>
+											<th>P5</th>
+											<th>P5</th>
+											<th>P6</th>
+											<th>P6</th>
+											<th>E1</th>
+											<th>E1</th>
+											<th>E2</th>
+											<th>E2</th>
+										</tr>
+										<tr>
+											<td>Monday</td>
+											<td>unb</td>
+											<td>unb</td>
+											<td>unb</td>
+											<td>lsn</td>
+											<td>lsn</td>
+											<td>lck</td>
+											<td>unb</td>
+											<td>unb</td>
+											<td>unb</td>
+											<td>unb</td>
+											<td>unb</td>
+											<td>lck</td>
+											<td>bkd</td>
+											<td>bkd</td>
+											<td>bkd</td>
+											<td>bkd</td>
+											<td>bkd</td>
+											<td>unb</td>
+											<td>unb</td>
+										</tr>
+									</thead>
+									-->
+								</table>	
+							</center>
+							<br><br><br>
+						</div>
+						
+						<div class="modal-footer">
+							<button id="nextBtn" onClick="" class="addResosUploadSkipBtn">Next</button>
+														
+							<button id="skipBtn" onClick="AddResosSkip(); reviewInfoClasses();" class="addResosUploadSkipBtn">Skip</button>
+						</div>
+					</div>
+					
+					<!--Add Room Slide 4 <Slide 5>-->
+					<div class="AddResosSlide">
+						<img class="imgBtn" onClick="plusAResosSlides(-1); preReviewInfoClasses();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+						<h1 align="center">Add Room <em>[Review Information]:</em></h1>
+						<em><p align="center">All settings can be modified later</p></em>
+						<br>
+						<div class="reviewInfo">
+							<strong><label class="reviewTitles">Room Name: &nbsp;</label></strong><br>
+							<label class="userInfo" id="RoomName"></label><br><br>
+							
+							<strong><label class="reviewTitles">Department: &nbsp;</label></strong><br>
+							<label  class="userInfo" id="depart"></label><br><br>
+							
+							<strong><label class="reviewTitles">Description: &nbsp;</label></strong>
+							<label  class="userInfo" id="descrip"></label><br><br>
+							
+							<strong><label class="reviewTitles">Access Rights: &nbsp;</label></strong><br>
+							<label  class="userInfo" id="AccessR"></label><br><br>
+							
+							<strong><label class="reviewTitles">Room Admin(s): &nbsp;</label></strong>
+							<label  class="userInfo" id="roomAdmins"></label><br>
+							
+							<strong><label class="reviewTitles">Plan Ahead: &nbsp;</label></strong><br>
+							<label  class="userInfo" id="PlanAh"></label><br><br>
+							
+							<strong><label class="reviewTitles">30 Minute Period: &nbsp;</label></strong><br>
+							<label  class="userInfo" id="30minP"></label><br><br>
+						</div>
+						<strong><label class="reviewTitles">Schedule:</label></strong>
+						<div id="reviewInfoPreviewInfo"></div>
+						<br>
+						<button class="createResosBtn" onClick="createResos('room')">Create Resource</button>
+						<p id="AddResosAddRoomErrMsg4" class="AddResosErrMsg"></p>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--Modal To Add a Resource end-->
+		<div id="allResosContainer">
+		
+			<div id="RecentlyVisitedResos">
+				<p class="MainPageP">Recently Visited Resources:</p>
+				<div class="Box room">
+					<i class="fa fa-bookmark-o imgBtn bookmark" aria-hidden="true"></i>
+					<p><strong>Technology 5</strong><br><em>room</em></p>
+					<button class="btnSuccessOutline">View</button>
+				</div>
+			</div>
+			
+			<hr>
+			
+			<div id="BookedmarkedResos">
+				<p class="MainPageP">Bookmarked Resources:</p>
+				<div id="bookmarkedResosBoxes">
+					<em><p>Loading...</p></em>
+				</div>
+			</div>
+			
+			<hr>
+			
+			<div id="allResos">
+				<p class="MainPageP">All Resources:</p>
+				<div id="allResosBoxes">
+					<em><p>Loading...</p></em>
+				</div>
+			</div>
+			
+		</div>
+		
+	</body>
+	
+	<script>//initilizers
+		//for small screens
+		if ($(window).width() < 1130) 
+		{
+			closeNav();
+			$("#HiddenMenuBtn").show();
+			$("#closeSideNav").show();
+		}
+		else 
+		{
+			openNav("23%","77%","80%");
+			$("#HiddenMenuBtn").hide();
+			$("#closeSideNav").hide();
+		}
+		$(window).resize(function() 
+		{
+			if ($(window).width() < 1130) 
+			{
+				closeNav();
+				$("#HiddenMenuBtn").show();
+				$("#closeSideNav").show();
+		  	}
+			else 
+		 	{
+				openNav("23%","77%","80%");
+				$("#HiddenMenuBtn").hide();
+				$("#closeSideNav").hide();
+			}
+		});
+		//locking in loop until email is fetched
+		getUserEmail();
+		checkEmailVar();
+		FunnyloadingTxt("loaderTxt",true,2000);
+		function checkEmailVar() // could be moreefficient if you searched for the specific user email
+		{
+			if(userEmail==null)
+			{
+				window.setTimeout(checkEmailVar, 2000);
+			}
+			else //checking to see if the user exists in the main user DB
+			{
+				$.ajax({
+					type:'GET',
+					url:DCBBookingsCreateUserDBAPI,
+					success: function (data)
+					{
+						FunnyloadingTxt("loaderTxt",false,2000);
+						userDataFull = data; 
+						//console.log(data)
+						var userExists = false; 
+						for(var i =0; i<data["Items"].length; i++)
+						{
+							if(data["Items"][i]["email"]==userEmail) //if user email is already part of the big email list
+							{
+								userExists =true;
+								individualData = data["Items"][i];
+								dynamicGenerateUpcomingBookings(individualData);
+								dynamicGenerateYourResos(individualData);
+								dynamicGenerateBookmarkedResos(individualData);
+								populateAllResos(false,false,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
+								
+								//console.log(userDataFull);
+							}
+						}
+						if(userExists==false) //if its not the sign up modal will open for them to complete the signup.
+						{
+							openStarterModal();
+						}
+						else
+						{
+							$("#Loader").fadeOut();
+						}
+					},
+					error: function (data)
+					{
+						console.log(data)
+						
+					}
+				});
+			}
+		}
+	</script>
+	<script> 
+		//modal Code for starter modal
+		var modal = document.getElementById("StarterModal");
+
+		// When the user clicks the button, open the modal 
+		function openStarterModal()
+		{
+			modal.style.display = "block";
+		}
+		//modal.style.display = "none";
+		
+	</script>
+	<script>//modal Code for adding Resource
+		//modal Code LoginSignup
+		var AddResosModal = document.getElementById("addResourceModal");
+
+		// Get the <span> element that closes the modal
+		var closeResosModalBtn = document.getElementById("addResosModalCloseBtn");
+
+		// When the user clicks the button, open the modal 
+		function openAddResos()
+		{
+			AddResosModal.style.display = "block";
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		closeResosModalBtn.onclick = function() {
+		  AddResosModal.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == AddResosModal) {
+			AddResosModal.style.display = "none";
+		  }
+		}
+	</script>
+	<script>//complete signup Procedure
+		function completeSignUp()
+		{
+			$("#starterPgErrMsg").html("Updating user information...")
+			createNewUserAddtoDB2(userEmail,$("#whoAreYouSelect").val());
+		}
+	</script>
+	<script> //custom select code
+		var x, i, j, selElmnt, a, b, c;
+		/* Look for any elements with the class "custom-select": */
+		x = document.getElementsByClassName("custom-select");
+		for (i = 0; i < x.length; i++) {
+		  selElmnt = x[i].getElementsByTagName("select")[0];
+		  /* For each element, create a new DIV that will act as the selected item: */
+		  a = document.createElement("DIV");
+		  a.setAttribute("class", "select-selected");
+		  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+		  x[i].appendChild(a);
+		  /* For each element, create a new DIV that will contain the option list: */
+		  b = document.createElement("DIV");
+		  b.setAttribute("class", "select-items select-hide");
+		  for (j = 1; j < selElmnt.length; j++) {
+			/* For each option in the original select element,
+			create a new DIV that will act as an option item: */
+			c = document.createElement("DIV");
+			c.innerHTML = selElmnt.options[j].innerHTML;
+			c.addEventListener("click", function(e) {
+				/* When an item is clicked, update the original select box,
+				and the selected item: */
+				var y, i, k, s, h;
+				s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+				h = this.parentNode.previousSibling;
+				for (i = 0; i < s.length; i++) {
+				  if (s.options[i].innerHTML == this.innerHTML) {
+					s.selectedIndex = i;
+					h.innerHTML = this.innerHTML;
+					y = this.parentNode.getElementsByClassName("same-as-selected");
+					for (k = 0; k < y.length; k++) {
+					  y[k].removeAttribute("class");
+					}
+					this.setAttribute("class", "same-as-selected");
+					break;
+				  }
+				}
+				h.click();
+			});
+			b.appendChild(c);
+		  }
+		  x[i].appendChild(b);
+		  a.addEventListener("click", function(e) {
+			/* When the select box is clicked, close any other select boxes,
+			and open/close the current select box: */
+			e.stopPropagation();
+			closeAllSelect(this);
+			this.nextSibling.classList.toggle("select-hide");
+			this.classList.toggle("select-arrow-active");
+		  });
+		}
+
+		function closeAllSelect(elmnt) {
+		  /* A function that will close all select boxes in the document,
+		  except the current select box: */
+		  var x, y, i, arrNo = [];
+		  x = document.getElementsByClassName("select-items");
+		  y = document.getElementsByClassName("select-selected");
+		  for (i = 0; i < y.length; i++) {
+			if (elmnt == y[i]) {
+			  arrNo.push(i)
+			} else {
+			  y[i].classList.remove("select-arrow-active");
+			}
+		  }
+		  for (i = 0; i < x.length; i++) {
+			if (arrNo.indexOf(i)) {
+			  x[i].classList.add("select-hide");
+			}
+		  }
+		}
+
+		/* If the user clicks anywhere outside the select box,
+		then close all select boxes: */
+		document.addEventListener("click", closeAllSelect);
+	</script>
+	<script>//add resos slideshow code
+		var AResosslideIndex = 1;
+		showAResosSlides(AResosslideIndex);
+		// Next/previous controls
+		function plusAResosSlides(n) {
+		  showAResosSlides(AResosslideIndex += n);
+		}
+
+		// Thumbnail image controls
+		function currentAResosSlide(n) {
+		  showAResosSlides(AResosslideIndex = n);
+		}
+
+		function showAResosSlides(n) {
+		  var i;
+		  var AResosslides = document.getElementsByClassName("AddResosSlide");
+		  if (n > AResosslides.length) {AResosslideIndex = 1} 
+		  if (n < 1) {AResosslideIndex = AResosslides.length}
+		  for (i = 0; i < AResosslides.length; i++) {
+			  AResosslides[i].style.display = "none"; 
+		  }
+		  AResosslides[AResosslideIndex-1].style.display = "block"; 
+		}
+		function backToFirstAResosSlide()
+		{
+			if(AResosslideIndex!=1)
+			{
+				currentAResosSlide(1);
+			}
+			addRoomClearAll();
+		}
+	</script>
+</html>

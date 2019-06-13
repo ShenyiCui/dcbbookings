@@ -2,7 +2,7 @@
 <html> <!--Need to Clear users from userpool and dynamo DB everyyear to prevent memory overflow-->
 	<head>
 		<meta charset="UTF-8">
-		<title>Make Booking</title>
+		<title>DCB Bookings</title>
 		<!--my own external stylesheets and JS-->
 		<link href="../CSS/main.css" rel="stylesheet">
 		<script src="../JS/main.js"></script>
@@ -341,7 +341,8 @@
 			</div>
 			
 		</div>
-		
+		<br><br><br><br><br><br>
+		<div id="testTable"></div>
 	</body>
 	
 	<script>//initilizers
@@ -522,7 +523,8 @@
 		  });
 		}
 
-		function closeAllSelect(elmnt) {
+		function closeAllSelect(elmnt) 
+		{
 		  /* A function that will close all select boxes in the document,
 		  except the current select box: */
 		  var x, y, i, arrNo = [];
@@ -550,16 +552,19 @@
 		var AResosslideIndex = 1;
 		showAResosSlides(AResosslideIndex);
 		// Next/previous controls
-		function plusAResosSlides(n) {
+		function plusAResosSlides(n) 
+		{
 		  showAResosSlides(AResosslideIndex += n);
 		}
 
 		// Thumbnail image controls
-		function currentAResosSlide(n) {
+		function currentAResosSlide(n) 
+		{
 		  showAResosSlides(AResosslideIndex = n);
 		}
 
-		function showAResosSlides(n) {
+		function showAResosSlides(n) 
+		{
 		  var i;
 		  var AResosslides = document.getElementsByClassName("AddResosSlide");
 		  if (n > AResosslides.length) {AResosslideIndex = 1} 

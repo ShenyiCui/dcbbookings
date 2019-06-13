@@ -99,7 +99,8 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* The Modal (background) */
-.Modal {
+.Modal 
+{
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 5; /* Sit on top */
@@ -114,7 +115,8 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* The Modal Close Button */
-.Modalclose {
+.Modalclose 
+{
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -824,7 +826,32 @@ h1,h2,h3,h4,p,label,a
 {
 	color: gray;
 }
-
+.hidden
+{
+	display: none;
+}
+.defaultCursor
+{
+	cursor: default;
+}
+.pointerCursor
+{
+	cursor: pointer;
+	font-weight: 300;
+}
+.light
+{
+	font-weight: 300;
+}
+.bold
+{
+	font-weight: 500;
+}
+.editColor
+{
+	background-color: #BDCAF2;
+}
+/*booking colors end*/
 #allResosContainer/*Contains all the Resos*/
 {
 	margin-left: 23%;
@@ -930,4 +957,3 @@ h1,h2,h3,h4,p,label,a
 	background-color: rgba(0,0,0,0.5);
 }
 /*Error module, showing up when connection breaks in order to have the user reload page end*/
-

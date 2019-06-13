@@ -1718,6 +1718,16 @@ function formatAMPM(date) //format time in AMPM
 	var strTime = hours + ':' + minutes +  '_' + ampm;
 	return strTime;
 }
+function getDayFromNum2(n)// get day from num full day name
+{
+	var weekday = new Array(5);
+	weekday[0] = "Monday";
+	weekday[1] = "Tuesday";
+	weekday[2] = "Wednesday";
+	weekday[3] = "Thursday";
+	weekday[4] = "Friday";
+	return weekday[n];
+}
 //TIMESTAMP END
 
 //View Room Start
@@ -1735,22 +1745,111 @@ function viewResos(resosID,resosType)
 		else
 		{
 			indiResosDataFetchSuccess = false;
-			console.log(indiRoomData);
+			//console.log(indiRoomData);
+			generateBookingTable(indiRoomData["Items"][0],resosType)
 		}
 	}
 }
 function generateBookingTable(data,resosType) //generates table for user
 {
+	var tableRowLength = 5;//the length of the table you are making
+	var tableColLength = 0; 
+	if(data["Min30Periods"]=="false")//normal headers
+	{
+		tableColLength = 10;
+		bookval = "booked";
+		lockval = "locked";
+		lessonval = "lesson";
+		unbookedval = "unbooked";
+	}
+	else
+	{
+		tableColLength = 19;
+		bookval = "bkd";
+		lockval = "lck";
+		lessonval = "lsn";
+		unbookedval = "unb";
+	}
+	//building initial empty table start
+	var initialTable = [];
+	var weekData = [];
+	var dayData=[];
+	var periodData=[];
+	weekData = []
+	for(var i = 0; i<tableRowLength;i++)
+	{
+		dayData=[];
+		for(var j = 0; j<tableColLength; j++)
+		{
+			periodData[0]=unbookedval;
+			periodData[1]="email@temp.com";
+			periodData[2]="perpetual";
+			periodData[3]="Week1";
+			dayData.push(periodData);
+		}
+		weekData.push(dayData);
+	}
+	initialTable = weekData
+	console.log(initialTable);
+	//building initial empty table end
+	
+	//populating initital table with user bookings vals start
+	//structure of each period in the fetched userbookings
+	/*
+	[0] - booking value, unbooked, etc
+	[1] - booking email
+	[2] - perpectual, nonperpectual booking etc. 
+	[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1 
+	[4] - week 1, week 2 or both
+	[5] - timeStamp
+	[6] - ECADescription [name][description]
+	[7] - coordinate of booking [row][col] on the table
+	[8] - week begining
+	*/
+	var userBookings = []//array containing the userbookings for that week. 
+	var fetchedUserBookings = data["BookingSchedule"] //array containing the fetched user bookings
+	if(fetchedUserBookings[0]!="Empty List") // populating the userBookings array;
+	{
+		for(var i =0; i<fetchedUserBookings.length;i++)
+		{
+			if(fetchedUserBookings[i][fetchedUserBookings[i].length-1] == getWeekBegining(new Date()))//the last index of each period's data contains the weekbegining
+			{
+				userBookings.push(fetchedUserBookings[i]);
+			}
+		}
+	}
+	for(var i =0; i<userBookings.length; i++)
+	{
+		initialTable[userBookings[fetchedUserBookings[i].length-2][0]][userBookings[fetchedUserBookings[i].length-2][1]] = userBookings;	
+	}
+	//populating initital table with user bookings vals end
+	
+	//console.log(data["PermaSchedule"][0]);
+	//populating initital table with permaSchd vals start
+	if(data["PermaSchedule"].length!=0)
+	{
+		for(var i =0; i<data["PermaSchedule"][0].length; i++) // how many days
+		{
+			for(var j = 0; j<data["PermaSchedule"][0][0].length; j++)// how many periods per day
+			{
+				//console.log(data["PermaSchedule"][0][i][j][0]);
+				if(data["PermaSchedule"][0][i][j][0] != unbookedval)//if data isn't unbooked in the perma sechdule the replace the booking with that 
+				{
+					//console.log(initialTable[i][j]);
+					initialTable[i][j] = data["PermaSchedule"][0][i][j]
+				}
+			}
+		}
+	}
+	//populating initital table with permaSchd vals end
+	
+	console.log(initialTable)
 	tbl = "";//clearing table
 	tbl +='<table class="table table-hover">';
 	
 	//creating table headers start
 	if(data["Min30Periods"]=="false")//normal headers
 	{
-		bookval = "booked";
-		lockval = "locked";
-		lessonval = "lesson";
-		unbookedval = "unbooked";
 		//--->create table header > start
 		tbl +='<thead>';
 			tbl +='<tr>';
@@ -1771,10 +1870,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	}
 	else //30 min period headers
 	{
-		bookval = "bkd";
-		lockval = "lck";
-		lessonval = "lsn";
-		unbookedval = "unb";
+		
 		//--->create table header > start
 		tbl +='<thead>';
 			tbl +='<tr>';
@@ -1806,12 +1902,28 @@ function generateBookingTable(data,resosType) //generates table for user
 	
 	//--->create table body > start
 	tbl +='<tbody>';
-	for(var i = 0; i<data["PermaSchedule"].length;i++)
-	{
-		
-	}
+		for(var i = 0; i <initialTable.length; i++)
+		{
+			row_id = random_id();
+			tbl +='<tr row_id="'+row_id+'" id="'+row_id+'">'
+			tbl +='<td ><div class="bold" col_name="Day">'+getDayFromNum2(i)+'</div></td>';
+			for(var j = 0; j<initialTable[0].length; j++)
+			{
+				var bookState = initialTable[i][j][0];
+				var hiddenState = initialTable[i][j][1];
+				for(var k = 2; k<initialTable[i][j].length; k++)
+				{
+					hiddenState = hiddenState + "," + initialTable[i][j][k];
+				}
+				var newString = bookState +'<span class="hidden">'+hiddenState+'</span>'
+				tbl +='<td ><div class="'+bookState+' row_data pointerCursor" edit_type="click" col_name="">'+newString+'</div></td>';
+			}
+			tbl +='</tr>'
+		}
 	tbl +='</tbody>';
 	//--->create table body > end
+	tbl +='</table">';
+	$("#testTable").html(tbl);
 }
 function getSpecificResos(resosID, resosType)
 {
@@ -1846,3 +1958,11 @@ var random_id = function() //generates a random ROW ID, for identifying cell dat
 	return id_num + id_str;
 } 
 //View Room End
+
+function getWeekBegining(d) //generates the week begining date for a given date value.
+{
+  d = new Date(d);
+  var day = d.getDay(),
+      diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+  return new Date(d.setDate(diff));
+}

@@ -104,7 +104,7 @@ h1,h2,h3,h4,p,label,a
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 5; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 30px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -169,6 +169,7 @@ h1,h2,h3,h4,p,label,a
 	border-radius: 25px;
 	overflow-y: scroll;
 	position: relative;
+	margin-top: 80px;
 }
 .width700
 {
@@ -957,3 +958,109 @@ h1,h2,h3,h4,p,label,a
 	background-color: rgba(0,0,0,0.5);
 }
 /*Error module, showing up when connection breaks in order to have the user reload page end*/
+
+
+/*Timetable Module CSS start*/
+#viewPort /*Viewport, showing modals*/
+{
+	height: 150px;
+	width: auto;
+}
+viewPort_Content
+{
+	display: none;
+}
+#viewPort button
+{
+	border: none;
+	height: 30px;
+	width: 120px;
+	background-color: #9C9C9C;
+	color: white;
+}
+#viewPort button:hover
+{
+	background-color: #CACACA;
+	color: black;
+}
+#viewPort button:disabled 
+{
+    background: #dddddd;
+	color:white
+}
+#viewPort button:disabled:hover 
+{
+    background: #dddddd;
+	color:white
+}
+
+.timeTableModal-content 
+{
+    background-color: white;/*rgba(245,245,245,1.00);*/
+    margin: 10% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+	border-radius: 25px;
+    width: 95%; /* Could be more or less, depending on screen size */
+	min-width: 944px;
+}
+.timeTableModal-content h3
+{
+	font-weight: 500;
+	font-size: 23px;
+	margin: 0;
+	display: inline-block;
+}
+.timeTableModal-content label
+{
+	margin: 0;
+}
+
+#DivDescription /*viewport description code*/
+{
+	position: absolute;
+	margin-left: 380px;
+}
+#whichWeekBtn /*Change Week Btn*/
+{
+	border: none;
+	height: 30px;
+	width: 120px;
+	background-color: #9C9C9C;
+	color: white;
+	display: inline-block;
+	float: right;
+	margin-top: 40px;
+}
+#whichWeekBtn:hover /*Change Week Btn hvr*/
+{
+	background-color: #CACACA;
+	color: black;
+}
+
+#preLimLoader/*Prelimary loader for the timetable to show user information*/
+{
+	text-align: center;
+	display: none;
+	margin-left: 100px;
+}
+#preLimLoaderText /*Prelimary loader for the timetable*/
+{
+	margin: 0;
+}
+
+#LoaderTimetable
+{
+	height: 100%;
+	width: 100%;
+	top:0;
+	background-color: white;
+	/*background-color: rgb(24,24,31);*/
+	z-index: 5;
+}
+#LoaderTimetable img
+{
+	display: block;
+	margin: auto;
+}
+/*Timetable Module CSS end*/

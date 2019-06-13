@@ -341,8 +341,42 @@
 			</div>
 			
 		</div>
-		<br><br><br><br><br><br>
-		<div id="testTable"></div>
+		
+		<!--Show Timetable Module-->
+		<div id="timeTableModal" class="Modal"> 
+		  <div class="timeTableModal-content">
+			<span id="closeTimetableModal" class="Modalclose">&times;</span>	
+				<h3 id="timeTableTitle">Timetable:</h3>
+				<button id="whichWeekBtn">Change Week</button>
+				<div id="viewPort">
+					<div id="viewPort_Content"> <!--Viewport, where all the buttons and eca infomation shows-->
+						<div id="DivDescription">
+							<label id="Description"></label>
+						</div>
+						<label id="bookingDetails">.......</label>
+						<br class="noHeightBreak">
+						<label id="bookingStatus">.......</label><br>
+						<br>					
+						<button id="bookBtn">Quick Book</button>
+						<button id="rbookBtn">Book Recurring</button>				
+						<button id="quickLockBtn">Lock</button>
+						<button id="lessonLockBtn">Lesson</button>
+						<button id="deleteBtn">Delete</button>
+						<button id="contactBtn">Contact</button>
+					</div>	
+					<div id="preLimLoader">
+						<em><p id="preLimLoaderText">[Click on a Timeslot to View Bookings]</p></em>
+					</div>
+				</div>
+				
+				<div id="timeTable"></div>
+				
+				<!--loader for when the page loads within the timetable modolue-->
+				<div id="LoaderTimetable"> 
+					<img style="margin-bottom: 80px;" width="10%" src="../Images/loader.gif">
+				</div>
+		  </div>
+		</div>
 	</body>
 	
 	<script>//initilizers
@@ -457,9 +491,35 @@
 		  AddResosModal.style.display = "none";
 		}
 
+	</script>
+	<script>//modal code for timetables
+		//modal Code LoginSignup
+		
+		var timetableModal = document.getElementById("timeTableModal");
+
+		// Get the <span> element that closes the modal
+		var closeTimetableModalBtn = document.getElementById("closeTimetableModal");
+
+		// When the user clicks the button, open the modal 
+		function openTimetableModal()
+		{
+			timetableModal.style.display = "block";
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		closeTimetableModalBtn.onclick = function() 
+		{
+		  timetableModal.style.display = "none";
+		}
+
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
-		  if (event.target == AddResosModal) {
+		  if (event.target == timetableModal) 
+		  {
+			timetableModal.style.display = "none";
+		  }
+		  else if (event.target == AddResosModal) 
+		  {
 			AddResosModal.style.display = "none";
 		  }
 		}

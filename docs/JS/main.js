@@ -1733,6 +1733,15 @@ function getDayFromNum2(n)// get day from num full day name
 //View Room Start
 function viewResos(resosID,resosType)
 {
+	openTimetableModal();
+	$("#timeTable").html("");
+	$("#LoaderTimetable").show();
+	$("#viewPort").show();
+	$("#viewPort_Content").hide();
+	$("#preLimLoader").show();
+	$('#timeTableTitle').html('Timetable:');
+	$("#whichWeekBtn").html("")
+	$("#whichWeekBtn").attr("onClick","")
 	getSpecificResos(resosID,resosType)
 	validateResosFetch()
 	indiResosDataFetchSuccess = false;
@@ -1923,7 +1932,8 @@ function generateBookingTable(data,resosType) //generates table for user
 	tbl +='</tbody>';
 	//--->create table body > end
 	tbl +='</table">';
-	$("#testTable").html(tbl);
+	$("#timeTable").html(tbl);
+	$("#LoaderTimetable").hide();
 }
 function getSpecificResos(resosID, resosType)
 {

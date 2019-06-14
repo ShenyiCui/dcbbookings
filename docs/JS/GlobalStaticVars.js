@@ -31,6 +31,11 @@ var individualData;
 
 //Individual Room Data
 var indiRoomData;
+var resosName; // used to store the resos ID the user is currently viewing
+var currentWeek; // used to store the current week, 0 for week 1, 1 for week 2
+var currentWeekB //used to store the current weekbegining 
+var resosAdmin = false; //boolean, used to store whether or not you are the true admin of a room. 
+var clickBookedEmail = ""; //used to store the email of the person who booked the room. 
 
 //All Resos Array [ResosID,ResosType]
 var allResos = [];
@@ -46,6 +51,9 @@ var allRooms;
 //List Of All Room Admins, used when creating a resos. 
 var adminEmailArray
 
+//timetable modal variables
+var PrevSelect; //stores the previously selected cell data. 
+var min30Periods; //boolean stores wheteher or not the current resos is using the 30 min period option
 
 //timetable vars
 var previewUploadTable = []; 

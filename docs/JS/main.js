@@ -1730,18 +1730,307 @@ function getDayFromNum2(n)// get day from num full day name
 }
 //TIMESTAMP END
 
+function loadingModal()
+//puts the timetable modal into loading mode for the user
+{
+	$("#timeTable").html("");
+	$("#LoaderTimetable").show();
+	$("#preLimLoader").hide()
+	$("#viewPort").show();
+	$("#timetableSettings").hide();
+	$("#viewPort_Content").hide();
+	$('#timeTableTitle').html('Loading...');
+	$("#whichWeekBtn").hide();
+	$("#whichWeekBtn").attr("onClick","")
+}
+function populateTimetableModal(timetableName)
+//puts the timetable modal out of loading mode for the user
+{
+	$("#LoaderTimetable").hide();
+	$("#preLimLoader").show()
+	$('#timeTableTitle').html(timetableName);
+	$("#whichWeekBtn").show();
+	$("#whichWeekBtn").html("Change Week")
+	$("#whichWeekBtn").attr("onClick","")
+	if(resosAdmin)
+	{
+		$("#timetableSettings").show();
+	}
+}
+
+function removeTimetableEventListeners() //used in viewRoom's document functions to for listening for user activity
+//remove all event listeners from the program for new ones to be added in. 
+{
+	$(document).off('click', '#bookBtn')
+	$(document).off('click', '#deleteBtn')
+	$(document).off('click', '.row_data')
+	$(document).off('click', '#contactBtn')
+	$(document).off('click', '#BookRecrBtn')
+	$(document).off('click', '#sendBtn')
+	$(document).off('click', '#lessonLockBtn')
+	$(document).off('click', '#quickLockBtn')
+	$(document).off('click', '#addUserBtn')
+	$(document).off('focusout', '.row_data')
+}
+function timetableDocFunctionsRoom()
+{
+	removeTimetableEventListeners();
+	//--->Editing Viewport > start
+	$(document).on('click', '.row_data', function(event)
+	{	
+		//selecting the currently clicked cell, adding the selected color class to it >>>> start
+		if(PrevSelect!=null)
+		{
+			PrevSelect.removeClass("selected");// remove the select look from the previously selected cell 
+		}
+		var row_div = $(this)
+		row_div.addClass("selected");
+		PrevSelect = row_div;//storing the selected cell
+		//selecting the currently clicked cell, adding the selected color class to it >>>> end
+		
+		//exatracting the information from the cell you just clicked on >>>> start
+		var coordinates = [] // stores the coordinates of the cell that was clicked. 
+		var day = ""// stores the day of the cell clicked
+		var period = "" //stores the period of the cell that was clicked
+		var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked 
+		var currentBookingState = "" // stores the current booking state of the cell you are on
+		var bookingDetails; // stores the current booking detailed information in an array 
+		//structure of each period in the fetched userbookings
+		/*
+		[0] - booking email
+		[1] - perpectual, nonperpectual booking etc. 
+		[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1 
+		[3] - week 1, week 2 or both
+		[4] - timeStamp
+		[5] - ECADescription [name][description]
+		[6] - coordinate of booking [row][col] on the table
+		[7] - week begining
+		*/
+		//putting the coordinates into the variable
+		coordinates.push(parseInt($(this).closest('tr').attr('row_name')));	
+		coordinates.push(parseInt($(this).attr('col_name')));
+		//console.log(coordinates);
+		
+		//getting the current day
+		var row_id = $(this).closest('tr').attr('row_id');	
+		var row = document.getElementById(row_id);
+		var cell = row.getElementsByTagName("td");
+		day = cell[0].textContent;
+		//getting the current period 
+		period = getPeriod(coordinates[1],min30Periods)
+
+		// storing the full HTML of the currently clicked div
+		fullCurrentStatus = $(this).html();
+		//getting the current booking status
+		currentBookingState = fullCurrentStatus.split(' ')[0]
+		//getting the hidden span content
+		var hiddenSpan = extractHiddenContent(fullCurrentStatus)
+		bookingDetails = hiddenSpan.split(' ')[1].split(',');
+		
+		//exatracting the information from the cell you just clicked on >>>> end
+		
+		
+		//populating the viewport with extracted information from the cell >>>> start
+		$("#viewPort").show();
+		$("#viewPort_Content").show();
+		$("#deleteBtn").hide();
+		$("#contactBtn").hide();
+		$("#bookBtn").hide();
+		$("#rbookBtn").hide();
+		$("#lessonLockBtn").hide();
+		$("#quickLockBtn").hide();
+		$("#preLimLoader").hide();
+		
+		$("#bookingDetails").html("<strong>Week Beginning: </strong>" + getWeekBegining(new Date()) + "<br><strong>Time:</strong> "+day+" "+period);
+		
+		if(currentBookingState == unbookedval)//if booked state is unbooked
+		{
+			$("#bookingStatus").html("<strong>Status: </strong>unbooked<br>")
+			$("#bookBtn").show();
+			$("#rbookBtn").show();
+			//the checkRoomAdmin function was called in the generate booking table area, used to determine whether the current user is a resos admin. or a master admin. 
+			if(resosAdmin==true)
+			{
+				$("#lessonLockBtn").show();
+				$("#quickLockBtn").show();
+			}
+		}
+		else if(currentBookingState == bookval)//if booked state is booked
+		{
+			//structure of each period in the fetched userbookings
+			/*
+			[0] - booking email
+			[1] - perpectual, nonperpectual booking etc. 
+			[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1 
+			[3] - week 1, week 2 or both
+			[4] - timeStamp
+			[5] - ECADescription [name][description]
+			[6] - coordinate of booking [row][col] on the table
+			[7] - week begining
+			*/
+			clickBookedEmail = bookingDetails[0];
+			if(userEmail == clickBookedEmail)//if user is the one who made the booking
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> booked <strong><em>[Timestamp: "+timeStamp+"]</em></strong><br><strong>Email: </strong>"+clickBookedEmail)
+				$("#deleteBtn").show();
+				if($(this).hasClass("disable"))//if time to make booking has elasped. 
+				{
+					$("#deleteBtn").attr("disabled", "disabled");
+					if(Recurrence=true)
+					{
+						$("#deleteBtn").removeAttr("disabled");
+					}
+				}
+				else
+				{
+					$("#deleteBtn").removeAttr("disabled");
+				}
+			}
+			else
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> booked <strong><em>[Timestamp: "+timeStamp+"]</em></strong><br><strong>Email: </strong>"+clickBookedEmail)
+				$("#contactBtn").show();
+				if($(this).hasClass("disable"))
+				{
+					$("#contactBtn").attr("disabled", "disabled");
+					if(Recurrence=true)
+					{
+						$("#contactBtn").removeAttr("disabled");
+					}
+				}
+				else
+				{
+					$("#contactBtn").removeAttr("disabled");
+				}
+			}
+			if(resosAdmin == true)
+			{
+				$("#deleteBtn").show();
+				$("#deleteBtn").removeAttr("disabled");
+			}
+		}
+		else if(currentBookingState == lessonval) //if booked state is lesson
+		{
+			clickBookedEmail = bookingDetails[0];
+			if(userEmail == clickBookedEmail)
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> lesson<br><strong>Email: </strong>"+clickBookedEmail)
+				$("#deleteBtn").show();
+				$("#deleteBtn").removeAttr("disabled");				}
+			else
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> lesson<br><strong>Email: </strong>"+clickBookedEmail)
+				$("#contactBtn").show();
+				$("#contactBtn").removeAttr("disabled");	
+			}
+			if(resosAdmin == true)
+			{
+				$("#deleteBtn").show();
+				$("#deleteBtn").removeAttr("disabled");
+			}
+		}
+		else if(currentBookingState ==lockval) //if booked state is lock
+		{
+			if(resosAdmin == true)
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> locked")
+				$("#deleteBtn").show();
+				$("#deleteBtn").removeAttr("disabled");
+			}
+			else
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> locked")
+			}
+		}
+		
+		//populating the viewport with extracted information from the cell >>>> end
+	});
+	//--->Editing Viewport > end
+	
+	//--->MakingviewPort Dissapear when user clicks away > start
+	$(document).mouseup(function(e) 
+	{	
+		var container = $("#viewPort");
+		var table = $("#timeTable");
+		var bookRModal = $("#BookRecuring")
+		var EModal = $("#emailModal")
+
+		// if the target of the click isn't the container nor a descendant of the container
+		if (!container.is(e.target) && container.has(e.target).length === 0 && !table.is(e.target) && table.has(e.target).length === 0 && !bookRModal.is(e.target) && bookRModal.has(e.target).length === 0 && !EModal.is(e.target) && EModal.has(e.target).length === 0 ) 
+		{
+			$("#viewPort_Content").hide()
+			$("#preLimLoader").show();
+			if(PrevSelect!=null)
+			{
+				PrevSelect.removeClass("selected")
+			}
+		}
+	});
+	//--->MakingviewPort Dissapear  when user clicks away > end
+}
+
+function getPeriod(colCoor, min30)//first parameter is a column coordinate of the cell you clicked, min 30 is whether or not it is a 30 min period room
+{
+	if(min30)
+	{
+		var period = new Array(19);
+		period[0] =  "Period 1 <em>[1]</em>";
+		period[1] =  "Period 1 <em>[2]</em>";
+		period[2] =  "Period 2 <em>[1]</em>";
+		period[3] =  "Period 2 <em>[2]</em>";
+		period[4] =  "Break";
+		period[5] =  "Period 3 <em>[1]</em>";
+		period[6] =  "Period 3 <em>[2]</em>";
+		period[7] =  "Period 4 <em>[1]</em>";
+		period[8] =  "Period 4 <em>[2]</em>";
+		period[9] =  "Lunch";
+		period[10] =  "Lunch";
+		period[11] =  "Period 5 <em>[1]</em>";
+		period[12] =  "Period 5 <em>[2]</em>";
+		period[13] =  "Period 6 <em>[1]</em>";
+		period[14] =  "Period 6 <em>[2]</em>";
+		period[15] =  "ECA 1 <em>[1]</em>";
+		period[16] =  "ECA 1 <em>[2]</em>";
+		period[17] =  "ECA 2 <em>[1]</em>";
+		period[18] =  "ECA 2 <em>[2]</em>";
+		return period[colCoor];
+	}
+	else
+	{
+		var period = new Array(10);
+		period[0] =  "Period 1";
+		period[1] =  "Period 2";
+		period[2] =  "Break";
+		period[3] =  "Period 3";
+		period[4] =  "Period 4";
+		period[5] =  "Lunch";
+		period[6] =  "Period 5";
+		period[7] =  "Period 6";
+		period[8] =  "ECA 1";
+		period[9] =  "ECA 2";
+		return period[colCoor];
+	}
+	
+}
+function checkIfResosAdmin()//function that checks whether or not you are the admin of the resos
+{
+	//seeing if you are an admin of the room
+	resosAdmin = false; 
+	for(var i = 0; i< indiRoomData["Items"][0]["RoomAdmin"].length; i++)
+	{
+		if(indiRoomData["Items"][0]["RoomAdmin"][i].trim().toLowerCase()==userEmail.trim().toLowerCase())
+		{
+			resosAdmin = true; 
+		}
+	}
+}
+
 //View Room Start
 function viewResos(resosID,resosType)
 {
 	openTimetableModal();
-	$("#timeTable").html("");
-	$("#LoaderTimetable").show();
-	$("#viewPort").show();
-	$("#viewPort_Content").hide();
-	$("#preLimLoader").show();
-	$('#timeTableTitle').html('Timetable:');
-	$("#whichWeekBtn").html("")
-	$("#whichWeekBtn").attr("onClick","")
+	loadingModal();
+	resosName = resosID;
 	getSpecificResos(resosID,resosType)
 	validateResosFetch()
 	indiResosDataFetchSuccess = false;
@@ -1761,6 +2050,7 @@ function viewResos(resosID,resosType)
 }
 function generateBookingTable(data,resosType) //generates table for user
 {
+	checkIfResosAdmin()
 	var tableRowLength = 5;//the length of the table you are making
 	var tableColLength = 0; 
 	if(data["Min30Periods"]=="false")//normal headers
@@ -1770,6 +2060,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		lockval = "locked";
 		lessonval = "lesson";
 		unbookedval = "unbooked";
+		min30Periods = false; 
 	}
 	else
 	{
@@ -1778,6 +2069,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		lockval = "lck";
 		lessonval = "lsn";
 		unbookedval = "unb";
+		min30Periods = true; 
 	}
 	//building initial empty table start
 	var initialTable = [];
@@ -1799,7 +2091,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		weekData.push(dayData);
 	}
 	initialTable = weekData
-	console.log(initialTable);
+	//console.log(initialTable);
 	//building initial empty table end
 	
 	//populating initital table with user bookings vals start
@@ -1829,7 +2121,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	}
 	for(var i =0; i<userBookings.length; i++)
 	{
-		initialTable[userBookings[fetchedUserBookings[i].length-2][0]][userBookings[fetchedUserBookings[i].length-2][1]] = userBookings;	
+		initialTable[userBookings[i][userBookings[i].length-2][0]][userBookings[i][userBookings[i].length-2][1]] = userBookings[i];	
 	}
 	//populating initital table with user bookings vals end
 	
@@ -1852,7 +2144,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	}
 	//populating initital table with permaSchd vals end
 	
-	console.log(initialTable)
+	//console.log(initialTable)
 	tbl = "";//clearing table
 	tbl +='<table class="table table-hover">';
 	
@@ -1914,7 +2206,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		for(var i = 0; i <initialTable.length; i++)
 		{
 			row_id = random_id();
-			tbl +='<tr row_id="'+row_id+'" id="'+row_id+'">'
+			tbl +='<tr row_name="'+i+'" row_id="'+row_id+'" id="'+row_id+'">'
 			tbl +='<td ><div class="bold" col_name="Day">'+getDayFromNum2(i)+'</div></td>';
 			for(var j = 0; j<initialTable[0].length; j++)
 			{
@@ -1924,8 +2216,8 @@ function generateBookingTable(data,resosType) //generates table for user
 				{
 					hiddenState = hiddenState + "," + initialTable[i][j][k];
 				}
-				var newString = bookState +'<span class="hidden">'+hiddenState+'</span>'
-				tbl +='<td ><div class="'+bookState+' row_data pointerCursor" edit_type="click" col_name="">'+newString+'</div></td>';
+				var newString = bookState +' <span class="hidden">'+hiddenState+'</span>'
+				tbl +='<td ><div class="'+bookState+' row_data pointerCursor" edit_type="click" col_name="'+j+'">'+newString+'</div></td>';
 			}
 			tbl +='</tr>'
 		}
@@ -1933,9 +2225,11 @@ function generateBookingTable(data,resosType) //generates table for user
 	//--->create table body > end
 	tbl +='</table">';
 	$("#timeTable").html(tbl);
-	$("#LoaderTimetable").hide();
+	populateTimetableModal("Room Timetable: <em>"+resosName+"</em>");
+	timetableDocFunctionsRoom()//activating document functions for room
+	
 }
-function getSpecificResos(resosID, resosType)
+function getSpecificResos(resosID, resosType) // gets the information of a very specific resosID
 {
 	if(resosType=="room")
 	{
@@ -1960,7 +2254,6 @@ function getSpecificResos(resosID, resosType)
 		});
 	}
 }
-
 var random_id = function() //generates a random ROW ID, for identifying cell data. 
 {
 	var id_num = Math.random().toString(9).substr(2,3);
@@ -1969,10 +2262,19 @@ var random_id = function() //generates a random ROW ID, for identifying cell dat
 } 
 //View Room End
 
-function getWeekBegining(d) //generates the week begining date for a given date value.
+function getWeekBegining(date) //generates the week begining date for a given date value.
 {
-  d = new Date(d);
-  var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-  return new Date(d.setDate(diff));
+  var day = date.getDay() || 7;  
+    if( day !== 0 ) 
+        date.setHours(-24 * (day - 2)); 
+	
+	date = date.toUTCString();
+	date = date.split(' ').slice(0, 4).join(' ');
+    return date;
 }
+function extractHiddenContent(s)//extracts the hidden content from within a span.
+{
+  var span = document.createElement('span');
+  span.innerHTML = s;
+  return span.textContent || span.innerText;
+}; 

@@ -2278,3 +2278,406 @@ function extractHiddenContent(s)//extracts the hidden content from within a span
   span.innerHTML = s;
   return span.textContent || span.innerText;
 }; 
+
+
+function generateAdminTable() // generates admin table and the doc functions that come with it
+{
+	removeTimetableEventListeners()
+	$("#AdminUserTable").html("<em>Processing Data...</em>")
+	$("#LoaderUser").show()
+	$.ajax({
+		type: 'GET',
+		url: DCBBookingsAdminUserAPI,
+		success: function (data) 
+		{
+			$("#LoaderUser").hide()
+			tbl = ''
+				//--->create data table > start
+
+			tbl += '<table class="table table-hover">'
+
+				//--->create table header > start
+				tbl += '<thead>';
+					tbl += '<tr>';
+						tbl += '<th></th>';
+						tbl += '<th>Email</th>';
+						tbl += '<th>Options</th>';
+					tbl += '</tr>';
+				tbl += '</thead>';
+				//--->create table header > end
+
+
+				//--->create table body > start
+				tbl += '<tbody>';
+
+					//--->create table body rows > start
+					$.each(data.Items, function (index, val)
+					{
+						//you can replace with your database row id
+						row_id = random_id();
+
+						//loop through ajax row data
+						tbl += '<tr id="' + row_id + '" row_id="' + row_id + '">';
+							tbl += '<td ><div edit_type="click" col_name="email"> <span class="hidden">' + val['email'] + '</span></div></td>';
+							tbl += '<td ><div edit_type="click" class="row_data" col_name="userEmail">' + val['userEmail'] + '</div></td>';
+						//--->edit options > start
+						tbl += '<td>';
+
+						tbl += '<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="' + row_id + '" > Edit</a> | </span>';
+						tbl += '<span class="btn_delete"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Delete</a> </span>';
+
+						//only show this button if edit button is clicked
+						tbl += '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Save</a> | </span>';
+						tbl += '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="' + row_id + '"> Cancel</a></span>';
+
+						tbl += '</td>';
+						//--->edit options > end
+
+						tbl += '</tr>';
+					});
+
+					//--->create table body rows > end
+
+				tbl += '</tbody>';
+				//--->create table body > end
+
+			tbl += '</table>'
+				//--->create data table > end
+
+			//out put table data
+			$(document).find('#AdminUserTable').html(tbl);
+
+			$(document).find('.btn_save').hide();
+			$(document).find('.btn_cancel').hide();
+		},
+		error: function (data) {
+			$("#errorModule").show();
+		}
+	});
+ 	
+	//--->make div editable > start
+	$(document).on('click', '.row_data', function(event)
+	{
+		event.preventDefault();
+		if($(this).attr('edit_type') == 'button')
+		{
+			return false;
+		}
+		//make div editable
+		$(this).closest('div').attr('contenteditable', 'true');
+		//add bg css
+		$(this).addClass('editColor').css('padding','6px');
+		$(this).focus();
+		//--->add the original entry > start
+		//--->add the original entry > end
+	})
+	//--->make div editable > end
+	
+	//--->save single field data > start
+	$(document).on('focusout', '.row_data', function(event)
+	{
+		event.preventDefault();
+		if($(this).attr('edit_type') == 'button')
+		{
+			return false;
+		}
+
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		.removeClass('editColor') //add bg css
+		.css('padding','')
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+		var colEmail = Cells[0].textContent;
+		$.ajax({
+			type:'PATCH',
+			url:DCBBookingsAdminUserAPI,
+			data: JSON.stringify(
+					{
+						"email":extractHiddenContent(colEmail).trim(),
+						"updateAttr":col_name,
+						"updateValue":col_val
+					}
+				  ),
+
+			contentType:"application/json",
+
+			success: function(data){
+				generateAdminTable()
+			},
+
+			error: function(data)
+			{
+				$("#errorModule").show();
+			}
+		});
+
+		var arr = {};
+		arr[col_name] = col_val;
+		//use the "arr"	object for your ajax call
+		$.extend(arr, {row_id:row_id});
+		//out put to show
+		console.log(JSON.stringify(arr, null, 2));
+	})
+	//--->save single field data > end
+	
+	//--->button > AddUser > start
+	$(document).on('click', '#addUserBtn', function(event)
+	{
+		$.ajax({
+			type:'POST',
+			url:DCBBookingsAdminUserAPI,
+			data: JSON.stringify(
+					{
+						"email":$("#emailInput").val(),
+						"userEmail":$("#emailInput").val()
+					}
+				  ),
+
+			contentType:"application/json",
+
+			success: function(data){
+				generateAdminTable()
+				$("#emailInput").val("");
+			},
+
+			error: function(data)
+			{
+				$("#errorModule").show();
+			}
+		});
+	});
+	//--->button > edit > end
+	
+	//--->button > edit > start
+	$(document).on('click', '.btn_edit', function(event)
+	{
+		event.preventDefault();
+		var tbl_row = $(this).closest('tr');
+
+		var row_id = tbl_row.attr('row_id');
+
+		tbl_row.find('.btn_save').show();
+		tbl_row.find('.btn_cancel').show();
+
+		//hide edit button
+		tbl_row.find('.btn_edit').hide();
+		tbl_row.find('.btn_delete').hide();
+
+		//--->add the original entry > start
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			//this will help in case user decided to click on cancel button
+			$(this).attr('original_entry', $(this).html());
+		});
+		//--->add the original entry > end
+
+		//make the whole row editable
+		tbl_row.find('.row_data')
+		.attr('contenteditable', 'true')
+		.attr('edit_type', 'button')
+		.addClass('editColor')
+		.css('padding','3px')
+
+	});
+	//--->button > edit > end
+	
+	//--->button > cancel > start
+	$(document).on('click', '.btn_cancel', function(event)
+	{
+		event.preventDefault();
+
+		var tbl_row = $(this).closest('tr');
+
+		var row_id = tbl_row.attr('row_id');
+
+		//hide save and cacel buttons
+		tbl_row.find('.btn_save').hide();
+		tbl_row.find('.btn_cancel').hide();
+
+		//show edit button
+		tbl_row.find('.btn_edit').show();
+		tbl_row.find('.btn_delete').show();
+
+		//make the whole row editable
+		tbl_row.find('.row_data')
+		.attr('edit_type', 'click')
+		.removeClass('editColor')
+		.css('padding','')
+
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			$(this).html( $(this).attr('original_entry') );
+		});
+	});
+	//--->button > cancel > end
+	
+	//--->save whole row entery > start
+	$(document).on('click', '.btn_save', function(event)
+	{
+		event.preventDefault();
+		var tbl_row = $(this).closest('tr');
+		var row_id = tbl_row.attr('row_id');
+		//hide save and cacel buttons
+		tbl_row.find('.btn_save').hide();
+		tbl_row.find('.btn_cancel').hide();
+
+		//show edit button
+		tbl_row.find('.btn_edit').show();
+		tbl_row.find('.btn_delete').show();
+
+		//make the whole row editable
+		tbl_row.find('.row_data')
+		.attr('edit_type', 'click')
+		.removeClass('editColor')
+		.css('padding','')
+
+
+		editingMultiple = false;
+		editingSelect = false;
+
+		//--->get row data > start
+		var arr = {};
+		tbl_row.find('.row_data').each(function(index, val) // normal Text Data Save
+		{
+			var col_name = $(this).attr('col_name');
+			var col_val  =  $(this).html();
+
+			var Row = document.getElementById(row_id);
+			var Cells = Row.getElementsByTagName("td");
+			var colEmail = Cells[0].textContent;
+
+			$.ajax({
+				type:'PATCH',
+				url:DCBBookingsAdminUserAPI,
+				data: JSON.stringify(
+						{
+							"email":extractHiddenContent(colEmail).trim(),
+							"updateAttr":col_name,
+							"updateValue":col_val
+						}),
+				contentType:"application/json",
+				success: function(data){
+					generateAdminTable()
+				},
+				error: function(data)
+				{
+					$("#errorModule").show();
+				}
+			});
+			arr[col_name] = col_val;
+		});
+		//--->get row data > end
+		
+		//use the "arr"	object for your ajax call
+		$.extend(arr, {row_id:row_id});
+		//out put to show
+		console.log(JSON.stringify(arr, null, 2))
+	});
+	//--->save whole row entery > end
+	
+	//--->Delete whole row entry > start
+	$(document).on('click', '.btn_delete', function(event)
+	{
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+
+		var colEmail = Cells[0].textContent;
+
+		$.ajax({
+			type:'PUT',
+			url:DCBBookingsAdminUserAPI,
+			data: JSON.stringify(
+				{
+					"email":extractHiddenContent(colEmail).trim()
+				}),
+			contentType:"application/json",
+			success: function(data){
+				generateAdminTable()
+			},
+			error: function(data)
+			{
+				$("#errorModule").show();
+			}
+		});
+	});
+}
+function changeSettingTitle(title) //changes the title of the setting page
+{
+	$("#SettingsTitleP").html(title);
+}
+
+function getAllAdmins()//gets all admins and puts them in the allMasterAdmins array
+{
+	$.ajax({
+		type: 'GET',
+		url: DCBBookingsAdminUserAPI,
+		success: function (data) 
+		{
+			$.each(data.Items, function (index, val)
+			{
+				allMasterAdmins.push(val['email']);
+			});
+		},
+		error: function (data)
+		{
+			$("#errorModule").show();
+		}
+	});
+}
+
+function searchMyResos() //search My resos list code
+{
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("searchResosInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myResosList");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+function getMyResos()//gets user resos and populates it on the search feature in settings
+{
+	$("#myResosList").html("<em>Processing Data...</em>")
+	var listOfMyResos = "";
+	var myResosArray = [];
+	individualData = null;
+	getUserInfo(userEmail);
+	validateIndiFetch();
+	function validateIndiFetch()
+	{
+		if(individualData!=null)
+		{
+			myResosArray = bubble_Sort2DArray(individualData["Items"][0]["userControlledResources"],0);
+			if(myResosArray!="Empty List")
+			{
+				for(var i = 0; i<myResosArray.length;i++)
+				{
+					listOfMyResos += '<li><a class="imgBtn" onClick="openResosSettings("'+myResosArray[i][0]+'","'+myResosArray[i][1]+'")">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
+				}
+				$("#myResosList").html(listOfMyResos);
+			}
+		}
+		else
+		{
+			window.setTimeout(validateIndiFetch,1000)
+		}
+	}
+}

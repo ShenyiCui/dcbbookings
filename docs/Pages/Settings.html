@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Settings</title>
+		<!--my own external stylesheets and JS-->
+		<link href="../CSS/main.css" rel="stylesheet">
+		<script src="../JS/main.js"></script>
+		<script src="../JS/GlobalStaticVars.js"></script>
+		<!--Imported Stylesheets and JS-->
+		<script src="../JS/aws-cognito.js"></script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.0.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../CSS/bootstrap.css">
+		<script src="../JS/NicEdit.js" type="text/javascript"></script><!--TextEdit-->
+		<script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
+	</head>
+
+	<body>
+		<!--Error Module--> 
+       	<div id="errorModule">
+			<div id="ErrorBox" class="ErrorColor">
+				<p align="center"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;REQUEST ERROR: <br>Connection Broken</p>
+				<button class="btnSuccessOutline" onClick="location.reload();">Reload</button>
+			</div>
+		</div>
+		
+		<!--Loader showing up when the site is loading in-->
+		<div id="Loader" class="loader">	
+			<img width="12.5%" src="../Images/loader.gif">
+			<br><br><br><br><br><br><br>
+			<p id="loaderTxt"></p>
+		</div>
+		
+		<div id="settingSideNav">
+		
+			<div id="backToMainPage">
+				<i onClick="self.location='Make_Booking.html'" class="fa fa-arrow-left imgBtn" aria-hidden="true"></i>
+				<p onClick="self.location='Make_Booking.html'" class="imgBtn" style="display: inline-block; margin: 0;">Go Back</p>
+			</div>
+			
+			<br><br>
+			
+			<div onClick="currentSettingsSlide(1);changeSettingTitle('Account Details');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-address-card-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Account Details</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<div onClick="getMyResos();currentSettingsSlide(2);changeSettingTitle('My Resource Settings');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Resource Settings</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<br><br>
+			<div onClick="currentSettingsSlide(3);changeSettingTitle('History');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;History</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<div onClick="currentSettingsSlide(4);changeSettingTitle('My Data');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Data</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<div onClick="currentSettingsSlide(5);changeSettingTitle('My Resource Data');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Resource Data</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<br><br>
+
+			<div id="adminSettings">
+				<div onClick="currentSettingsSlide(6);generateAdminTable();changeSettingTitle('Admin Users');" class="settingsPageBtn imgBtn edit_hover_class">
+					<p><i class="fa fa-user-md" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Admin Users</p>
+					<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+				</div>
+				<div onClick="currentSettingsSlide(7);changeSettingTitle('Teachers');" class="settingsPageBtn imgBtn edit_hover_class">
+					<p><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Teachers</p>
+					<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+				</div>
+				<div onClick="currentSettingsSlide(8);changeSettingTitle('Students');" class="settingsPageBtn imgBtn edit_hover_class">
+					<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Students</p>
+					<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+				</div>
+				<div onClick="currentSettingsSlide(9);changeSettingTitle('Users Pending Approval');" class="settingsPageBtn imgBtn edit_hover_class">
+					<p><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users Pending Approval</p>
+					<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+				</div>
+				<br><br>
+				<div onClick="currentSettingsSlide(10);changeSettingTitle('User Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+					<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User Data Analysis</p>
+					<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+				</div>
+				<div onClick="currentSettingsSlide(11);changeSettingTitle('Resource Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+					<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Resource Data Analysis</p>
+					<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+				</div>
+			</div>
+		</div>
+
+		<div id="mainSettingsPanel">
+			<div id="settingsTitleCard">
+				<p align="center" id="SettingsTitleP">Account Details</p>
+			</div>
+			
+			<!--Account Details 1-->
+			<div class="SettingsSlide">
+				
+			</div>
+			<!--My Resources 2-->
+			<div class="SettingsSlide">
+				<center>
+					<input type="text" id="searchResosInput" onkeyup="searchMyResos()" placeholder="Search Resources..."><br><br>
+					<ul id="myResosList"></ul>
+				</center>
+			</div>
+			
+			<!--History 3-->
+			<div class="SettingsSlide"></div>
+			<!--My Data 4-->
+			<div class="SettingsSlide"></div>
+			<!--My Resource Data 5-->
+			<div class="SettingsSlide"></div>
+			
+			<!--Admin Users 6-->
+			<div class="SettingsSlide">
+				<center>
+					<input placeholder="Email" id="emailInput">
+					<br>
+					<button class="btnSuccessOutline" id="addUserBtn">Add User</button>
+					<br><br><br>
+					<div id="AdminUserTable"></div>
+				</center>
+			</div>
+			<!--Teachers 7-->
+			<div class="SettingsSlide"></div>
+			<!--Students 8-->
+			<div class="SettingsSlide"></div>
+			<!--Users Pending Approval 9-->
+			<div class="SettingsSlide"></div>
+			
+			<!--User Data Analysis 10-->
+			<div class="SettingsSlide"></div>
+			<!--Resource Data Analysis 11-->
+			<div class="SettingsSlide"></div>
+			
+		</div>
+	</body>
+
+	<script>
+		//initilizers
+		FunnyloadingTxt("loaderTxt",true,2000);
+		//autoscalers to make sure that the panel widths match 
+		if ($(window).width() < 1280) 
+		{
+			document.getElementById("mainSettingsPanel").style.left = "400px";
+		}
+		else 
+		{
+			document.getElementById("mainSettingsPanel").style.left = "31.25%";
+		}
+		$(window).resize(function() 
+		{
+			if ($(window).width() < 1280) 
+			{
+				document.getElementById("mainSettingsPanel").style.left = "400px";
+			}
+			else 
+			{
+				document.getElementById("mainSettingsPanel").style.left = "31.25%";
+			}
+		});
+		
+		getUserEmail();
+		validateEmail();
+		function validateEmail()//get the email of the user
+		{
+			if(userEmail!=null)
+			{
+				getAllAdmins()
+				validateAdminFetch()
+			}
+			else
+			{
+				window.setTimeout(validateEmail,1000);
+			}
+		}
+		function validateAdminFetch()//get all admin users
+		{
+			if(allMasterAdmins.length!=0)
+			{
+				checkIfAdmin()
+				$("#Loader").fadeOut();
+			}
+			else
+			{
+				window.setTimeout(validateAdminFetch,1000);
+			}
+		}
+		function checkIfAdmin()//see if you are an admin
+		{
+			for(var i = 0; i<allMasterAdmins.length; i++)
+			{
+				if(userEmail.trim().toLowerCase()==allMasterAdmins[i].trim().toLowerCase())
+				{
+					masterAdmin= true; 
+				}
+			}
+			if(masterAdmin)
+			{
+				$("#adminSettings").show();
+			}
+			else
+			{
+				$("#adminSettings").hide();
+			}
+		}
+	</script>
+	<script>
+		var settingsSlideIndex = 1;
+		showSettingsSlides(settingsSlideIndex);
+		// Next/previous controls
+		function plusSettingsSlides(n) 
+		{
+		  showSettingsSlides(settingsSlideIndex += n);
+		}
+
+		// Thumbnail image controls
+		function currentSettingsSlide(n) 
+		{
+		  showSettingsSlides(settingsSlideIndex = n);
+		}
+
+		function showSettingsSlides(n) 
+		{
+		  var i;
+		  var settingsSlides = document.getElementsByClassName("SettingsSlide");
+		  if (n > settingsSlides.length) {settingsSlideIndex = 1} 
+		  if (n < 1) {settingsSlideIndex = settingsSlides.length}
+		  for (i = 0; i < settingsSlides.length; i++) {
+			  settingsSlides[i].style.display = "none"; 
+		  }
+		  settingsSlides[settingsSlideIndex-1].style.display = "block"; 
+		}
+		
+	</script>
+</html>

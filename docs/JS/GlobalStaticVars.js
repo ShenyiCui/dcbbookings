@@ -6,6 +6,8 @@ var AdminAppClientID = "2qis1u4uur3e17ua9a28r7b6ol"; //APPCLIENT ID
 var DCBBookingsCreateUserDBAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/UserSignupDCBBookings/user-signup"; //API for writing to the main USER DB of dcbbookings in dynamo DB
 var DCBBookingsResourceRoomAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Resos/resource/room";
 var DCBBookingsChangeUserInfoAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/ChangeUserInfo/user-changeinfo";
+var DCBBookingsAdminUserAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Admin/admins";//API that gives you access to admin users of DCBBookings
+
 //email of the current user
 var userEmail;
 
@@ -67,3 +69,7 @@ var unbookedval;
 
 //random loading text that'll give you fun messages to look at
 var randomLoadingText = ["Looking at kittens...","Playing with yarnballs...","Sniffing catnip...","Scratching the post...","Sharpening claws...","Stalking a mouse..."]
+
+//array of Master Admins
+var allMasterAdmins = [];
+var masterAdmin = false; //will be true if you are a master admin

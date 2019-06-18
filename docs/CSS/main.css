@@ -1080,3 +1080,150 @@ viewPort_Content
 	margin: auto;
 }
 /*Timetable Module CSS end*/
+
+/*Settings Page CSS*/
+#backToMainPage /*back button*/
+{
+	font-size: 17px;
+	background-color: rgb(255,255,255);
+	height: 40px;
+	display: inline-block;
+	width: 100%; 
+	margin: auto;
+    padding-top: 8px;
+	padding-left: 15px; 
+}
+#settingSideNav/*side navigation bar*/
+{
+	position: fixed;
+	background-color: rgb(240,239,245);
+	width: 31.25%;
+	min-width: 400px;
+	height: 100%;
+	left: 0px; 
+	border-right: 1px solid rgb(219,218,224); 
+	overflow-y: auto;
+}
+.settingsPageBtn
+{
+	background-color: rgb(255,255,255);
+	width: 100%;
+	height: 45px; 
+	border-top: 1px solid rgb(243,243,243);
+	border-bottom: 1px solid rgb(243,243,243);
+}
+.settingsPageBtn p
+{
+	display: inline-block;
+	font-size: 14px;
+	width: 49%; 
+	margin: auto;
+    padding: 10px;
+}
+
+/*Shows the hover arrow when btn is hovered over*/
+.edit_hover_class
+{
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+}
+.edit_hover_class a
+{
+	display:none;
+}
+.edit_hover_class:hover a 
+{
+ 	display:block;
+}
+
+/*settings panel*/
+#mainSettingsPanel
+{
+	position: fixed;
+	background-color: rgb(240,239,245);
+	left:400px;
+	width: 68.75%;
+	min-width: 880px; 
+	height: 100%;
+	overflow-y: auto;
+}
+#settingsTitleCard
+{
+	width: 68.75%;
+	min-width: 880px; 
+	background-color: rgb(255,255,255);
+	height: 40px; 
+	top:0;
+	position: fixed;
+	left:400px;
+}
+#settingsTitleCard p
+{
+	display: inline-block;
+	font-size: 17px;
+	width: 100%; 
+	margin: auto;
+    padding: 9px;
+}
+
+.SettingsSlide
+{
+	padding-top: 70px; 
+	display: none;
+	overflow-x: auto;
+}
+#AdminUserTable
+{
+	background-color: rgb(255,255,255);
+	width: 90%;
+}
+
+.SettingsSlide input
+{
+    width: 90%;
+    padding: 7px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+.SettingsSlide input:focus
+{
+    border: 3px solid #555;
+}
+
+#addUserBtn
+{
+	width: 90%;
+	border-radius: 2px; 
+}
+#adminSettings
+{
+	display: none;
+}
+
+/*CSS Search feture in the Settings Page*/
+#myResosList 
+{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 90%; 
+}
+#myResosList li a 
+{
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: rgb(255,255,255);
+  padding: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  color: black;
+  display: block
+}
+#myResosList li a:hover:not(.header) 
+{
+  background-color: #eee;
+}

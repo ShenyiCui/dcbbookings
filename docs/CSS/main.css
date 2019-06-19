@@ -1103,6 +1103,7 @@ viewPort_Content
 	left: 0px; 
 	border-right: 1px solid rgb(219,218,224); 
 	overflow-y: auto;
+	z-index: 4;
 }
 .settingsPageBtn
 {
@@ -1143,14 +1144,12 @@ viewPort_Content
 	background-color: rgb(240,239,245);
 	left:400px;
 	width: 68.75%;
-	min-width: 880px; 
 	height: 100%;
 	overflow-y: auto;
 }
 #settingsTitleCard
 {
 	width: 68.75%;
-	min-width: 880px; 
 	background-color: rgb(255,255,255);
 	height: 40px; 
 	top:0;
@@ -1170,7 +1169,6 @@ viewPort_Content
 {
 	padding-top: 70px; 
 	display: none;
-	overflow-x: auto;
 }
 #AdminUserTable
 {
@@ -1226,4 +1224,19 @@ viewPort_Content
 #myResosList li a:hover:not(.header) 
 {
   background-color: #eee;
+}
+
+#backToMainPage .closebtn 
+{
+	position: absolute;
+	top: -42px;
+	right: 10px;
+	font-size: 36px;
+	margin-left: 50px;
+	cursor: pointer;
+	display: none;
+}
+#backToMainPage .closebtn:hover
+{
+	color:rgba(0,162,155,1.00);
 }

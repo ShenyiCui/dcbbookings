@@ -33,10 +33,11 @@
 		</div>
 		
 		<div id="settingSideNav">
-		
+			
 			<div id="backToMainPage">
 				<i onClick="self.location='Make_Booking.html'" class="fa fa-arrow-left imgBtn" aria-hidden="true"></i>
 				<p onClick="self.location='Make_Booking.html'" class="imgBtn" style="display: inline-block; margin: 0;">Go Back</p>
+				<p class="closebtn" id="closeSideNavSettings" onclick="closeSettingsNav()">&times;</p>
 			</div>
 			
 			<br><br>
@@ -95,6 +96,7 @@
 
 		<div id="mainSettingsPanel">
 			<div id="settingsTitleCard">
+				<div style="margin-top: 5px;" id="HiddenMenuBtn"><i onClick="openSettingsNav();" class="fa fa-bars imgBtn"></i></div>
 				<p align="center" id="SettingsTitleP">Account Details</p>
 			</div>
 			
@@ -146,23 +148,31 @@
 		//initilizers
 		FunnyloadingTxt("loaderTxt",true,2000);
 		//autoscalers to make sure that the panel widths match 
-		if ($(window).width() < 1280) 
+		if ($(window).width() < 1280 && $(window).width() >= 1150) 
 		{
-			document.getElementById("mainSettingsPanel").style.left = "400px";
+			openSettingsNav()
 		}
-		else 
+		else if($(window).width() >= 1280)
 		{
-			document.getElementById("mainSettingsPanel").style.left = "31.25%";
+			openSettingsNav()
+		}
+		else if($(window).width() <= 1150)
+		{
+			closeSettingsNav()
 		}
 		$(window).resize(function() 
 		{
-			if ($(window).width() < 1280) 
+			if ($(window).width() < 1280 && $(window).width() >= 1150) 
 			{
-				document.getElementById("mainSettingsPanel").style.left = "400px";
+				openSettingsNav()
 			}
-			else 
+			else if($(window).width() >= 1280)
 			{
-				document.getElementById("mainSettingsPanel").style.left = "31.25%";
+				openSettingsNav()
+			}
+			else if($(window).width() <= 1150)
+			{
+				closeSettingsNav()
 			}
 		});
 		

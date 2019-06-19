@@ -2681,3 +2681,38 @@ function getMyResos()//gets user resos and populates it on the search feature in
 		}
 	}
 }
+
+function openSettingsNav()
+{
+	$("#settingSideNav").show();
+	$("#HiddenMenuBtn").hide()
+	if($(window).width() < 1280 && $(window).width() >= 1150)
+	{
+		document.getElementById("mainSettingsPanel").style.left = "400px";
+		document.getElementById("settingsTitleCard").style.left = "400px";
+		document.getElementById("mainSettingsPanel").style.width = "68.75%";
+		document.getElementById("settingsTitleCard").style.width = "68.75%";
+	}
+	else if($(window).width() >= 1280)
+	{
+		document.getElementById("mainSettingsPanel").style.left = "31.25%";
+		document.getElementById("settingsTitleCard").style.left = "31.25%";
+		document.getElementById("mainSettingsPanel").style.width = "68.75%";
+		document.getElementById("settingsTitleCard").style.width = "68.75%";
+	}
+	else if($(window).width() < 1150)
+	{
+		$("#closeSideNavSettings").show()
+	}
+	
+}
+function closeSettingsNav()
+{
+	$("#settingSideNav").hide();
+	$("#HiddenMenuBtn").show()
+	document.getElementById("mainSettingsPanel").style.left = "0px";
+	document.getElementById("settingsTitleCard").style.left = "0px";
+	document.getElementById("mainSettingsPanel").style.width = "100%";
+	document.getElementById("settingsTitleCard").style.width = "100%";
+	$("#closeSideNavSettings").hide()
+}

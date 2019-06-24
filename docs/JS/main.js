@@ -1,18 +1,18 @@
 //TODOs for Tomorrow:
 
-//start the view code for rooms. 
+//start the view code for rooms.
 //IF you are a student u should not be able to see teacher bookings
 //maybe start a gitub?
 
 //TASK COMPLETE LIST!
-//If mulitple admins are being added to a room then it should also show up on your resos on the other person's account  
-//do all the appropriate errormodules for internet connection problems. 
+//If mulitple admins are being added to a room then it should also show up on your resos on the other person's account
+//do all the appropriate errormodules for internet connection problems.
 //length check for add room, ROom ID can only be a certain length
-//!! IMPORTANT write code that'll check whether or not the file the user uploaded is valid or not, check format to make sure SIMS doenst get custom and to make sure that the length and width of the files are correct. 
+//!! IMPORTANT write code that'll check whether or not the file the user uploaded is valid or not, check format to make sure SIMS doenst get custom and to make sure that the length and width of the files are correct.
 //write and figure out the 30 min upload code and table
 
 
-function bubble_Sort2DArray(a,sortIndex)//bubble sort algorithm, used throughout to sort arrays. 
+function bubble_Sort2DArray(a,sortIndex)//bubble sort algorithm, used throughout to sort arrays.
 {
     var swapp;
     var n = a.length-1;
@@ -31,10 +31,10 @@ function bubble_Sort2DArray(a,sortIndex)//bubble sort algorithm, used throughout
         }
         n--;
     } while (swapp);
- return x; 
+ return x;
 }
 
-function bubble_SortJSONArray(a,sortValue)//bubble sort algorithm, used throughout to sort JSON Arrays, sort value is the value inside the json object that will be sorted, secondary sort value will be the second data to be sorted iF the first sort array is equal. . 
+function bubble_SortJSONArray(a,sortValue)//bubble sort algorithm, used throughout to sort JSON Arrays, sort value is the value inside the json object that will be sorted, secondary sort value will be the second data to be sorted iF the first sort array is equal. .
 {
     var swapp;
     var n = a.length-1;
@@ -53,7 +53,7 @@ function bubble_SortJSONArray(a,sortValue)//bubble sort algorithm, used througho
         }
         n--;
     } while (swapp);
- return x; 
+ return x;
 }
 
 function Login(usernames, passwords) //used to log a user into the main page
@@ -62,7 +62,7 @@ function Login(usernames, passwords) //used to log a user into the main page
     UserPoolId : AdmimUserpoolID, // your user pool id here
     ClientId : AdminAppClientID // your app client id here
 	};
-	var userPool = 
+	var userPool =
 	new AmazonCognitoIdentity.CognitoUserPool(poolData);
 	var userData = {
 		Username : usernames, // your username here
@@ -73,7 +73,7 @@ function Login(usernames, passwords) //used to log a user into the main page
         Password : passwords, // your password here
     };
     var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
- 
+
     cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
     cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: function (result) {
@@ -92,8 +92,8 @@ function Login(usernames, passwords) //used to log a user into the main page
 function Logout() // used to log a user out of the page
 {
 	cognitoUser=getCognitoUser();
-	
-	if (cognitoUser != null) 
+
+	if (cognitoUser != null)
 	{
     	cognitoUser.signOut();
 		self.location="../index.html";
@@ -114,18 +114,18 @@ function createNewUser(emails,password) //CreateNewUser
         Name : 'email', //user email
         Value : emails //the variable pushed into the method
     };
-	
+
     var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail); //creating a user attribuit of email
 
     attributeList.push(attributeEmail); //push all the attribuites into a attribute list linked-list
 
-    userPool.signUp(emails, password, attributeList, null, function(err, result){ //function to signup 
-        if (err) { //if signup failed 
-			document.getElementById("SignupErrMsg2").style.color="red"; 
+    userPool.signUp(emails, password, attributeList, null, function(err, result){ //function to signup
+        if (err) { //if signup failed
+			document.getElementById("SignupErrMsg2").style.color="red";
             document.getElementById("SignupErrMsg2").innerHTML=(err.message || JSON.stringify(err)); //why there is an error, output to user
             return;
         }
-        cognitoUser = result.user; //signup sucessful 
+        cognitoUser = result.user; //signup sucessful
 		createNewUserAddtoDB(emails,$("#whoAreYouSelect").val(),cognitoUser);
     });
 }
@@ -152,11 +152,11 @@ function createNewUserAddtoDB(emailz,rolez,CUSER) // Used to create a new user o
 		},
 		error:function(data)
 		{
-			document.getElementById("SignupErrMsg2").style.color="green"; 
+			document.getElementById("SignupErrMsg2").style.color="green";
 			document.getElementById("SignupErrMsg2").innerHTML = ("Welcome! "+ CUSER.getUsername() + "<br>Please access your email to verify your account. <br><br><em><strong>Please Check Your Junk Folder</strong></em>");
 		}
 	});
-	
+
 }
 
 function createNewUserAddtoDB2(emailz,rolez)// Used to create a new user on the DynamoDB side, adding to the user list to be mananged on the make booking page
@@ -180,7 +180,7 @@ function createNewUserAddtoDB2(emailz,rolez)// Used to create a new user on the 
 		},
 		error:function(data)
 		{
-			document.getElementById("starterPgErrMsg").style.color="red"; 
+			document.getElementById("starterPgErrMsg").style.color="red";
 			document.getElementById("starterPgErrMsg").innerHTML = ("Error in connection to database, please try again.");
 		}
 	});
@@ -188,7 +188,7 @@ function createNewUserAddtoDB2(emailz,rolez)// Used to create a new user on the 
 
 function getUserInfo(UserInfo) // get user info, used in the add resos func [createResos]
 {
-	userInfoFetchSuccess = false; 
+	userInfoFetchSuccess = false;
 	userInfoFetchError = false;
 	$.ajax({
 		type:'PATCH',
@@ -201,20 +201,20 @@ function getUserInfo(UserInfo) // get user info, used in the add resos func [cre
 		success:function(data)
 		{
 			individualData = data;
-			userInfoFetchSuccess = true; 
+			userInfoFetchSuccess = true;
 		},
 		error:function(data)
 		{
-			userInfoFetchError = true; 
-			$("#errorModule").show();
+			userInfoFetchError = true;
+			errorModuleShow()
 		}
 	});
 }
 function updateUserInfo(updateAttr, updateVal) // update user info, used in add resos func [createResos]
 {
 	userInfoUpdateSuccess = false;
-	userInfoUpdateError = false; 
-	
+	userInfoUpdateError = false;
+
 	$("#AddResosAddRoomErrMsg4").css("color","black");
 	$("#AddResosAddRoomErrMsg4").html("Updating User Info...");
 	$.ajax({
@@ -232,15 +232,15 @@ function updateUserInfo(updateAttr, updateVal) // update user info, used in add 
 		},
 		error:function(data)
 		{
-			userInfoUpdateError = true; 
-			$("#errorModule").show();
+			userInfoUpdateError = true;
+			errorModuleShow()
 		}
 	});
 }
-function updateAnyUserInfo(emailKey, updateAttr, updateVal) //update any user info, that you have the email key for. 
+function updateAnyUserInfo(emailKey, updateAttr, updateVal) //update any user info, that you have the email key for.
 {
 	userInfoUpdateSuccess = false;
-	userInfoUpdateError = false; 
+	userInfoUpdateError = false;
 	$.ajax({
 		type:'POST',
 		url:DCBBookingsChangeUserInfoAPI,
@@ -256,21 +256,21 @@ function updateAnyUserInfo(emailKey, updateAttr, updateVal) //update any user in
 		},
 		error:function(data)
 		{
-			userInfoUpdateError = true; 
-			$("#errorModule").show();
+			userInfoUpdateError = true;
+			errorModuleShow()
 		}
 	});
 }
 
 function forgotPassword(username) //used to verify and send a code to the forgotten passcode
 {
-	
+
 	var poolData = {
         UserPoolId : AdmimUserpoolID, // Your user pool id here
         ClientId : AdminAppClientID // Your client id here
     };
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-	
+
 	cognitoUser = new AmazonCognitoIdentity.CognitoUser({
 			Username: username,
 			Pool: userPool
@@ -283,13 +283,13 @@ function forgotPassword(username) //used to verify and send a code to the forgot
 				plusSlides(1);
 				$("#ForgotPassErrMsg2").css("color","green")
 				$("#ForgotPassErrMsg2").html("Code sent to your registered email<br><br><em><strong>Please Check your Junk Folder</strong></em>");
-				
+
 			},
 			onFailure: function(err) {
 				console.log((err.message || JSON.stringify(err)));
 				$("#ForgotPassErrMsg1").html((err.message || JSON.stringify(err)));
 			}
-		});	
+		});
 }
 
 function confirmForgottenPassword(username,code,newPassword) // used to change the password with the code sent in the forgotten password flow
@@ -299,12 +299,12 @@ function confirmForgottenPassword(username,code,newPassword) // used to change t
         ClientId : AdminAppClientID // Your client id here
     };
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-	
+
 	cognitoUser = new AmazonCognitoIdentity.CognitoUser({
         Username: username,
         Pool: userPool
     }),
-	
+
     cognitoUser.confirmPassword(code, newPassword, {
 	  onSuccess: function(result) {
 		  console.log(result)
@@ -323,18 +323,18 @@ function confirmForgottenPassword(username,code,newPassword) // used to change t
 function getCognitoUser() // gets the current user, makes sure that the user is currently logged in.
 {
 	var data =
-	{ 
+	{
 		UserPoolId : AdmimUserpoolID,
         ClientId : AdminAppClientID
     };
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
     var cognitoUser = userPool.getCurrentUser();
 
-    if (cognitoUser != null) 
+    if (cognitoUser != null)
 	{
-        cognitoUser.getSession(function(err, session) 
+        cognitoUser.getSession(function(err, session)
 		{
-            if (err) 
+            if (err)
 			{
                 console.log(err);
 				self.location="../index.html"
@@ -350,27 +350,27 @@ function getCognitoUser() // gets the current user, makes sure that the user is 
 	}
 }
 
-function getUserEmail() // get email of current user 
+function getUserEmail() // get email of current user
 {
 	cognitoUser = getCognitoUser()
 	cognitoUser.getUserAttributes(function(err, result) {
         if (err) {
             console.log(err);
-			$("#errorModule").show();
+			errorModuleShow()
             return;
         }
 		userEmail = result[2]["Value"];
 	});
-} 
+}
 
 function dynamicGenerateUpcomingBookings(data)//dynamically generate the list for upcoming Bookings and then append it to the main page
 {
-	var listOfItems; 
+	var listOfItems;
 	if(data["userBookings"]=="Empty List")
 	{
 		listOfItems = "<a href='#'>"+data["userBookings"][0]+"</a>"
 	}
-	
+
 	$("#upcomingBookingsList").html(listOfItems);
 }
 function dynamicGenerateYourResos(data)//dynamically generate the list for your resources and then append it to the main page
@@ -392,7 +392,7 @@ function dynamicGenerateYourResos(data)//dynamically generate the list for your 
 	//console.log(listOfItems);
 	$("#MyResosList").html(listOfItems);
 }
-function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //requires dataRoom, DataDevice data sub and user data in array from, not raw JSON Form. 
+function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //requires dataRoom, DataDevice data sub and user data in array from, not raw JSON Form.
 {
 	allResosHTML = "" //HTML for appending to the main page for All Resos
 	//allResos [roomid, resostype]
@@ -405,9 +405,9 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	// !!IMPORTATNT design fallback in the generate allresos section if the array is empty
 	if(dataRoom.length!=0) // will sort room array if its not empty
 	{
-		dataRoom = bubble_SortJSONArray(dataRoom,"RoomID")// if array is not empty sort it alphabetically. 
+		dataRoom = bubble_SortJSONArray(dataRoom,"RoomID")// if array is not empty sort it alphabetically.
 	}
-	
+
 	for(var i = 0; i<dataRoom.length; i++) // generating Big Array containing all the roomIDs and their Resos Type
 	{
 		tempObject = [];
@@ -417,7 +417,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	}
 	//have to add the 2 other for loops for datadevice and datasub
 	for(var i = 0; i<allResos.length; i++)
-	{	
+	{
 		bookMarkFunction = 'bookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'
 		ResosID = allResos[i][0]+":"+allResos[i][1]; //"resosID:ResosType"
 		bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
@@ -430,7 +430,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 			}
 		}
 		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');">View</button></div>'
-		allResosHTML += tempHTML; 
+		allResosHTML += tempHTML;
 	}
 	if(allResosHTML == "")//fallback incase all 3 arrays are empty
 	{
@@ -438,25 +438,25 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	}
 	$("#allResosBoxes").html(allResosHTML);
 }
-function dynamicGenerateBookmarkedResos(userData)//requires user data in array from, not raw JSON Form. 
+function dynamicGenerateBookmarkedResos(userData)//requires user data in array from, not raw JSON Form.
 {
-	BookmarkedResos = userData["bookmarkedResources"]; 
+	BookmarkedResos = userData["bookmarkedResources"];
 	BookmarkedResosHTML = "";
 	var tempHTML = "";
 	var n= 0; // number of times the code will loop
-	
+
 	if(BookmarkedResos.length != 0)//will only sort if the array isnt empty
 	{
 		BookmarkedResos = bubble_Sort2DArray(BookmarkedResos,0);
-		if(BookmarkedResos[0]!="Empty List")//will only loop if the list isnt empty. 
+		if(BookmarkedResos[0]!="Empty List")//will only loop if the list isnt empty.
 		{
 			n = BookmarkedResos.length;
 		}
 	}
-	
+
 	var bookmarkClass = "fa fa-bookmark imgBtn bookmark"; //change the bookmarkClassImg
 	var bookMarkFunction = "";
-	
+
 	for(var i = 0; i<n; i++)
 	{
 		var ResosID = BookmarkedResos[i][0]+":"+BookmarkedResos[i][1]+"BM"
@@ -474,7 +474,7 @@ function dynamicGenerateBookmarkedResos(userData)//requires user data in array f
 
 function populateYourResos()
 {
-	userInfoFetchSuccess = false; 
+	userInfoFetchSuccess = false;
 	validateUserInfoFetched();
 	getUserInfo(userEmail);
 	function validateUserInfoFetched()
@@ -482,25 +482,25 @@ function populateYourResos()
 		//output messages to make the wait seem more bearable
 
 		$("#MyResosList").html("<em><p>Fetching new data...</p></em>")
-		
+
 		//output messages end
-		
+
 		if(userInfoFetchSuccess == false)
 		{
 			window.setTimeout(validateUserInfoFetched,1000);
 		}
-		else 
-		{	
+		else
+		{
 			dynamicGenerateYourResos(individualData["Items"][0]);
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 		}
 	}
 }
 
-function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates the all Resos HTML in main page 
-//first 3 boolean parameters, when true, this function will also automically populate the bookmark div and the recently visited div and the your resos list, if these paramters aare true. 
+function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates the all Resos HTML in main page
+//first 3 boolean parameters, when true, this function will also automically populate the bookmark div and the recently visited div and the your resos list, if these paramters aare true.
 {
-	roomDataFetchSuccess = false; 
+	roomDataFetchSuccess = false;
 	validateFetchRoom();
 	getAllRooms();
 	function validateFetchRoom() // will not continue until it knows that room has been fetched
@@ -518,15 +518,15 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 			$("#MyResosList").html("<em><p>Processing Data...</p></em>")
 		}
 		//output messages end
-		
-		if(roomDataFetchSuccess == false) //if data is not fetched 
+
+		if(roomDataFetchSuccess == false) //if data is not fetched
 		{
 			window.setTimeout(validateFetchRoom,1000);
 		}
 		else
 		{
 			roomDataFetchSuccess = false;
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 			validateUserInfoFetched();
 			getUserInfo(userEmail);
 		}
@@ -545,13 +545,13 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 			$("#MyResosList").html("<em><p>Success! building new HTML</p></em>")
 		}
 		//output messages end
-		
+
 		if(userInfoFetchSuccess == false)
 		{
 			window.setTimeout(validateUserInfoFetched,1000);
 		}
-		else 
-		{				
+		else
+		{
 			dynamicGenerateAllResos(allRooms["Items"],[],[],individualData["Items"][0]) //parameters are: dataRoom, DataDeviece, datasubscription, user data
 			if(bookmarkPop==true)
 			{
@@ -561,25 +561,25 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 			{
 				dynamicGenerateYourResos(individualData["Items"][0]);
 			}
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 		}
 	}
 }
 function populateBookmarkedResos()
 {
-	roomDataFetchSuccess = false; 
+	roomDataFetchSuccess = false;
 	validateFetchRoom();
 	getAllRooms();
 	function validateFetchRoom() // will not continue until it knows that room has been fetched
 	{
-		if(roomDataFetchSuccess == false) //if data is not fetched 
+		if(roomDataFetchSuccess == false) //if data is not fetched
 		{
 			window.setTimeout(validateFetchRoom,1000);
 		}
 		else
 		{
 			roomDataFetchSuccess = false;
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 			validateUserInfoFetched();
 			getUserInfo(userEmail);
 		}
@@ -591,10 +591,10 @@ function populateBookmarkedResos()
 		{
 			window.setTimeout(validateUserInfoFetched,1000);
 		}
-		else 
-		{	
+		else
+		{
 			dynamicGenerateBookmarkedResos(individualData["Items"][0]) //parameters are: user data
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 		}
 	}
 }
@@ -607,58 +607,59 @@ function getAllRooms()//get All the Rooms from the list
 		success: function(data)
 		{
 			allRooms = data;
-			roomDataFetchSuccess = true; 
+			roomDataFetchSuccess = true;
 			//console.log(data);
 		},
 		error: function(data) //connection to database problem
 		{
-			$("#errorModule").show();
+			errorModuleShow()
 			//error Module
 		}
 	});
 }
 function getAllUsers()//get the user data of all users
 {
-	userInfoFetchSuccess = false; 
-	userInfoFetchError = false; 
+	userInfoFetchSuccess = false;
+	userInfoFetchError = false;
 	$.ajax({
 		type:'GET',
 		url:DCBBookingsCreateUserDBAPI,
 		success: function (data)
 		{
 			userDataFull = data;
-			userInfoFetchSuccess = true; 
+			userInfoFetchSuccess = true;
 		},
 		error: function (data)
 		{
 			console.log(data)
-			userInfoFetchError = true; 
-			$("#errorModule").show();
+			userInfoFetchError = true;
+			errorModuleShow()
 		}
 	});
 }
 
-function checkAvailableUpload()//this method will check what option has been chosen for the upload code and then populate the modal accordingly by hiding and showing the different modals. 
-{	
+function checkAvailableUpload()//this method will check what option has been chosen for the upload code and then populate the modal accordingly by hiding and showing the different modals.
+{
 	$("#skipBtn").show()
 	$("#SimUploadDocs").hide();
 	if($("#uploadSource").val()!="invalid" && $("#uploadMethods").val()!="invalid")
 	{
 		$("#uploadBlock").hide();
+		$("#fileLoadForm").show();
 		if($("#uploadSource").val()=="custom")//if user chose custom upload docs
 		{
 			$("#PreviewTable").css("color","black")
 			$("#skipBtn").hide()
 			$("#customUploadDocs").show();
 			$("#previewWhichRoom").hide();
-			$("#SimUploadDocs").hide();			
+			$("#SimUploadDocs").hide();
 			$("#fileToLoad").attr("onChange","readCustomUploadCSV("+$("#30MinPeriodCB").prop('checked')+")");
 			$("#nextBtn").attr("onClick","plusAResosSlides(1); populateReviewInfo();");
 			// clear files
 			$("#fileToLoad").val("")
-			previewUploadTable = []; 
+			previewUploadTable = [];
 			timetableHTML = "";
-			$("#PreviewTable").html("<em><p>[Preview Table]</p></em>")
+			$("#PreviewTable").html("<em><p align='center'>[Preview Table]</p></em>")
 		}
 		else // if user chose sims upload docs
 		{
@@ -671,9 +672,9 @@ function checkAvailableUpload()//this method will check what option has been cho
 			$("#nextBtn").attr("onClick","plusAResosSlides(1); populateReviewInfo();");
 			// clear files
 			$("#fileToLoad").val("")
-			previewUploadTable = []; 
+			previewUploadTable = [];
 			timetableHTML = "";
-			$("#PreviewTable").html("<em><p>[Preview Table]</p></em>")
+			$("#PreviewTable").html("<em><p align='center'>[Preview Table]</p></em>")
 		}
 	}
 	else
@@ -682,8 +683,9 @@ function checkAvailableUpload()//this method will check what option has been cho
 		$("#customUploadDocs").hide();
 		$("#nextBtn").hide()
 		$("#skipBtn").show()
-		$("#PreviewTable").html("<em><p>[Preview Table]</p></em>")
+		$("#PreviewTable").html("<em><p align='center'>[Preview Table]</p></em>")
 		$("#fileToLoad").val("")
+		$("#fileLoadForm").hide();
 	}
 }
 
@@ -694,13 +696,13 @@ function createResos(resosType) //creates new Resos depending on the type you en
 		$("#AddResosAddRoomErrMsg4").css("color","black");
 		$("#AddResosAddRoomErrMsg4").html("Creating Resource...");
 		var addResosRoomDescription = new nicEditors.findEditor('AddResosDescription');
-		
+
 		//parameters to push into the database from the modal information the user entered
 		var AccessR = $("#AccessRightsSelect").val().trim();
 		var BookingSched = ["Empty List"];
 		var Depart = $("#department").val().trim();
-		var Descript = addResosRoomDescription.getContent().trim()+" "+getTimeStamp(); 
-		
+		var Descript = addResosRoomDescription.getContent().trim()+" "+getTimeStamp();
+
 		var Min30P = "";
 		if($("#30MinPeriodCB").prop('checked'))
 		{
@@ -710,8 +712,8 @@ function createResos(resosType) //creates new Resos depending on the type you en
 		{
 			Min30P = "false";
 		}
-		
-		
+
+
 		var PlanAH = ""
 		if($("#planAheadCB").prop('checked'))
 		{
@@ -721,12 +723,12 @@ function createResos(resosType) //creates new Resos depending on the type you en
 		{
 			PlanAH = "0";
 		}
-		
-		var PermaSched= previewUploadTable; 	
+
+		var PermaSched= previewUploadTable;
 		var RoomAdm = adminEmailArray;
 		var RoomI = $("#RoomID").val().trim();
-		// parameters end 
-		
+		// parameters end
+
 		//pushing new info the the database
 		$.ajax({
 			type:'POST',
@@ -748,16 +750,16 @@ function createResos(resosType) //creates new Resos depending on the type you en
 			{
 				$("#AddResosAddRoomErrMsg4").css("color","green");
 				$("#AddResosAddRoomErrMsg4").html("Success! Resource succesfully created");
-				fetchUserandUpdate = true; 
+				fetchUserandUpdate = true;
 				if(RoomAdm.length == 1)//if the only admin is yourself
 				{
 					fetchAndUpdateUserControlledResos("room"); // updating user information
 				}
-				else//there is more than 1 admin. 
+				else//there is more than 1 admin.
 				{
 					fetchAndUpdateMultiAdminControlledResos("room",RoomAdm)//updating user information
 				}
-				
+
 			},
 			error:function(data)
 			{
@@ -771,20 +773,20 @@ function createResos(resosType) //creates new Resos depending on the type you en
 function fetchAndUpdateUserControlledResos(resoType) // get user info and then updates it used to add a new Resos under the user controlled resos field, used in the add resos func [createResos]
 {
 	var newResosList = [];
-	var tempObject = []; 
+	var tempObject = [];
 	var errMsgID = "";
 	if(resoType == "room")
 	{
 		errMsgID = "#AddResosAddRoomErrMsg4";
 	}
-	
+
 	$(errMsgID).css("color","black");
 	$(errMsgID).html("Fetching User Info...");
-	getUserInfo(userEmail); 
-	userInfoFetchSuccess = false; 
-	userInfoFetchError = false; 
-	userInfoUpdateSuccess = false; 
-	userInfoUpdateError = false; 
+	getUserInfo(userEmail);
+	userInfoFetchSuccess = false;
+	userInfoFetchError = false;
+	userInfoUpdateSuccess = false;
+	userInfoUpdateError = false;
 	validateFetch();
 	function validateFetch()//will run until it knows that user info has been sucessfully fetched
 	{
@@ -798,7 +800,7 @@ function fetchAndUpdateUserControlledResos(resoType) // get user info and then u
 			{
 				$(errMsgID).css("color","red");
 				$(errMsgID).html("Err, Resource successfully created but failed to fetch user data to update... Falling to backup procedure <br> <strong>Please find and click on your newly created resource</strong>");
-				userInfoFetchError = false; 
+				userInfoFetchError = false;
 			}
 		}
 		else
@@ -806,7 +808,7 @@ function fetchAndUpdateUserControlledResos(resoType) // get user info and then u
 			$(errMsgID).css("color","green");
 			$(errMsgID).html("Success! User data succesfully fetched");
 			createNewListOfUserResos()
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 		}
 	}
 	function createNewListOfUserResos()
@@ -839,7 +841,7 @@ function fetchAndUpdateUserControlledResos(resoType) // get user info and then u
 			{
 				$(errMsgID).css("color","red");
 				$(errMsgID).html("Err, Room successfully created but failed to update user data... Falling to backup procedure <br> <strong>Please find and click on your newly created room</strong>");
-				userInfoUpdateError = false; 
+				userInfoUpdateError = false;
 			}
 		}
 		else
@@ -847,33 +849,33 @@ function fetchAndUpdateUserControlledResos(resoType) // get user info and then u
 			$(errMsgID).css("color","green");
 			$(errMsgID).html("Success! Resource succesfully created <br> User info sucessfully fetched and updated");
 			populateAllResos(false,false,true)//updates all resos, but will not update the bookmark tab and the recently visited tab. but will update the your resos tabs
-			userInfoUpdateSuccess = false; 
+			userInfoUpdateSuccess = false;
 		}
 	}
 }
 function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user info of all admins and then updates it used to add a new Resos under the user controlled resos field, used in the add resos func [createResos]
-//adminArray is the array of what the users typed into the extra admin field, in the create resos section. 
+//adminArray is the array of what the users typed into the extra admin field, in the create resos section.
 {
 	var newResosList = [];
-	var tempObject = []; 
+	var tempObject = [];
 	var errMsgID = "";
 	var iStop = 0;
 	if(resoType == "room")
 	{
 		errMsgID = "#AddResosAddRoomErrMsg4";
 	}
-	
+
 	$(errMsgID).css("color","black");
 	$(errMsgID).html("Fetching User Info...");
-	
-	userInfoFetchSuccess = false; 
-	userInfoFetchError = false; 
-	userInfoUpdateSuccess = false; 
-	userInfoUpdateError = false; 
-	
+
+	userInfoFetchSuccess = false;
+	userInfoFetchError = false;
+	userInfoUpdateSuccess = false;
+	userInfoUpdateError = false;
+
 	getAllUsers();
 	validateFetch();
-	
+
 	function validateFetch()//will run until it knows that all user info has been sucessfully fetched
 	{
 		if(userInfoFetchSuccess===false) // will be true if user data is fetched
@@ -886,7 +888,7 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 			{
 				$(errMsgID).css("color","red");
 				$(errMsgID).html("Err, Resource successfully created but failed to fetch user data to update... Falling to backup procedure <br> <strong>Please find and click on your newly created resource</strong>");
-				userInfoFetchError = false; 
+				userInfoFetchError = false;
 			}
 		}
 		else
@@ -894,12 +896,12 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 			$(errMsgID).css("color","green");
 			$(errMsgID).html("Success! User data succesfully fetched");
 			createAllAdminFullData()
-			userInfoFetchSuccess = false; 
+			userInfoFetchSuccess = false;
 		}
 	}
-	
-	var adminListFullData = []; // creating a list of Keys to be used during the updating of the arrays... 
-	var AllAdminsUserInfoIndex = []; // creating the list of indexes of admin user's information. 
+
+	var adminListFullData = []; // creating a list of Keys to be used during the updating of the arrays...
+	var AllAdminsUserInfoIndex = []; // creating the list of indexes of admin user's information.
 	function createAllAdminFullData()
 	{
 		for(var i = 0; i<adminArray.length;i++)
@@ -914,18 +916,18 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 			}
 		}
 		iStop = adminListFullData.length;
-		loopi();//calling lock loop function. where each request will only run once the previous one has finished. 
+		loopi();//calling lock loop function. where each request will only run once the previous one has finished.
 	}
-	//Function Loop to lock and slow down requests, to prevent overflow, used to update and create new lists of Resos. 
+	//Function Loop to lock and slow down requests, to prevent overflow, used to update and create new lists of Resos.
 	var i = 0;
 	function loopi()
 	{
-		createNewListOfUserResos(); 
+		createNewListOfUserResos();
 		function createNewListOfUserResos()
 		{
 			tempObject = [];
 			newResosList = [];
-			
+
 			if(userDataFull["Items"][AllAdminsUserInfoIndex[i]]["userControlledResources"][0]=="Empty List")
 			{
 				tempObject = [$("#RoomID").val().trim(),resoType];
@@ -954,7 +956,7 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 				{
 					$(errMsgID).css("color","red");
 					$(errMsgID).html("Err, Room successfully created but failed to update user data... Falling to backup procedure <br> <strong>Please find and click on your newly created room</strong>");
-					userInfoUpdateError = false; 
+					userInfoUpdateError = false;
 				}
 			}
 			else
@@ -962,8 +964,8 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 				$(errMsgID).css("color","green");
 				$(errMsgID).html("Success! Resource succesfully created <br> User info sucessfully fetched and updated");
 				populateAllResos(false,false,true)//updates all resos, but will not update the bookmark tab and the recently visited tab. but will update the your resos tabs
-				userInfoUpdateSuccess = false; 
-				//checking if loop needs to be rerun 
+				userInfoUpdateSuccess = false;
+				//checking if loop needs to be rerun
 				if(i<iStop)
 				{
 					i+=1;
@@ -975,16 +977,16 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 }
 
 //SideNav code open and close it when screen gets too small
-function openNav(val1,val2,val3) 
+function openNav(val1,val2,val3)
 {
 	document.getElementById("sideMenu").style.width = "20%";
 	document.getElementById("sideMenu").style.minWidth = "250px";
 	document.getElementById("searchBarContainer").style.width = val3;
  	document.getElementById("allResosContainer").style.marginLeft = val1;
 	document.getElementById("allResosContainer").style.width = val2;
-	
+
 }
-function closeNav() 
+function closeNav()
 {
 	document.getElementById("sideMenu").style.width = "0";
 	document.getElementById("sideMenu").style.minWidth = "0";
@@ -1004,11 +1006,11 @@ function addRoomClearAll()//clears all the input fields from previous entries
 	$("#AddResosAddRoomErrMsg4").html("");
 	$("#addresosContent").addClass("width700");
 	$("#addresosContent").removeClass("width80Percent");
-	previewUploadTable = []; 
+	previewUploadTable = [];
 	timetableHTML = "";
 	$("#fileToLoad").val("")
 	$('#uploadSource option[value="invalid"]').prop("selected", "selected");
-	$("#PreviewTable").html("<em><p>[Preview Table]</p></em>")
+	$("#PreviewTable").html("<em><p align='center'>[Preview Table]</p></em>")
 	checkAvailableUpload();
 }
 function addRoomNext1() // checking to see if all fields are filled and to see if primary key repeats
@@ -1017,7 +1019,7 @@ function addRoomNext1() // checking to see if all fields are filled and to see i
 	$("#AddResosAddRoomErrMsg1").html("Processing Information...");
 	var addResosRoomDescription = new nicEditors.findEditor('AddResosDescription');
 
-	if($("#RoomID").val().trim().length!=0 && $("#department").val().trim().length!=0 && addResosRoomDescription.getContent().trim().length!=0) // checking to see if all fields are filled 
+	if($("#RoomID").val().trim().length!=0 && $("#department").val().trim().length!=0 && addResosRoomDescription.getContent().trim().length!=0) // checking to see if all fields are filled
 	{
 
 		$.ajax({ // checking to see if primary key repeats
@@ -1035,7 +1037,7 @@ function addRoomNext1() // checking to see if all fields are filled and to see i
 			}
 		});
 	}
-	else // fields are not all filled 
+	else // fields are not all filled
 	{
 		$("#AddResosAddRoomErrMsg1").css("color","red");
 		$("#AddResosAddRoomErrMsg1").html("Err, Fields cannot be empty");
@@ -1081,23 +1083,23 @@ function addRoomNext2() //checking to make sure that select isnt invalid
 		$("#AddResosAddRoomErrMsg2").html("");
 		$("#addresosContent").removeClass("width700");
 		$("#addresosContent").addClass("width80Percent");
-		
+
 		if($("#30MinPeriodCB").prop('checked'))
 		{
 			var op = document.getElementById("uploadSource").getElementsByTagName("option");
 				for (var i = 0; i < op.length; i++) {
 				  // lowercase comparison for case-insensitivity
-				  (op[i].value.toLowerCase() == "sims") 
-					? op[i].disabled = true 
+				  (op[i].value.toLowerCase() == "sims")
+					? op[i].disabled = true
 					: op[i].disabled = false ;
 				}
 			// getting rid of all files once its 30min checkbox changes, for reuploading
 			$('#uploadSource option[value="invalid"]').prop("selected", "selected");
 			$('#uploadMethods option[value="invalid"]').prop("selected", "selected");
 			$("#fileToLoad").val("")
-			previewUploadTable = []; 
+			previewUploadTable = [];
 			timetableHTML = "";
-			$("#PreviewTable").html("<em><p>[Preview Table]</p></em>")
+			$("#PreviewTable").html("<em><p align='center'>[Preview Table]</p></em>")
 			checkAvailableUpload();
 		}
 		else
@@ -1110,9 +1112,9 @@ function addRoomNext2() //checking to make sure that select isnt invalid
 			$('#uploadSource option[value="invalid"]').prop("selected", "selected");
 			$('#uploadMethods option[value="invalid"]').prop("selected", "selected");
 			$("#fileToLoad").val("")
-			previewUploadTable = []; 
+			previewUploadTable = [];
 			timetableHTML = "";
-			$("#PreviewTable").html("<em><p>[Preview Table]</p></em>")
+			$("#PreviewTable").html("<em><p align='center'>[Preview Table]</p></em>")
 			checkAvailableUpload();
 		}
 	}
@@ -1122,20 +1124,20 @@ function addRoomNext2() //checking to make sure that select isnt invalid
 		$("#AddResosAddRoomErrMsg2").html("Err, you must make a selection");
 	}
 }
-function AddResosSkip()//function called when users skip the upload feature. 
+function AddResosSkip()//function called when users skip the upload feature.
 {
 	plusAResosSlides(1);
-	timetableHTML = "Empty Permanent Schedule, User Skipped Upload"; // skipped so preview Upload Table is null; 
+	timetableHTML = "Empty Permanent Schedule, User Skipped Upload"; // skipped so preview Upload Table is null;
 	populateReviewInfo();
 }
 function populateReviewInfo() //populating the review info section
 {
 	var addResosRoomDescription = new nicEditors.findEditor('AddResosDescription'); // getting the niceEdit value for description
-	$("#RoomName").html($("#RoomID").val()); 
+	$("#RoomName").html($("#RoomID").val());
 
 	$("#depart").html($("#department").val());
 
-	var descriptionString = addResosRoomDescription.getContent().trim(); 		
+	var descriptionString = addResosRoomDescription.getContent().trim();
 	$("#descrip").html("<br>"+descriptionString);
 	var adminEmails = $("#RoomAdmin1").val().trim() + ";" + $("#RoomAdmin2").val().trim()
 	adminEmails = adminEmails.trim();
@@ -1185,7 +1187,7 @@ function populateReviewInfo() //populating the review info section
 		Min30PString="Each period WILL NOT be split into two thirty minute sections"
 	}
 	$("#30minP").html(Min30PString);
-	
+
 	$("#reviewInfoPreviewInfo").html(timetableHTML)
 }
 
@@ -1199,44 +1201,44 @@ function reviewInfoClasses()//change the classes of the modal to adjust its widt
 	$("#addresosContent").addClass("widthReviewInfo");
 	$("#addresosContent").removeClass("width80Percent");
 }
-function preReviewInfoClasses()//change the classes of the modal to adjust its width Pre reviewing information for non-30 minute periods 
+function preReviewInfoClasses()//change the classes of the modal to adjust its width Pre reviewing information for non-30 minute periods
 {
 	$("#addresosContent").addClass("width80Percent");
 	$("#addresosContent").removeClass("widthReviewInfo");
 }
 //add room logic end-->
 
-//Read and upload Timetables start--> 
+//Read and upload Timetables start-->
 //1 boolean parameter, if true then the 30 min booking option is checked, a different logic path will build the 3D array
-function readCustomUploadCSV(min30) //read data and populate it in an giant linked list for a custom CSV File, 
+function readCustomUploadCSV(min30) //read data and populate it in an giant linked list for a custom CSV File,
 {
 	$("#PreviewTable").css("color","black")
 	$("#nextBtn").show();
 	var week1Data = [];
 	var week2Data = [];
-	
+
 	var dayData = [];
 	var periodData = []; //["status","bookeduser","perpetual","Week1"]
-	
+
 	var CSVExWidth = 16;//CSV File expected width to validate correct file using lenght check later
-	if(min30 == true)//if min30p is chcked then the expected width value will increase. 
+	if(min30 == true)//if min30p is chcked then the expected width value will increase.
 	{
 		CSVExWidth = 25;
 	}
-	 
-	
+
+
 	var fileToLoad = document.getElementById("fileToLoad").files[0];
 	var fileReader = new FileReader();
 	fileReader.onload = function(fileLoadedEvent)
 	{
-		
+
 		var textFromFileLoaded = fileLoadedEvent.target.result;
 		var timetable_data = textFromFileLoaded.split(/\r?\n|\r/);
-		
+
 		//console.log("Width: "+timetable_data[0].length)
 		//console.log("Height: "+timetable_data.length)
-		
-		if(timetable_data[0].length == CSVExWidth && timetable_data.length == 21) // validating that the the correct file is uploaded with a length check. 
+
+		if(timetable_data[0].length == CSVExWidth && timetable_data.length == 21) // validating that the the correct file is uploaded with a length check.
 		{
 			for(var i = 2; i<7; i++) //reading first week data
 			{
@@ -1267,17 +1269,17 @@ function readCustomUploadCSV(min30) //read data and populate it in an giant link
 			//if min30p is chcked then the HTML table will be built with a slightly different function to accomindate for the extra periods per day
 			//else it'll just build it normally with 1 hour periods
 			generatePreviewTable(previewUploadTable,min30);
-			
+
 		}
 		else//if length check failed, it'll output err msg
 		{
 			$("#PreviewTable").css("color","red")
 			$("#PreviewTable").html("Error: file dimensions do not match, please do not delete or add unnecessary data. <br>Please also ensure that you are adding the correct file type.")
 		}
-		
+
 	}
 	fileReader.readAsText(fileToLoad, "UTF-8");
-	
+
 }
 function readSimsUploadCSV() //read data and populate it in an giant linked list for a SIMS File
 {
@@ -1285,23 +1287,23 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 	$("#nextBtn").show();
 	var week1Data = [];
 	var week2Data = [];
-	
+
 	var dayData = [];
 	var periodData = []; //["status","bookeduser","perpetual","Week1"]
-	
+
 	var fileToLoad = document.getElementById("fileToLoad").files[0];
 	var fileReader = new FileReader();
 	fileReader.onload = function(fileLoadedEvent)
 	{
 		var textFromFileLoaded = fileLoadedEvent.target.result;
 		var timetable_data = textFromFileLoaded.split(/\r?\n|\r/); // only need rows index 7 onwards, exclusive
-		
+
 		//console.log("Width: "+timetable_data[0].length)
 		//console.log("Height: "+timetable_data.length)
-		
+
 		if(timetable_data[0].length == 10 && timetable_data.length == 27)
 		{
-			timetable_data.splice(22, 5); //deleting row 22, bus row, useless. 
+			timetable_data.splice(22, 5); //deleting row 22, bus row, useless.
 			timetable_data.splice(0, 8); // deleting rows 0 to 7 cuz they're useless
 
 			var UselessRowsSims = [13,11,8,6,3,1]//the rows that need to be deleted cuz they r useless
@@ -1313,7 +1315,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 
 			//generating the array, WEEK 1
 			for(var i = 1; i < 6; i++) // i is the number of cols
-			{ 
+			{
 				dayData = [];
 				for(var j = 0; j < timetable_data.length; j++) // j is the number of rows
 				{
@@ -1349,7 +1351,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 			}
 			//generating the array, WEEK 2
 			for(var i = 6; i < 11; i++) // i is the number of cols
-			{ 
+			{
 				dayData = [];
 				for(var j = 0; j < timetable_data.length; j++) // j is the number of rows
 				{
@@ -1391,7 +1393,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 			$("#PreviewTable").css("color","red")
 			$("#PreviewTable").html("Error: file dimensions do not match, please do not delete or add unnecessary data. <br> Please also ensure that you are adding the correct file type.<br>The SIMS uploads can only support a file output of <strong>1 room</strong>.")
 		}
-		
+
 	}
 	fileReader.readAsText(fileToLoad, "UTF-8");
 }
@@ -1451,7 +1453,7 @@ function generatePreviewTable(data,min30)
 		timetableHTML +='</thead>';
 		//--->create table header > end
 	}//else the headers will generate with extra values
-	
+
 	for(var i = 0; i<5;i++) // generate the 5 day week
 	{
 		timetableHTML += '<tr>'
@@ -1464,12 +1466,12 @@ function generatePreviewTable(data,min30)
 		timetableHTML += '</tr>'
 	}
 	timetableHTML += '</table>'
-	
+
 	timetableHTML +="<strong><p>Week 2:</p></strong>"
-	
+
 	//Week 2 Code
 	timetableHTML +='<table class="table table-hover">'
-	
+
 	if(min30 == false) //if min30p is not checked then the tables headers will generate normally
 	{
 		//--->create table header > start
@@ -1519,7 +1521,7 @@ function generatePreviewTable(data,min30)
 		timetableHTML +='</thead>';
 		//--->create table header > end
 	}//else the headers will generate with extra values
-	
+
 	for(var i = 0; i<5;i++) // generate the 5 day week
 	{
 		timetableHTML += '<tr>'
@@ -1531,23 +1533,23 @@ function generatePreviewTable(data,min30)
 		}
 		timetableHTML += '</tr>'
 	}
-	
+
 	timetableHTML += '</table>'
-	
+
 	$("#PreviewTable").html(timetableHTML);
 }
 
 //Read and upload Timetables end-->
 
-//bookmark and unbookmark function. Will populate the online DB with the new booking. 
+//bookmark and unbookmark function. Will populate the online DB with the new booking.
 function bookmarkIt(resosID, resosType)// function to bookmark a certain room
 {
 	$("#allResosBoxes").css("color","black")
 	$("#allResosBoxes").html("<em><p>Processing Request...</p></em>");
-	
+
 	$("#bookmarkedResosBoxes").css("color","black")
 	$("#bookmarkedResosBoxes").html("<em><p>Processing Request...</p></em>");
-	
+
 	userInfoFetchSuccess = false;
 	validateFetchedUserInfo();
 	getUserInfo(userEmail);
@@ -1555,7 +1557,7 @@ function bookmarkIt(resosID, resosType)// function to bookmark a certain room
 	var tempObject = [];
 	function validateFetchedUserInfo() // ensuring that use data is fetched before updating it
 	{
-		if(userInfoFetchSuccess == false) 
+		if(userInfoFetchSuccess == false)
 		{
 			window.setTimeout(validateFetchedUserInfo,1000);
 			userInfoFetchSuccess = false;
@@ -1564,7 +1566,7 @@ function bookmarkIt(resosID, resosType)// function to bookmark a certain room
 		{
 			$("#bookmarkedResosBoxes").html("<em><p>Updating user information...</p></em>");
 			$("#allResosBoxes").html("<em><p>Updating user information...</p></em>");
-			
+
 			if(individualData["Items"][0]["bookmarkedResources"][0]=="Empty List") //if the list is empty
 			{
 				tempObject.push(resosID);
@@ -1582,7 +1584,7 @@ function bookmarkIt(resosID, resosType)// function to bookmark a certain room
 				newBookmarkArray.push(tempObject);
 			}
 			updateUserInfo("bookmarkedResources",newBookmarkArray); // updating user information
-			userInfoUpdateSuccess = false; 
+			userInfoUpdateSuccess = false;
 			validateUpdatedUserInfo(); // making sure that the thing is being bookmarked.
 		}
 	}
@@ -1591,26 +1593,26 @@ function bookmarkIt(resosID, resosType)// function to bookmark a certain room
 		if(userInfoUpdateSuccess== false)
 		{
 			window.setTimeout(validateUpdatedUserInfo,1000)
-			userInfoUpdateSuccess = false; 
+			userInfoUpdateSuccess = false;
 		}
 		else
 		{
 			$("#bookmarkedResosBoxes").html("<em><p>Populating new values...</p></em>");
 			$("#allResosBoxes").html("<em><p>Populating new values...</p></em>");
-			
+
 			populateAllResos(true,true,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
 		}
 	}
-	
+
 }
 function unBookmarkIt(resosID, resosType)// function to bookmark a certain room
 {
 	$("#allResosBoxes").css("color","black")
 	$("#allResosBoxes").html("<em><p>Processing Request...</p></em>");
-	
+
 	$("#bookmarkedResosBoxes").css("color","black")
 	$("#bookmarkedResosBoxes").html("<em><p>Processing Request...</p></em>");
-	
+
 	userInfoFetchSuccess = false;
 	validateFetchedUserInfo();
 	getUserInfo(userEmail);
@@ -1618,7 +1620,7 @@ function unBookmarkIt(resosID, resosType)// function to bookmark a certain room
 	var tempObject = [];
 	function validateFetchedUserInfo() // ensuring that use data is fetched before updating it
 	{
-		if(userInfoFetchSuccess == false) 
+		if(userInfoFetchSuccess == false)
 		{
 			window.setTimeout(validateFetchedUserInfo,1000);
 			userInfoFetchSuccess = false;
@@ -1627,14 +1629,14 @@ function unBookmarkIt(resosID, resosType)// function to bookmark a certain room
 		{
 			$("#bookmarkedResosBoxes").html("<em><p>Updating user information...</p></em>");
 			$("#allResosBoxes").html("<em><p>Updating user information...</p></em>");
-			
+
 			tempObject.push(resosID)
 			tempObject.push(resosType)
 			newBookmarkArray = individualData["Items"][0]["bookmarkedResources"];
-			newBookmarkArray.splice( newBookmarkArray.indexOf(tempObject), 1);// removing array from position. 
-			
+			newBookmarkArray.splice( newBookmarkArray.indexOf(tempObject), 1);// removing array from position.
+
 			updateUserInfo("bookmarkedResources",newBookmarkArray); // updating user information
-			userInfoUpdateSuccess = false; 
+			userInfoUpdateSuccess = false;
 			validateUpdatedUserInfo(); // making sure that the thing is being bookmarked.
 		}
 	}
@@ -1643,17 +1645,17 @@ function unBookmarkIt(resosID, resosType)// function to bookmark a certain room
 		if(userInfoUpdateSuccess== false)
 		{
 			window.setTimeout(validateUpdatedUserInfo,1000)
-			userInfoUpdateSuccess = false; 
+			userInfoUpdateSuccess = false;
 		}
 		else
 		{
 			$("#bookmarkedResosBoxes").html("<em><p>Populating new values...</p></em>");
 			$("#allResosBoxes").html("<em><p>Populating new values...</p></em>");
-			
+
 			populateAllResos(true,true,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited? truefalse, populae your resos? truefalse
 		}
 	}
-	
+
 }
 
 function FunnyloadingTxt(elemID,start,delay)//function to load funny loading text for the user to look at.
@@ -1666,18 +1668,18 @@ function FunnyloadingTxt(elemID,start,delay)//function to load funny loading tex
 	{
 		max = randomLoadingText.length;
 		min = 0;
-		var random =Math.floor(Math.random() * (+max - +min)) + +min; 
+		var random =Math.floor(Math.random() * (+max - +min)) + +min;
 		$("#" + elemID).html("<em>"+randomLoadingText[random]+"</em>")
 	}
 	function loadText()
 	{
 		max = randomLoadingText.length;
 		min = 0;
-		var random =Math.floor(Math.random() * (+max - +min)) + +min; 
+		var random =Math.floor(Math.random() * (+max - +min)) + +min;
 		$("#" + elemID).html("<em>"+randomLoadingText[random]+"</em>")
 	}
 	startFunnyLoadingText = setInterval(loadText, delay);
-	
+
 	if(start==false)
 	{
 		clearInterval(startFunnyLoadingText);
@@ -1759,7 +1761,7 @@ function populateTimetableModal(timetableName)
 }
 
 function removeTimetableEventListeners() //used in viewRoom's document functions to for listening for user activity
-//remove all event listeners from the program for new ones to be added in. 
+//remove all event listeners from the program for new ones to be added in.
 {
 	$(document).off('click', '#bookBtn')
 	$(document).off('click', '#deleteBtn')
@@ -1777,29 +1779,29 @@ function timetableDocFunctionsRoom()
 	removeTimetableEventListeners();
 	//--->Editing Viewport > start
 	$(document).on('click', '.row_data', function(event)
-	{	
+	{
 		//selecting the currently clicked cell, adding the selected color class to it >>>> start
 		if(PrevSelect!=null)
 		{
-			PrevSelect.removeClass("selected");// remove the select look from the previously selected cell 
+			PrevSelect.removeClass("selected");// remove the select look from the previously selected cell
 		}
 		var row_div = $(this)
 		row_div.addClass("selected");
 		PrevSelect = row_div;//storing the selected cell
 		//selecting the currently clicked cell, adding the selected color class to it >>>> end
-		
+
 		//exatracting the information from the cell you just clicked on >>>> start
-		var coordinates = [] // stores the coordinates of the cell that was clicked. 
+		var coordinates = [] // stores the coordinates of the cell that was clicked.
 		var day = ""// stores the day of the cell clicked
 		var period = "" //stores the period of the cell that was clicked
-		var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked 
+		var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked
 		var currentBookingState = "" // stores the current booking state of the cell you are on
-		var bookingDetails; // stores the current booking detailed information in an array 
+		var bookingDetails; // stores the current booking detailed information in an array
 		//structure of each period in the fetched userbookings
 		/*
 		[0] - booking email
-		[1] - perpectual, nonperpectual booking etc. 
-		[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1 
+		[1] - perpectual, nonperpectual booking etc.
+		[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
 		[3] - week 1, week 2 or both
 		[4] - timeStamp
 		[5] - ECADescription [name][description]
@@ -1807,16 +1809,16 @@ function timetableDocFunctionsRoom()
 		[7] - week begining
 		*/
 		//putting the coordinates into the variable
-		coordinates.push(parseInt($(this).closest('tr').attr('row_name')));	
+		coordinates.push(parseInt($(this).closest('tr').attr('row_name')));
 		coordinates.push(parseInt($(this).attr('col_name')));
 		//console.log(coordinates);
-		
+
 		//getting the current day
-		var row_id = $(this).closest('tr').attr('row_id');	
+		var row_id = $(this).closest('tr').attr('row_id');
 		var row = document.getElementById(row_id);
 		var cell = row.getElementsByTagName("td");
 		day = cell[0].textContent;
-		//getting the current period 
+		//getting the current period
 		period = getPeriod(coordinates[1],min30Periods)
 
 		// storing the full HTML of the currently clicked div
@@ -1826,10 +1828,10 @@ function timetableDocFunctionsRoom()
 		//getting the hidden span content
 		var hiddenSpan = extractHiddenContent(fullCurrentStatus)
 		bookingDetails = hiddenSpan.split(' ')[1].split(',');
-		
+
 		//exatracting the information from the cell you just clicked on >>>> end
-		
-		
+
+
 		//populating the viewport with extracted information from the cell >>>> start
 		$("#viewPort").show();
 		$("#viewPort_Content").show();
@@ -1840,15 +1842,15 @@ function timetableDocFunctionsRoom()
 		$("#lessonLockBtn").hide();
 		$("#quickLockBtn").hide();
 		$("#preLimLoader").hide();
-		
+
 		$("#bookingDetails").html("<strong>Week Beginning: </strong>" + getWeekBegining(new Date()) + "<br><strong>Time:</strong> "+day+" "+period);
-		
+
 		if(currentBookingState == unbookedval)//if booked state is unbooked
 		{
 			$("#bookingStatus").html("<strong>Status: </strong>unbooked<br>")
 			$("#bookBtn").show();
 			$("#rbookBtn").show();
-			//the checkRoomAdmin function was called in the generate booking table area, used to determine whether the current user is a resos admin. or a master admin. 
+			//the checkRoomAdmin function was called in the generate booking table area, used to determine whether the current user is a resos admin. or a master admin.
 			if(resosAdmin==true)
 			{
 				$("#lessonLockBtn").show();
@@ -1860,8 +1862,8 @@ function timetableDocFunctionsRoom()
 			//structure of each period in the fetched userbookings
 			/*
 			[0] - booking email
-			[1] - perpectual, nonperpectual booking etc. 
-			[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1 
+			[1] - perpectual, nonperpectual booking etc.
+			[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
 			[3] - week 1, week 2 or both
 			[4] - timeStamp
 			[5] - ECADescription [name][description]
@@ -1873,7 +1875,7 @@ function timetableDocFunctionsRoom()
 			{
 				$("#bookingStatus").html("<strong>Status: </strong> booked <strong><em>[Timestamp: "+timeStamp+"]</em></strong><br><strong>Email: </strong>"+clickBookedEmail)
 				$("#deleteBtn").show();
-				if($(this).hasClass("disable"))//if time to make booking has elasped. 
+				if($(this).hasClass("disable"))//if time to make booking has elasped.
 				{
 					$("#deleteBtn").attr("disabled", "disabled");
 					if(Recurrence=true)
@@ -1921,7 +1923,7 @@ function timetableDocFunctionsRoom()
 			{
 				$("#bookingStatus").html("<strong>Status: </strong> lesson<br><strong>Email: </strong>"+clickBookedEmail)
 				$("#contactBtn").show();
-				$("#contactBtn").removeAttr("disabled");	
+				$("#contactBtn").removeAttr("disabled");
 			}
 			if(resosAdmin == true)
 			{
@@ -1942,21 +1944,21 @@ function timetableDocFunctionsRoom()
 				$("#bookingStatus").html("<strong>Status: </strong> locked")
 			}
 		}
-		
+
 		//populating the viewport with extracted information from the cell >>>> end
 	});
 	//--->Editing Viewport > end
-	
+
 	//--->MakingviewPort Dissapear when user clicks away > start
-	$(document).mouseup(function(e) 
-	{	
+	$(document).mouseup(function(e)
+	{
 		var container = $("#viewPort");
 		var table = $("#timeTable");
 		var bookRModal = $("#BookRecuring")
 		var EModal = $("#emailModal")
 
 		// if the target of the click isn't the container nor a descendant of the container
-		if (!container.is(e.target) && container.has(e.target).length === 0 && !table.is(e.target) && table.has(e.target).length === 0 && !bookRModal.is(e.target) && bookRModal.has(e.target).length === 0 && !EModal.is(e.target) && EModal.has(e.target).length === 0 ) 
+		if (!container.is(e.target) && container.has(e.target).length === 0 && !table.is(e.target) && table.has(e.target).length === 0 && !bookRModal.is(e.target) && bookRModal.has(e.target).length === 0 && !EModal.is(e.target) && EModal.has(e.target).length === 0 )
 		{
 			$("#viewPort_Content").hide()
 			$("#preLimLoader").show();
@@ -2010,17 +2012,17 @@ function getPeriod(colCoor, min30)//first parameter is a column coordinate of th
 		period[9] =  "ECA 2";
 		return period[colCoor];
 	}
-	
+
 }
 function checkIfResosAdmin()//function that checks whether or not you are the admin of the resos
 {
 	//seeing if you are an admin of the room
-	resosAdmin = false; 
+	resosAdmin = false;
 	for(var i = 0; i< indiRoomData["Items"][0]["RoomAdmin"].length; i++)
 	{
 		if(indiRoomData["Items"][0]["RoomAdmin"][i].trim().toLowerCase()==userEmail.trim().toLowerCase())
 		{
-			resosAdmin = true; 
+			resosAdmin = true;
 		}
 	}
 }
@@ -2052,7 +2054,7 @@ function generateBookingTable(data,resosType) //generates table for user
 {
 	checkIfResosAdmin()
 	var tableRowLength = 5;//the length of the table you are making
-	var tableColLength = 0; 
+	var tableColLength = 0;
 	if(data["Min30Periods"]=="false")//normal headers
 	{
 		tableColLength = 10;
@@ -2060,7 +2062,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		lockval = "locked";
 		lessonval = "lesson";
 		unbookedval = "unbooked";
-		min30Periods = false; 
+		min30Periods = false;
 	}
 	else
 	{
@@ -2069,7 +2071,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		lockval = "lck";
 		lessonval = "lsn";
 		unbookedval = "unb";
-		min30Periods = true; 
+		min30Periods = true;
 	}
 	//building initial empty table start
 	var initialTable = [];
@@ -2093,21 +2095,21 @@ function generateBookingTable(data,resosType) //generates table for user
 	initialTable = weekData
 	//console.log(initialTable);
 	//building initial empty table end
-	
+
 	//populating initital table with user bookings vals start
 	//structure of each period in the fetched userbookings
 	/*
 	[0] - booking value, unbooked, etc
 	[1] - booking email
-	[2] - perpectual, nonperpectual booking etc. 
-	[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1 
+	[2] - perpectual, nonperpectual booking etc.
+	[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
 	[4] - week 1, week 2 or both
 	[5] - timeStamp
 	[6] - ECADescription [name][description]
 	[7] - coordinate of booking [row][col] on the table
 	[8] - week begining
 	*/
-	var userBookings = []//array containing the userbookings for that week. 
+	var userBookings = []//array containing the userbookings for that week.
 	var fetchedUserBookings = data["BookingSchedule"] //array containing the fetched user bookings
 	if(fetchedUserBookings[0]!="Empty List") // populating the userBookings array;
 	{
@@ -2121,10 +2123,10 @@ function generateBookingTable(data,resosType) //generates table for user
 	}
 	for(var i =0; i<userBookings.length; i++)
 	{
-		initialTable[userBookings[i][userBookings[i].length-2][0]][userBookings[i][userBookings[i].length-2][1]] = userBookings[i];	
+		initialTable[userBookings[i][userBookings[i].length-2][0]][userBookings[i][userBookings[i].length-2][1]] = userBookings[i];
 	}
 	//populating initital table with user bookings vals end
-	
+
 	//console.log(data["PermaSchedule"][0]);
 	//populating initital table with permaSchd vals start
 	if(data["PermaSchedule"].length!=0)
@@ -2134,7 +2136,7 @@ function generateBookingTable(data,resosType) //generates table for user
 			for(var j = 0; j<data["PermaSchedule"][0][0].length; j++)// how many periods per day
 			{
 				//console.log(data["PermaSchedule"][0][i][j][0]);
-				if(data["PermaSchedule"][0][i][j][0] != unbookedval)//if data isn't unbooked in the perma sechdule the replace the booking with that 
+				if(data["PermaSchedule"][0][i][j][0] != unbookedval)//if data isn't unbooked in the perma sechdule the replace the booking with that
 				{
 					//console.log(initialTable[i][j]);
 					initialTable[i][j] = data["PermaSchedule"][0][i][j]
@@ -2143,11 +2145,11 @@ function generateBookingTable(data,resosType) //generates table for user
 		}
 	}
 	//populating initital table with permaSchd vals end
-	
+
 	//console.log(initialTable)
 	tbl = "";//clearing table
 	tbl +='<table class="table table-hover">';
-	
+
 	//creating table headers start
 	if(data["Min30Periods"]=="false")//normal headers
 	{
@@ -2171,7 +2173,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	}
 	else //30 min period headers
 	{
-		
+
 		//--->create table header > start
 		tbl +='<thead>';
 			tbl +='<tr>';
@@ -2200,7 +2202,7 @@ function generateBookingTable(data,resosType) //generates table for user
 		//--->create table header > end
 	}
 	//creating table headers end
-	
+
 	//--->create table body > start
 	tbl +='<tbody>';
 		for(var i = 0; i <initialTable.length; i++)
@@ -2227,7 +2229,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	$("#timeTable").html(tbl);
 	populateTimetableModal("Room Timetable: <em>"+resosName+"</em>");
 	timetableDocFunctionsRoom()//activating document functions for room
-	
+
 }
 function getSpecificResos(resosID, resosType) // gets the information of a very specific resosID
 {
@@ -2245,29 +2247,29 @@ function getSpecificResos(resosID, resosType) // gets the information of a very 
 			success:function(data)
 			{
 				indiRoomData = data;
-				indiResosDataFetchSuccess =true; 
+				indiResosDataFetchSuccess =true;
 			},
 			error:function(data)
 			{
-				$("#errorModule").show();
+				errorModuleShow()
 			}
 		});
 	}
 }
-var random_id = function() //generates a random ROW ID, for identifying cell data. 
+var random_id = function() //generates a random ROW ID, for identifying cell data.
 {
 	var id_num = Math.random().toString(9).substr(2,3);
 	var id_str = Math.random().toString(36).substr(2);
 	return id_num + id_str;
-} 
+}
 //View Room End
 
 function getWeekBegining(date) //generates the week begining date for a given date value.
 {
-  var day = date.getDay() || 7;  
-    if( day !== 0 ) 
-        date.setHours(-24 * (day - 2)); 
-	
+  var day = date.getDay() || 7;
+    if( day !== 0 )
+        date.setHours(-24 * (day - 2));
+
 	date = date.toUTCString();
 	date = date.split(' ').slice(0, 4).join(' ');
     return date;
@@ -2277,7 +2279,7 @@ function extractHiddenContent(s)//extracts the hidden content from within a span
   var span = document.createElement('span');
   span.innerHTML = s;
   return span.textContent || span.innerText;
-}; 
+};
 
 
 function generateAdminTable() // generates admin table and the doc functions that come with it
@@ -2288,7 +2290,7 @@ function generateAdminTable() // generates admin table and the doc functions tha
 	$.ajax({
 		type: 'GET',
 		url: DCBBookingsAdminUserAPI,
-		success: function (data) 
+		success: function (data)
 		{
 			$("#LoaderUser").hide()
 			tbl = ''
@@ -2351,10 +2353,10 @@ function generateAdminTable() // generates admin table and the doc functions tha
 			$(document).find('.btn_cancel').hide();
 		},
 		error: function (data) {
-			$("#errorModule").show();
+			errorModuleShow()
 		}
 	});
- 	
+
 	//--->make div editable > start
 	$(document).on('click', '.row_data', function(event)
 	{
@@ -2372,7 +2374,7 @@ function generateAdminTable() // generates admin table and the doc functions tha
 		//--->add the original entry > end
 	})
 	//--->make div editable > end
-	
+
 	//--->save single field data > start
 	$(document).on('focusout', '.row_data', function(event)
 	{
@@ -2412,7 +2414,7 @@ function generateAdminTable() // generates admin table and the doc functions tha
 
 			error: function(data)
 			{
-				$("#errorModule").show();
+				errorModuleShow()
 			}
 		});
 
@@ -2424,7 +2426,7 @@ function generateAdminTable() // generates admin table and the doc functions tha
 		console.log(JSON.stringify(arr, null, 2));
 	})
 	//--->save single field data > end
-	
+
 	//--->button > AddUser > start
 	$(document).on('click', '#addUserBtn', function(event)
 	{
@@ -2447,12 +2449,12 @@ function generateAdminTable() // generates admin table and the doc functions tha
 
 			error: function(data)
 			{
-				$("#errorModule").show();
+				errorModuleShow()
 			}
 		});
 	});
 	//--->button > edit > end
-	
+
 	//--->button > edit > start
 	$(document).on('click', '.btn_edit', function(event)
 	{
@@ -2485,7 +2487,7 @@ function generateAdminTable() // generates admin table and the doc functions tha
 
 	});
 	//--->button > edit > end
-	
+
 	//--->button > cancel > start
 	$(document).on('click', '.btn_cancel', function(event)
 	{
@@ -2515,7 +2517,7 @@ function generateAdminTable() // generates admin table and the doc functions tha
 		});
 	});
 	//--->button > cancel > end
-	
+
 	//--->save whole row entery > start
 	$(document).on('click', '.btn_save', function(event)
 	{
@@ -2566,20 +2568,20 @@ function generateAdminTable() // generates admin table and the doc functions tha
 				},
 				error: function(data)
 				{
-					$("#errorModule").show();
+					errorModuleShow()
 				}
 			});
 			arr[col_name] = col_val;
 		});
 		//--->get row data > end
-		
+
 		//use the "arr"	object for your ajax call
 		$.extend(arr, {row_id:row_id});
 		//out put to show
 		console.log(JSON.stringify(arr, null, 2))
 	});
 	//--->save whole row entery > end
-	
+
 	//--->Delete whole row entry > start
 	$(document).on('click', '.btn_delete', function(event)
 	{
@@ -2607,13 +2609,17 @@ function generateAdminTable() // generates admin table and the doc functions tha
 			},
 			error: function(data)
 			{
-				$("#errorModule").show();
+				errorModuleShow()
 			}
 		});
 	});
 }
 function changeSettingTitle(title) //changes the title of the setting page
 {
+    if($(window).width() < 1150)
+	{
+        closeSettingsNav();
+    }
 	$("#SettingsTitleP").html(title);
 }
 
@@ -2622,7 +2628,7 @@ function getAllAdmins()//gets all admins and puts them in the allMasterAdmins ar
 	$.ajax({
 		type: 'GET',
 		url: DCBBookingsAdminUserAPI,
-		success: function (data) 
+		success: function (data)
 		{
 			$.each(data.Items, function (index, val)
 			{
@@ -2631,7 +2637,7 @@ function getAllAdmins()//gets all admins and puts them in the allMasterAdmins ar
 		},
 		error: function (data)
 		{
-			$("#errorModule").show();
+			errorModuleShow()
 		}
 	});
 }
@@ -2653,7 +2659,7 @@ function searchMyResos() //search My resos list code
         }
     }
 }
-function getMyResos()//gets user resos and populates it on the search feature in settings
+function getMyResos()//gets user resos and populates it on the search feature in settings in slide 2, Open Slide
 {
 	$("#myResosList").html("<em>Processing Data...</em>")
 	var listOfMyResos = "";
@@ -2670,7 +2676,7 @@ function getMyResos()//gets user resos and populates it on the search feature in
 			{
 				for(var i = 0; i<myResosArray.length;i++)
 				{
-					listOfMyResos += '<li><a class="imgBtn" onClick="openResosSettings("'+myResosArray[i][0]+'","'+myResosArray[i][1]+'")">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
+					listOfMyResos += '<li><a class="imgBtn" onClick="openResosSettings(\''+myResosArray[i][0]+'\',\''+myResosArray[i][1]+'\'); checkAvailableUpload(); $(\'#customUploadDocs\').hide(); $(\'#SimUploadDocs\').hide();">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
 				}
 				$("#myResosList").html(listOfMyResos);
 			}
@@ -2681,8 +2687,402 @@ function getMyResos()//gets user resos and populates it on the search feature in
 		}
 	}
 }
+function openResosSettings(resosID, resosType)
+{
+    $("#resosSettingsErrMsg").css("color","black")
+    $("#resosSettingsErrMsg").html("")
+    document.getElementById("saveResosChanges").disabled = false;
 
-function openSettingsNav()
+	$("#viewResosInfo").hide()
+	$("#resosSettingsLoader").show();
+	openResosSettingsModal()
+
+	$("#settingsTitle").html("Loading data...")
+	$("#resosIDval").val("")
+	indiRoomData = null;
+
+	getSpecificResos(resosID,resosType);
+	validataIndiRoomFetch();
+
+	function validataIndiRoomFetch()
+	{
+		if(indiRoomData==null)
+		{
+			window.setTimeout(validataIndiRoomFetch,1000);
+		}
+		else
+		{
+			$("#viewResosInfo").show();
+			$("#resosSettingsLoader").hide();
+			$("#settingsTitle").html(resosID+": "+resosType + " settings")
+			$("#resosIDval").val(resosID)
+			var roomItem = indiRoomData["Items"][0];
+
+			$("#departmentVal").val(roomItem.Department);
+
+			var timeSt; // timestamp from the description
+			var str = roomItem.Description;
+			var lastIndex = str.lastIndexOf(" ");
+
+			timeSt = str.substring(lastIndex, str.length);
+			str = str.substring(0, lastIndex);
+			nicEditors.findEditor("DescriptionVal").setContent(str);
+
+			$("#accessRightSelect").val(roomItem.AccessRights);
+			var admins = roomItem.RoomAdmin
+
+			$("#RoomAdmin1").val(admins[0])
+
+			var otherAdminStr = "";
+			for(var i = 1; i<admins.length; i++)
+			{
+				otherAdminStr = otherAdminStr + admins[i] + "; "
+			}
+			$("#RoomAdmin2").val(otherAdminStr)
+
+			if(roomItem.PlanAhead != "0")
+			{
+				$( "#planAheadCB" ).prop( "checked", true );
+			}
+			if(roomItem.Min30Periods == "true")
+			{
+				$("#30MinPeriodCB").prop("checked", true)
+			}
+			if(roomItem.PermaSchedule.length != 0)
+			{
+				var myBool = JSON.parse(roomItem.Min30Periods);
+				generatePreviewTable(roomItem.PermaSchedule, myBool)
+			}
+            $("#deleteResos").attr("onClick","deleteResosFunc('"+resosID+"','"+resosType+"');");
+		}
+	}
+
+}
+function resosSaveChanges()
+{
+    alert("Hello")
+}
+
+function deleteResosFunc(resosID, resosType)//called when user clicks the btn to delete resos, confirmation will show
+{
+    $.confirm
+    ({
+        boxWidth: '400px',
+        useBootstrap: false,
+        icon: 'fa fa-warning',
+        title: 'Confirm Deletion',
+        content: 'Are you sure you want to delete: '+resosID +'. <br> Resource Type: '+resosType,
+        theme: 'modern',
+        draggable: false,
+        buttons:
+        {
+            confirm:
+            {
+                btnClass: 'btn-red',
+                text:'Delete',
+                action: function()
+                {
+                    $("#resosSettingsErrMsg").html("Deleting Resource...")
+                    document.getElementById("saveResosChanges").disabled = true;
+                    delResosFromServer(resosID, resosType);
+                }
+            },
+            cancel:
+            {
+                text:'Cancel',
+                action: function()
+                {
+                    //$.alert('Canceled!');
+                }
+            },
+        }
+    });
+}
+function delResosFromServer(resosID, resosType) // actual deletion function AJAX that'll delete from the main server
+{
+    var delResosAPI = "";
+    var uniqueResosID = "";
+    if(resosType == "room")
+    {
+        delResosAPI = DCBBookingsResourceRoomAPI
+        uniqueResosID = "RoomID";//resos database primary Key
+    }
+
+    var obj = {};
+    obj[uniqueResosID] = resosID;
+    // making it extensible because diffrent resos have different Resos Primary Key IDs
+    var myJSON = JSON.stringify(obj);
+
+    $.ajax({
+        type:'DELETE',
+        url: delResosAPI,
+        data: myJSON,
+        contentType:"application/json",
+        success: function(data)
+        {
+            $("#resosSettingsErrMsg").html("Deleted From Main Server...")
+            window.setTimeout(reloadPg,2000);
+        },
+        error: function(data)
+        {
+            errorModuleShow()
+        }
+    });
+
+    function reloadPg()
+    {
+        location.reload();
+    }
+}
+function checkIfResosExists() //Checks if Resos still exists, if it doens't Delete it from everything.
+{
+    individualData = null;
+    allRooms = null;
+    resosExistCheckAndDeleteComplete = false;
+
+    var myData; // my data array
+    var allRoomsData; //all room data array
+    var allDeviceData; // all device data array
+    var allSubscriptionData; // all subscription data array
+
+    getUserInfo(userEmail);
+    validateIndiDataFetch();
+    function validateIndiDataFetch() // validating that your data has been fetched
+    {
+        $("#resosSettingsErrMsg").html("Fetching my data...")
+        if(individualData == null)
+        {
+            window.setTimeout(validateIndiDataFetch,1000)
+        }
+        else
+        {
+            myData = individualData["Items"][0]
+            getAllRooms();
+            validateResosFetch();
+        }
+    }
+    function validateResosFetch() // validating that all resos data has been fetched
+    {
+        $("#resosSettingsErrMsg").html("Fetching all resources & seeing if it still exists...")
+        if(allRooms == null)
+        {
+            window.setTimeout(validateResosFetch,1000)
+        }
+        else
+        {
+            allRoomsData = allRooms["Items"]
+            for(var i =0; i<allRoomsData.length; i++)
+            {
+                allResos.push([allRoomsData[i].RoomID,"room"])
+            }
+            checkMyData();
+        }
+    }
+
+    function checkMyData()//checking if my resos data still exists in the all resos list
+    {
+        var tempList = [];
+
+        var noInstanceFound = true;
+        // checking the bookedmark resos list
+        for(var i = 0; i<myData.bookmarkedResources.length; i++)
+        {
+            noInstanceFound = true;
+            for(var j =0; j<allResos.length; j++)
+            {
+                if(myData.bookmarkedResources[0] != "Empty List")
+                {
+                    if(myData.bookmarkedResources[i][0]==allResos[j][0] && myData.bookmarkedResources[i][1]==allResos[j][1])
+                    {
+                        noInstanceFound = false;
+                    }
+                }
+                else
+                {
+                    noInstanceFound = false
+                }
+            }
+            if(noInstanceFound)
+            {
+                tempList = myData.bookmarkedResources[i];
+                tempList.push("bookmarkedResources")
+                resosDeleteList.push(tempList)
+            }
+        }
+
+        //checking the userControlledResources field
+        noInstanceFound = true;
+        for(var i = 0; i<myData.userControlledResources.length; i++)
+        {
+            noInstanceFound = true;
+            for(var j =0; j<allResos.length; j++)
+            {
+                if(myData.userControlledResources[0] != "Empty List")
+                {
+                    if(myData.userControlledResources[i][0]==allResos[j][0] && myData.userControlledResources[i][1]==allResos[j][1])
+                    {
+                        noInstanceFound = false;
+                    }
+                }
+                else
+                {
+                    noInstanceFound = false
+                }
+            }
+            if(noInstanceFound)
+            {
+                tempList = myData.userControlledResources[i];
+                tempList.push("userControlledResources")
+                resosDeleteList.push(tempList)
+            }
+        }
+
+        //checking the recentlyBookedResources field
+        noInstanceFound = true;
+        for(var i = 0; i<myData.recentlyBookedResources.length; i++)
+        {
+            noInstanceFound = true;
+            for(var j =0; j<allResos.length; j++)
+            {
+                if(myData.recentlyBookedResources[0] != "Empty List")
+                {
+                    if(myData.recentlyBookedResources[i][0]==allResos[j][0] && myData.recentlyBookedResources[i][1]==allResos[j][1])
+                    {
+                        noInstanceFound = false;
+                    }
+                }
+                else
+                {
+                    noInstanceFound = false
+                }
+            }
+            if(noInstanceFound)
+            {
+                tempList = myData.recentlyBookedResources[i];
+                tempList.push("recentlyBookedResources")
+                resosDeleteList.push(tempList)
+            }
+        }
+        removeOldData()
+    }
+
+    var newRecentlyVistedArray;
+    var newBookmarkedArray;
+    var newUserControlledArray;
+    function removeOldData()//removing data that has been deleted from the main resos lists
+    {
+        newRecentlyVistedArray = myData.recentlyBookedResources;
+        newBookmarkedArray = myData.bookmarkedResources;
+        newUserControlledArray = myData.userControlledResources;
+
+        if(newRecentlyVistedArray[0] != "Empty List")
+        {
+            for(var i =resosDeleteList.length-1; i>- 1; i--)
+            //deleting backwards to prevent structure collasp.
+            {
+                if(resosDeleteList[i][2] == "recentlyBookedResources")
+                {
+                    newRecentlyVistedArray = removeA(newRecentlyVistedArray, resosDeleteList[i]);
+                }
+            }
+
+        }
+
+        if(newBookmarkedArray[0] != "Empty List")
+        {
+            for(var i =resosDeleteList.length-1; i> -1; i--)
+            //deleting backwards to prevent structure collasp.
+            {
+                if(resosDeleteList[i][2] == "bookmarkedResources")
+                {
+                    newBookmarkedArray = removeA(newBookmarkedArray, resosDeleteList[i]);
+                }
+            }
+        }
+
+        if(newUserControlledArray[0] != "Empty List")
+        {
+            for(var i =resosDeleteList.length-1; i> -1; i--)
+            //deleting backwards to prevent structure collasp.
+            {
+                if(resosDeleteList[i][2] == "userControlledResources")
+                {
+                    newUserControlledArray = removeA(newUserControlledArray, resosDeleteList[i]);
+                }
+            }
+        }
+        pushNewData();
+    }
+    function pushNewData()//push new data into my resos dataSub
+    {
+        $("#resosSettingsErrMsg").html("Pushing new data...")
+        updateUserInfo("recentlyBookedResources",newRecentlyVistedArray);
+        //pushing new recently visted data
+        userInfoUpdateSuccess = false
+        validateRecentlyVisitedUpdate();
+        function validateRecentlyVisitedUpdate()
+        {
+            if(userInfoUpdateSuccess == true)
+            {
+                userInfoUpdateSuccess = false
+                updateUserInfo("bookmarkedResources",newBookmarkedArray);
+                validateBookmarkedResourcesUpdate();
+            }
+            else
+            {
+                window.setTimeout(validateRecentlyVisitedUpdate,1000);
+            }
+        }
+
+        //pushing new bookmarked Resources data
+        function validateBookmarkedResourcesUpdate()
+        {
+            if(userInfoUpdateSuccess == true)
+            {
+                userInfoUpdateSuccess = false
+                updateUserInfo("userControlledResources",newUserControlledArray);
+                validateUpdateserControlledResourcesUpdate()
+            }
+            else
+            {
+                window.setTimeout(validateBookmarkedResourcesUpdate,1000);
+            }
+        }
+
+        //UpdateserControlledResources
+        function validateUpdateserControlledResourcesUpdate()
+        {
+            if(userInfoUpdateSuccess == true)
+            {
+                resosExistCheckAndDeleteComplete = true;
+            }
+            else
+            {
+                window.setTimeout(validateUpdateserControlledResourcesUpdate,1000);
+            }
+        }
+    }
+}
+
+function getCurrentPageName()//returns the page name the user is currently on.
+{
+    var currentPageName = "";
+    var urlSplitArray = window.location.href.split('/')
+    currentPageName = urlSplitArray[urlSplitArray.length-1]
+    return currentPageName;
+}
+function removeA(arr, Rval)
+//remove a certain value from the array. (arr, "value")
+{
+    var index = arr.indexOf(Rval);
+    if (index > -1)
+    {
+        arr.splice(index, 1);
+    }
+    return arr;
+}
+
+function openSettingsNav()//opening side navigation bar for settings
 {
 	$("#settingSideNav").show();
 	$("#HiddenMenuBtn").hide()
@@ -2692,6 +3092,7 @@ function openSettingsNav()
 		document.getElementById("settingsTitleCard").style.left = "400px";
 		document.getElementById("mainSettingsPanel").style.width = "68.75%";
 		document.getElementById("settingsTitleCard").style.width = "68.75%";
+        document.getElementById("settingSideNav").style.width = "400px";
 	}
 	else if($(window).width() >= 1280)
 	{
@@ -2699,14 +3100,16 @@ function openSettingsNav()
 		document.getElementById("settingsTitleCard").style.left = "31.25%";
 		document.getElementById("mainSettingsPanel").style.width = "68.75%";
 		document.getElementById("settingsTitleCard").style.width = "68.75%";
+        document.getElementById("settingSideNav").style.width = "31.25%";
 	}
 	else if($(window).width() < 1150)
 	{
 		$("#closeSideNavSettings").show()
+        document.getElementById("settingSideNav").style.width = "100%";
 	}
-	
+
 }
-function closeSettingsNav()
+function closeSettingsNav()//closing side navigation bar for settings
 {
 	$("#settingSideNav").hide();
 	$("#HiddenMenuBtn").show()
@@ -2715,4 +3118,30 @@ function closeSettingsNav()
 	document.getElementById("mainSettingsPanel").style.width = "100%";
 	document.getElementById("settingsTitleCard").style.width = "100%";
 	$("#closeSideNavSettings").hide()
+}
+
+function errorModuleShow()//error module for lost of connection
+{
+    $.alert
+    ({
+        boxWidth: '400px',
+        useBootstrap: false,
+        icon: 'fa fa-warning',
+        title: 'REQUEST ERROR:',
+        content: 'Connection Broken',
+        theme: 'modern',
+        draggable: false,
+        buttons:
+        {
+            reload:
+            {
+                btnClass: 'btn-red',
+                text:'Reload',
+                action: function()
+                {
+                    location.reload();
+                }
+            },
+        }
+    });
 }

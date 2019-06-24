@@ -14,25 +14,19 @@
 		<link rel="stylesheet" href="../CSS/bootstrap.css">
 		<script src="../JS/NicEdit.js" type="text/javascript"></script><!--TextEdit-->
 		<script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 	</head>
 	<body>
 		<!--Loader showing up when the site is loading in-->
-		<div id="Loader" class="loader">	
+		<div id="Loader" class="loader">
 			<img width="12.5%" src="../Images/loader.gif">
 			<br><br><br><br><br><br><br>
 			<p id="loaderTxt"></p>
 		</div>
-		
-		<!--Error Module--> 
-       	<div id="errorModule">
-			<div id="ErrorBox" class="ErrorColor">
-				<p align="center"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;REQUEST ERROR: <br>Connection Broken</p>
-				<button class="btnSuccessOutline" onClick="location.reload();">Reload</button>
-			</div>
-		</div>
-       	
+
         <!-- Starter Modal enter information-->
-        <div id="StarterModal" class="Modal"> 
+        <div id="StarterModal" class="Modal">
     	 	<!--Starter Modal content -->
       		<div class="starterModal-content">
       			<p class="starterWelcomeMsg"><strong>Welcome to DCB Bookings!</strong><br>Some information appears to be incomplete<br><br><br></p>
@@ -48,7 +42,7 @@
 				<button class="LandingModalBtns" onClick="completeSignUp();">Complete Sign Up</button>
 			</div>
 		</div>
-		
+
 		<!--Navigation panel Start-->
 		<div id="navBar" class="topnav">
 			<div id="title">
@@ -58,44 +52,44 @@
 				<div class="dropbtn"><i style="font-size: 20px;" class="fa fa-bars imgBtn"></i></div>
 				<div class="dropdown-content">
 					<a href="Settings.html">Settings</a>
-					<a href="#">Sign Out</a>	
+					<a href="#">Sign Out</a>
 			    </div>
 			</div>
 		</div>
-		
+
 		<div id="searchBarContainer">
 			<div id="HiddenMenuBtn"><i onClick="openNav('260px',($(window).width()-260).toString()+'px',($(window).width()-250).toString()+'px');" class="fa fa-bars imgBtn"></i></div>
 			<div class="search-container">
 			 	<input type="text" placeholder="Search... <Device, Room, Subscription, Email...>" name="search">
 		  	</div>
 		</div>
-		
+
 		<div id="sideMenu" class="sidenav">
 			<p class="closebtn" id="closeSideNav" onclick="closeNav()">&times;</p>
-			
+
 			<div id="UpcomingBookings" class="sideMenuBox">
 				<strong><p class="sideNavTitle">Your Upcoming Bookings:</p></strong>
-				
+
 				<div class="listOfItems" id="upcomingBookingsList">
 					<!--<a href="#">Empty List</a>-->
 				</div>
-				
+
 			</div>
 			<hr>
 			<div id="MyResos" class="sideMenuBox">
 				<strong><p class="sideNavTitle">Your Resources:</p></strong>
-				
+
 				<div class="listOfItems" id="MyResosList">
 					<!--<a href="#">Empty List</a>-->
 				</div>
-				
+
 				<div id="bottomBtns">
-					<button id="AddRoomBtn" class="btnSuccessOutline sameLine ManageResosBtns" onClick="openAddResos(); backToFirstAResosSlide();">Add a Resource</button>		
+					<button id="AddRoomBtn" class="btnSuccessOutline sameLine ManageResosBtns" onClick="openAddResos(); backToFirstAResosSlide();">Add a Resource</button>
 				</div>
 			</div>
 		</div>
 		<!--Navigation panel end-->
-		
+
 		<!--Modal To Add a Resource start-->
 		<div id="addResourceModal" class="Modal">
 			<!--Add resourceModalContent Content-->
@@ -114,7 +108,7 @@
 							<p>Add a Subscription</p>
 						</div>
 					</div>
-					
+
 					<!--Add Room Slide 1, <Slide 2>-->
 					<div class="AddResosSlide">
 						<img class="imgBtn" onClick="currentAResosSlide(1)" src="../Images/Back.png" width="2.5%" style="margin: 0;">
@@ -127,7 +121,7 @@
 						<button class="LandingModalBtns" onClick="addRoomNext1();">Next</button>
 						<p id="AddResosAddRoomErrMsg1" class="AddResosErrMsg"></p>
 					</div>
-					
+
 					<!--Add Room Slide 2, <Slide 3>-->
 					<div class="AddResosSlide">
 						<img class="imgBtn" onClick="plusAResosSlides(-1)" src="../Images/Back.png" width="2.5%" style="margin: 0;">
@@ -144,27 +138,27 @@
 						<br><br><br>
 						<label>Room Admin:</label>
 						<input type="text" id="RoomAdmin1" name="Admin1" readonly>
-						
+
 						<label>Other Admins <em>[ Separate room admins emails with a ' ; ' ]  OPTIONAL </em></label>
 						<input type="text" id="RoomAdmin2" placeholder="Other Admins [ Enter Emails ]:" name="Admin2">
-						
+
 						<input type="checkbox" id="planAheadCB">&nbsp;Plan Ahead [Close booking ability 30 minutes ahead of time]<br>
 						<input type="checkbox" id="30MinPeriodCB">&nbsp;30 minute period [Split each period into 30 minute sections]<br><br>
-						
+
 						<button class="LandingModalBtns" onClick="addRoomNext2();">Next</button>
 						<p id="AddResosAddRoomErrMsg2" class="AddResosErrMsg"></p>
 					</div>
-					
+
 					<!--Add Room Slide 3 <Slide 4>-->
 					<div class="AddResosSlide">
 						<div class="modal-header">
 							<img class="imgBtn" onClick="plusAResosSlides(-1); preTimeableClasses();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
 							<h1 align="center">Add Room</h1>
 						</div>
-						
+
 						<div class="modal-body">
 							<center>
-								<!--The upload options-->	
+								<!--The upload options-->
 								<div id="Options">
 									<strong><label>Choose a upload source:</label></strong>
 									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -210,67 +204,17 @@
 								<div id="PreviewTable">
 									<em><p>[Preview Table]</p></em>
 								</div>
-								<table class="table table-hover">
-									<!--
-									<thead>
-										<tr>
-											<th>Day</th>
-											<th>P1</th>
-											<th>P1</th>
-											<th>P2</th>
-											<th>P2</th>
-											<th>Br</th>
-											<th>P3</th>
-											<th>P3</th>
-											<th>P4</th>
-											<th>P4</th>
-											<th>Lun</th>
-											<th>Lun</th>
-											<th>P5</th>
-											<th>P5</th>
-											<th>P6</th>
-											<th>P6</th>
-											<th>E1</th>
-											<th>E1</th>
-											<th>E2</th>
-											<th>E2</th>
-										</tr>
-										<tr>
-											<td>Monday</td>
-											<td>unb</td>
-											<td>unb</td>
-											<td>unb</td>
-											<td>lsn</td>
-											<td>lsn</td>
-											<td>lck</td>
-											<td>unb</td>
-											<td>unb</td>
-											<td>unb</td>
-											<td>unb</td>
-											<td>unb</td>
-											<td>lck</td>
-											<td>bkd</td>
-											<td>bkd</td>
-											<td>bkd</td>
-											<td>bkd</td>
-											<td>bkd</td>
-											<td>unb</td>
-											<td>unb</td>
-										</tr>
-									</thead>
-									-->
-								</table>	
 							</center>
 							<br><br><br>
 						</div>
-						
+
 						<div class="modal-footer">
 							<button id="nextBtn" onClick="" class="addResosUploadSkipBtn">Next</button>
-														
+
 							<button id="skipBtn" onClick="AddResosSkip(); reviewInfoClasses();" class="addResosUploadSkipBtn">Skip</button>
 						</div>
 					</div>
-					
+
 					<!--Add Room Slide 4 <Slide 5>-->
 					<div class="AddResosSlide">
 						<img class="imgBtn" onClick="plusAResosSlides(-1); preReviewInfoClasses();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
@@ -280,22 +224,22 @@
 						<div class="reviewInfo">
 							<strong><label class="reviewTitles">Room Name: &nbsp;</label></strong><br>
 							<label class="userInfo" id="RoomName"></label><br><br>
-							
+
 							<strong><label class="reviewTitles">Department: &nbsp;</label></strong><br>
 							<label  class="userInfo" id="depart"></label><br><br>
-							
+
 							<strong><label class="reviewTitles">Description: &nbsp;</label></strong>
 							<label  class="userInfo" id="descrip"></label><br><br>
-							
+
 							<strong><label class="reviewTitles">Access Rights: &nbsp;</label></strong><br>
 							<label  class="userInfo" id="AccessR"></label><br><br>
-							
+
 							<strong><label class="reviewTitles">Room Admin(s): &nbsp;</label></strong>
 							<label  class="userInfo" id="roomAdmins"></label><br>
-							
+
 							<strong><label class="reviewTitles">Plan Ahead: &nbsp;</label></strong><br>
 							<label  class="userInfo" id="PlanAh"></label><br><br>
-							
+
 							<strong><label class="reviewTitles">30 Minute Period: &nbsp;</label></strong><br>
 							<label  class="userInfo" id="30minP"></label><br><br>
 						</div>
@@ -309,10 +253,10 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!--Modal To Add a Resource end-->
 		<div id="allResosContainer">
-		
+
 			<div id="RecentlyVisitedResos">
 				<p class="MainPageP">Recently Visited Resources:</p>
 				<div class="Box room">
@@ -321,31 +265,31 @@
 					<button class="btnSuccessOutline">View</button>
 				</div>
 			</div>
-			
+
 			<hr>
-			
+
 			<div id="BookedmarkedResos">
 				<p class="MainPageP">Bookmarked Resources:</p>
 				<div id="bookmarkedResosBoxes">
 					<em><p>Loading...</p></em>
 				</div>
 			</div>
-			
+
 			<hr>
-			
+
 			<div id="allResos">
 				<p class="MainPageP">All Resources:</p>
 				<div id="allResosBoxes">
 					<em><p>Loading...</p></em>
 				</div>
 			</div>
-			
+
 		</div>
-		
+
 		<!--Show Timetable Module-->
-		<div id="timeTableModal" class="Modal"> 
+		<div id="timeTableModal" class="Modal">
 		  <div class="timeTableModal-content">
-			<span id="closeTimetableModal" class="Modalclose">&times;</span>	
+			<span id="closeTimetableModal" class="Modalclose">&times;</span>
 				<h3 id="timeTableTitle">Timetable:</h3>&nbsp;&nbsp;&nbsp;
 				<button id="whichWeekBtn">Change Week</button>
 				<div id="timetableSettings"><i class="fa fa-cog" aria-hidden="true"></i></div>
@@ -357,52 +301,52 @@
 						<label id="bookingDetails">.......</label>
 						<br class="noHeightBreak">
 						<label id="bookingStatus">.......</label><br>
-						<br>					
+						<br>
 						<button id="bookBtn">Quick Book</button>
-						<button id="rbookBtn">Book Recurring</button>				
+						<button id="rbookBtn">Book Recurring</button>
 						<button id="quickLockBtn">Lock</button>
 						<button id="lessonLockBtn">Lesson</button>
 						<button id="deleteBtn">Delete</button>
 						<button id="contactBtn">Contact</button>
-					</div>	
+					</div>
 					<div id="preLimLoader">
 						<em><p id="preLimLoaderText">[Click on a Timeslot to View Bookings]</p></em>
 					</div>
 				</div>
-				
+
 				<div id="timeTable"></div>
-				
+
 				<!--loader for when the page loads within the timetable modolue-->
-				<div id="LoaderTimetable"> 
+				<div id="LoaderTimetable">
 					<img style="margin-bottom: 80px;" width="10%" src="../Images/loader.gif">
 				</div>
 		  </div>
 		</div>
 	</body>
-	
+
 	<script>//initilizers
 		//for small screens
-		if ($(window).width() < 1130) 
+		if ($(window).width() < 1130)
 		{
 			closeNav();
 			$("#HiddenMenuBtn").show();
 			$("#closeSideNav").show();
 		}
-		else 
+		else
 		{
 			openNav("23%","77%","80%");
 			$("#HiddenMenuBtn").hide();
 			$("#closeSideNav").hide();
 		}
-		$(window).resize(function() 
+		$(window).resize(function()
 		{
-			if ($(window).width() < 1130) 
+			if ($(window).width() < 1130)
 			{
 				closeNav();
 				$("#HiddenMenuBtn").show();
 				$("#closeSideNav").show();
 		  	}
-			else 
+			else
 		 	{
 				openNav("23%","77%","80%");
 				$("#HiddenMenuBtn").hide();
@@ -427,9 +371,9 @@
 					success: function (data)
 					{
 						FunnyloadingTxt("loaderTxt",false,2000);
-						userDataFull = data; 
+						userDataFull = data;
 						//console.log(data)
-						var userExists = false; 
+						var userExists = false;
 						for(var i =0; i<data["Items"].length; i++)
 						{
 							if(data["Items"][i]["email"]==userEmail) //if user email is already part of the big email list
@@ -440,7 +384,7 @@
 								dynamicGenerateYourResos(individualData);
 								dynamicGenerateBookmarkedResos(individualData);
 								populateAllResos(false,false,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
-								
+
 								//console.log(userDataFull);
 							}
 						}
@@ -456,17 +400,17 @@
 					error: function (data)
 					{
 						console.log(data)
-						
+
 					}
 				});
 			}
 		}
 	</script>
-	<script> 
+	<script>
 		//modal Code for starter modal
 		var modal = document.getElementById("StarterModal");
 
-		// When the user clicks the button, open the modal 
+		// When the user clicks the button, open the modal
 		function openStarterModal()
 		{
 			modal.style.display = "block";
@@ -480,7 +424,7 @@
 		// Get the <span> element that closes the modal
 		var closeResosModalBtn = document.getElementById("addResosModalCloseBtn");
 
-		// When the user clicks the button, open the modal 
+		// When the user clicks the button, open the modal
 		function openAddResos()
 		{
 			AddResosModal.style.display = "block";
@@ -494,31 +438,31 @@
 	</script>
 	<script>//modal code for timetables
 		//modal Code LoginSignup
-		
+
 		var timetableModal = document.getElementById("timeTableModal");
 
 		// Get the <span> element that closes the modal
 		var closeTimetableModalBtn = document.getElementById("closeTimetableModal");
 
-		// When the user clicks the button, open the modal 
+		// When the user clicks the button, open the modal
 		function openTimetableModal()
 		{
 			timetableModal.style.display = "block";
 		}
 
 		// When the user clicks on <span> (x), close the modal
-		closeTimetableModalBtn.onclick = function() 
+		closeTimetableModalBtn.onclick = function()
 		{
 		  timetableModal.style.display = "none";
 		}
 
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
-		  if (event.target == timetableModal) 
+		  if (event.target == timetableModal)
 		  {
 			timetableModal.style.display = "none";
 		  }
-		  else if (event.target == AddResosModal) 
+		  else if (event.target == AddResosModal)
 		  {
 			AddResosModal.style.display = "none";
 		  }
@@ -583,7 +527,7 @@
 		  });
 		}
 
-		function closeAllSelect(elmnt) 
+		function closeAllSelect(elmnt)
 		{
 		  /* A function that will close all select boxes in the document,
 		  except the current select box: */
@@ -612,27 +556,27 @@
 		var AResosslideIndex = 1;
 		showAResosSlides(AResosslideIndex);
 		// Next/previous controls
-		function plusAResosSlides(n) 
+		function plusAResosSlides(n)
 		{
 		  showAResosSlides(AResosslideIndex += n);
 		}
 
 		// Thumbnail image controls
-		function currentAResosSlide(n) 
+		function currentAResosSlide(n)
 		{
 		  showAResosSlides(AResosslideIndex = n);
 		}
 
-		function showAResosSlides(n) 
+		function showAResosSlides(n)
 		{
 		  var i;
 		  var AResosslides = document.getElementsByClassName("AddResosSlide");
-		  if (n > AResosslides.length) {AResosslideIndex = 1} 
+		  if (n > AResosslides.length) {AResosslideIndex = 1}
 		  if (n < 1) {AResosslideIndex = AResosslides.length}
 		  for (i = 0; i < AResosslides.length; i++) {
-			  AResosslides[i].style.display = "none"; 
+			  AResosslides[i].style.display = "none";
 		  }
-		  AResosslides[AResosslideIndex-1].style.display = "block"; 
+		  AResosslides[AResosslideIndex-1].style.display = "block";
 		}
 		function backToFirstAResosSlide()
 		{

@@ -38,7 +38,7 @@ h1,h2,h3,h4,p,label,a
 	z-index: 1;
 	margin: 0 auto;
 	left: 0;
-	right: 0;        
+	right: 0;
 	text-align: center;
 	top: 37%; /* Adjust this value to move the positioned div up and down */
 	background:rgba(255,254,254,0.9);
@@ -54,7 +54,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 .landingBtn /*code for the buttom on the landing page, the big "make a booking"*/
-{ 
+{
 	display: inline-block;
 	border-radius: 4px;
 	background-color:#555555;
@@ -99,7 +99,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* The Modal (background) */
-.Modal 
+.Modal
 {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -115,7 +115,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* The Modal Close Button */
-.Modalclose 
+.Modalclose
 {
   color: #aaaaaa;
   float: right;
@@ -139,7 +139,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* signup Modal Content */
-.signInModal-content 
+.signInModal-content
 {
   	background-color:rgba(233,233,233,1.00);
 	margin: auto;
@@ -152,7 +152,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /*starter modal content*/
-.starterModal-content 
+.starterModal-content
 {
   	background-color:rgba(233,233,233,1.00);
 	margin:auto;
@@ -202,8 +202,8 @@ h1,h2,h3,h4,p,label,a
 	top:200px;
 }
 
-/* Full-width input fields for the Signup Modals content */ 
-.signInModal-content input[type=text], input[type=password] 
+/* Full-width input fields for the Signup Modals content */
+.signInModal-content input[type=text], input[type=password]
 {
   width: 90%;
   padding: 15px;
@@ -214,7 +214,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* Add a background color when the inputs get focus or the Signup Modals content*/
-.signInModal-content input[type=text]:focus, input[type=password]:focus 
+.signInModal-content input[type=text]:focus, input[type=password]:focus
 {
   background-color:rgba(242,242,242,1.00);
   outline: none;
@@ -237,7 +237,7 @@ h1,h2,h3,h4,p,label,a
 	cursor: pointer;
 	width: 100%;
 }
-.LandingModalBtns:hover 
+.LandingModalBtns:hover
 {
 	background-color:rgba(0,0,0,0.4);
 	color: white;
@@ -285,12 +285,12 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* Hide the slides by default for the Slideshow in the Signup Modal*/
-.SignUpSlides 
+.SignUpSlides
 {
   display: none;
 }
 /* Hide the slides by default for the Slideshow in the addResos Modal*/
-.AddResosSlide 
+.AddResosSlide
 {
   display: none;
 }
@@ -302,13 +302,13 @@ h1,h2,h3,h4,p,label,a
 }
 
 /*Start Custom Select Code*/
-.custom-select 
+.custom-select
 {
   position: relative;
   font-family: Arial;
 }
 
-.custom-select select 
+.custom-select select
 {
   display: none; /*hide original SELECT element: */
 }
@@ -319,7 +319,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* Style the arrow inside the select element: */
-.select-selected:after 
+.select-selected:after
 {
   position: absolute;
   content: "";
@@ -332,14 +332,14 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* Point the arrow upwards when the select box is open (active): */
-.select-selected.select-arrow-active:after 
+.select-selected.select-arrow-active:after
 {
   border-color: transparent transparent #fff transparent;
   top: 7px;
 }
 
 /* style the items (options), including the selected item: */
-.select-items div,.select-selected 
+.select-items div,.select-selected
 {
   color: #ffffff;
   padding: 8px 16px;
@@ -349,7 +349,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /* Style items (options): */
-.select-items 
+.select-items
 {
   position: absolute;
   background-color:rgba(182,179,179,1.00);
@@ -365,7 +365,7 @@ h1,h2,h3,h4,p,label,a
   display: none;
 }
 
-.select-items div:hover, .same-as-selected 
+.select-items div:hover, .same-as-selected
 {
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -440,7 +440,7 @@ h1,h2,h3,h4,p,label,a
 	overflow-x: scroll;
 	z-index: 2;
 }
-.search-container input[type=text] 
+.search-container input[type=text]
 {
 	width: 80%;
 	padding: 8px 20px;
@@ -456,7 +456,7 @@ h1,h2,h3,h4,p,label,a
 	left:110px;
 	color:black;
 }
-.search-container input[type=text]:focus 
+.search-container input[type=text]:focus
 {
   border: 3px solid #555;
 }
@@ -471,13 +471,13 @@ h1,h2,h3,h4,p,label,a
 	margin-left: 2px;
 	margin-top: 2px;
 }
-.dropdown 
+.dropdown
 {
 	position: absolute;
 	right:0;
 	display: inline-block;
 }
-.dropdown-content 
+.dropdown-content
 {
 	display: none;
 	position: absolute;
@@ -487,7 +487,7 @@ h1,h2,h3,h4,p,label,a
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
 	z-index: 1;
 }
-.dropdown-content a 
+.dropdown-content a
 {
 	color: black;
 	padding: 12px 16px;
@@ -496,23 +496,23 @@ h1,h2,h3,h4,p,label,a
 	cursor: pointer;
 	font-weight: 300;
 }
-.dropdown-content a:hover 
+.dropdown-content a:hover
 {
 	background-color: white;
 	text-decoration: none;
 }
-.dropdown-content a:visited 
+.dropdown-content a:visited
 {
 	color: black;
 	text-decoration: none;
 }
-.dropdown:hover .dropdown-content 
+.dropdown:hover .dropdown-content
 {display: block;}
 /*top Navbar Code end-->*/
 
 
 /*sideNav Code when Screen is big*/
-.sidenav 
+.sidenav
 {
 	height: 100%;
 	width: 20%;
@@ -567,7 +567,7 @@ h1,h2,h3,h4,p,label,a
 	font-size: 20px;
 	display: none;
 }
-.sidenav .closebtn 
+.sidenav .closebtn
 {
 	position: absolute;
 	top: 0;
@@ -581,11 +581,11 @@ h1,h2,h3,h4,p,label,a
 {
 	color:rgba(0,162,155,1.00);
 }
-#sideMenu 
+#sideMenu
 {
   transition: margin-left .5s;
 }
-@media screen and (max-height: 450px) 
+@media screen and (max-height: 450px)
 {
   .sidenavSmall {padding-top: 15px;}
 }
@@ -645,6 +645,19 @@ h1,h2,h3,h4,p,label,a
 	background-color: rgb(48,165,74);
 	color:white;
 }
+.btnDangerOutline
+{
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	background-color: white;
+	border:solid 1px rgb(205,53,70);
+	color:rgb(216,55,72);
+}
+.btnDangerOutline:hover
+{
+	background-color: rgb(218,55,73);
+	color:white;
+}
 .btnSecondaryOutline
 {
 	background-color: white;
@@ -686,7 +699,7 @@ h1,h2,h3,h4,p,label,a
 }
 
 /*Add Resos slide input CSS*/
-.AddResosSlide input[type=text] 
+.AddResosSlide input[type=text]
 {
 	width: 100%;
 	padding: 12px 20px;
@@ -699,7 +712,7 @@ h1,h2,h3,h4,p,label,a
 	font-size: 16px;
 	margin-bottom: 10px;
 }
-.AddResosSlide input[type=text]:focus 
+.AddResosSlide input[type=text]:focus
 {
   border: 3px solid #555;
 }
@@ -738,7 +751,7 @@ h1,h2,h3,h4,p,label,a
 	width: 100%;
 	display: none;
 }
-.addResosUploadSkipBtn:hover 
+.addResosUploadSkipBtn:hover
 {
 	background-color:rgba(0,0,0,0.4);
 	color: white;
@@ -760,14 +773,14 @@ h1,h2,h3,h4,p,label,a
 	cursor: pointer;
 	width: 100%;
 }
-.createResosBtn:hover 
+.createResosBtn:hover
 {
 	background-color:rgba(0,0,0,0.4);
 	color: white;
 }
 
 
-.AddResosSlide h1 
+.AddResosSlide h1
 {
 	margin: 0;
 }
@@ -992,12 +1005,12 @@ viewPort_Content
 	background-color: #CACACA;
 	color: black;
 }
-#viewPort button:disabled 
+#viewPort button:disabled
 {
     background: #dddddd;
 	color:white
 }
-#viewPort button:disabled:hover 
+#viewPort button:disabled:hover
 {
     background: #dddddd;
 	color:white
@@ -1010,10 +1023,10 @@ viewPort_Content
 	margin: 0;
 }
 
-.timeTableModal-content 
+.timeTableModal-content
 {
     background-color: white;/*rgba(245,245,245,1.00);*/
-    margin: 10% auto; /* 15% from the top and centered */
+    margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
 	border-radius: 25px;
@@ -1088,10 +1101,10 @@ viewPort_Content
 	background-color: rgb(255,255,255);
 	height: 40px;
 	display: inline-block;
-	width: 100%; 
+	width: 100%;
 	margin: auto;
     padding-top: 8px;
-	padding-left: 15px; 
+	padding-left: 15px;
 }
 #settingSideNav/*side navigation bar*/
 {
@@ -1100,8 +1113,8 @@ viewPort_Content
 	width: 31.25%;
 	min-width: 400px;
 	height: 100%;
-	left: 0px; 
-	border-right: 1px solid rgb(219,218,224); 
+	left: 0px;
+	border-right: 1px solid rgb(219,218,224);
 	overflow-y: auto;
 	z-index: 4;
 }
@@ -1109,7 +1122,7 @@ viewPort_Content
 {
 	background-color: rgb(255,255,255);
 	width: 100%;
-	height: 45px; 
+	height: 45px;
 	border-top: 1px solid rgb(243,243,243);
 	border-bottom: 1px solid rgb(243,243,243);
 }
@@ -1117,7 +1130,7 @@ viewPort_Content
 {
 	display: inline-block;
 	font-size: 14px;
-	width: 49%; 
+	width: 49%;
 	margin: auto;
     padding: 10px;
 }
@@ -1132,7 +1145,7 @@ viewPort_Content
 {
 	display:none;
 }
-.edit_hover_class:hover a 
+.edit_hover_class:hover a
 {
  	display:block;
 }
@@ -1151,7 +1164,7 @@ viewPort_Content
 {
 	width: 68.75%;
 	background-color: rgb(255,255,255);
-	height: 40px; 
+	height: 40px;
 	top:0;
 	position: fixed;
 	left:400px;
@@ -1160,14 +1173,14 @@ viewPort_Content
 {
 	display: inline-block;
 	font-size: 17px;
-	width: 100%; 
+	width: 100%;
 	margin: auto;
     padding: 9px;
 }
 
 .SettingsSlide
 {
-	padding-top: 70px; 
+	padding-top: 70px;
 	display: none;
 }
 #AdminUserTable
@@ -1195,7 +1208,7 @@ viewPort_Content
 #addUserBtn
 {
 	width: 90%;
-	border-radius: 2px; 
+	border-radius: 2px;
 }
 #adminSettings
 {
@@ -1203,14 +1216,14 @@ viewPort_Content
 }
 
 /*CSS Search feture in the Settings Page*/
-#myResosList 
+#myResosList
 {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  width: 90%; 
+  width: 90%;
 }
-#myResosList li a 
+#myResosList li a
 {
   border: 1px solid #ddd;
   margin-top: -1px; /* Prevent double borders */
@@ -1221,12 +1234,12 @@ viewPort_Content
   color: black;
   display: block
 }
-#myResosList li a:hover:not(.header) 
+#myResosList li a:hover:not(.header)
 {
   background-color: #eee;
 }
 
-#backToMainPage .closebtn 
+#backToMainPage .closebtn
 {
 	position: absolute;
 	top: -42px;
@@ -1239,4 +1252,55 @@ viewPort_Content
 #backToMainPage .closebtn:hover
 {
 	color:rgba(0,162,155,1.00);
+}
+
+/*resos settings page CSS*/
+.resosSettingsModal-content
+{
+	background-color: white;/*rgba(245,245,245,1.00);*/
+    margin: 2.5% auto; /* 15% from the top and centered */
+    padding: 10px 40px;
+    border: 1px solid #888;
+	border-radius: 25px;
+	width: 1000px;
+	height: 600px;
+	overflow-y: auto;
+}
+.resosSettingsModal-content input[type=text]
+{
+    width: 100%;
+    padding: 7px 20px;
+    margin: 0px 0px 10px 0px;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+.resosSettingsModal-content input[type=text]:focus
+{
+    border: 3px solid #555;
+}
+.resosSettingsModal-content label
+{
+	margin: 0;
+}
+.resosSettingsModal-content textarea
+{
+	width: 915px;
+	height: 180px;
+}
+.select100/*select tag with a width of 100%*/
+{
+	width: 100%;
+}
+/*Danger zone, delete resos etc.*/
+#resosSettingsDangerZone
+{
+	width: 100%;
+	height: 100px;
+	border:solid 1px orangered;
+	margin: 15px 0px;
+	padding: 0px 10px;
+	border-radius: 5px; 
 }

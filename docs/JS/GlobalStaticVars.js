@@ -15,15 +15,23 @@ var userEmail;
 var userInfoFetchSuccess = false;
 var userInfoUpdateSuccess = false;
 
+//when true, resos would have been checked to see if it exists and if it doesn't it'll call a deletion function
+var resosExistCheckAndDeleteComplete = false;
+//list of resos that no longer exists and thus needs to be deleted, structure is a 2D array, inner array with structure
+//[1]- resosID
+//[2]- resosType;
+//[3]- field it belongs to in MyData eg. .userControlledResources
+var resosDeleteList = [];
+
 //when true, user data will have unsuccesfully been fetched or updated
 var userInfoFetchError= false;
 var userInfoUpdateError =false;
 
 //when true room data will have sucessfully be fetched
-var roomDataFetchSuccess= false; 
+var roomDataFetchSuccess= false;
 
 //when true resos data will have sucessfully be fetched
-var indiResosDataFetchSuccess = false; 
+var indiResosDataFetchSuccess = false;
 
 //all data of users
 var userDataFull;
@@ -35,9 +43,9 @@ var individualData;
 var indiRoomData;
 var resosName; // used to store the resos ID the user is currently viewing
 var currentWeek; // used to store the current week, 0 for week 1, 1 for week 2
-var currentWeekB //used to store the current weekbegining 
-var resosAdmin = false; //boolean, used to store whether or not you are the true admin of a room. 
-var clickBookedEmail = ""; //used to store the email of the person who booked the room. 
+var currentWeekB //used to store the current weekbegining
+var resosAdmin = false; //boolean, used to store whether or not you are the true admin of a room.
+var clickBookedEmail = ""; //used to store the email of the person who booked the room.
 
 //All Resos Array [ResosID,ResosType]
 var allResos = [];
@@ -50,22 +58,22 @@ var BookmarkedResosHTML = ""; //all bookmarked Resos dynamic HTML
 //all rooms data
 var allRooms;
 
-//List Of All Room Admins, used when creating a resos. 
+//List Of All Room Admins, used when creating a resos.
 var adminEmailArray
 
 //timetable modal variables
-var PrevSelect; //stores the previously selected cell data. 
+var PrevSelect; //stores the previously selected cell data.
 var min30Periods; //boolean stores wheteher or not the current resos is using the 30 min period option
 
 //timetable vars
-var previewUploadTable = []; 
+var previewUploadTable = [];
 var timetableHTML = "";//preview table
 var tbl = "";//offical booking table
 //booking values for pushing values into the db
 var bookval;
 var lockval;
 var lessonval;
-var unbookedval; 
+var unbookedval;
 
 //random loading text that'll give you fun messages to look at
 var randomLoadingText = ["Looking at kittens...","Playing with yarnballs...","Sniffing catnip...","Scratching the post...","Sharpening claws...","Stalking a mouse..."]

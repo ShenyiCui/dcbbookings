@@ -16,6 +16,8 @@
 	<script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+	<script src="../JS/nprogress.js"></script>
+	<link rel="stylesheet" href="../CSS/nprogress.css">
 </head>
 
 <body>
@@ -254,6 +256,7 @@
 
 <script>//initilizers
 	FunnyloadingTxt("loaderTxt",true,2000);
+
 	//autoscalers to make sure that the panel widths match
 	if ($(window).width() < 1280 && $(window).width() >= 1150)
 	{
@@ -283,6 +286,7 @@
 		}
 	});
 
+	NProgress.start();
 	getUserEmail();
 	validateEmail();
 	function validateEmail()//get the email of the user
@@ -291,6 +295,7 @@
 		{
 			getAllAdmins()
 			validateAdminFetch()
+			NProgress.inc();
 		}
 		else
 		{
@@ -303,6 +308,7 @@
 		{
 			checkIfResosExists()
 			validateCheckIfExistandDelete();
+			NProgress.inc();
 		}
 		else
 		{
@@ -313,6 +319,7 @@
 	{
 		if(resosExistCheckAndDeleteComplete == true)
 		{
+			NProgress.inc();
 			checkIfAdmin()
 			$("#Loader").fadeOut();
 		}
@@ -323,6 +330,8 @@
 	}
 	function checkIfAdmin()//see if you are an admin
 	{
+		NProgress.done();
+		openedSettingsCheckPrelim();
 		for(var i = 0; i<allMasterAdmins.length; i++)
 		{
 			if(userEmail.trim().toLowerCase()==allMasterAdmins[i].trim().toLowerCase())

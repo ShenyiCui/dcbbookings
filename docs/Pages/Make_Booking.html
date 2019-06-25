@@ -16,6 +16,8 @@
 		<script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="../JS/nprogress.js"></script>
+		<link rel="stylesheet" href="../CSS/nprogress.css">
 	</head>
 	<body>
 		<!--Loader showing up when the site is loading in-->
@@ -292,7 +294,7 @@
 			<span id="closeTimetableModal" class="Modalclose">&times;</span>
 				<h3 id="timeTableTitle">Timetable:</h3>&nbsp;&nbsp;&nbsp;
 				<button id="whichWeekBtn">Change Week</button>
-				<div id="timetableSettings"><i class="fa fa-cog" aria-hidden="true"></i></div>
+				<div id="timetableSettings" onclick=""><i class="fa fa-cog" aria-hidden="true"></i></div>
 				<div id="viewPort">
 					<div id="viewPort_Content"> <!--Viewport, where all the buttons and eca infomation shows-->
 						<div id="DivDescription">
@@ -354,6 +356,7 @@
 			}
 		});
 		//locking in loop until email is fetched
+		NProgress.start();
 		getUserEmail();
 		checkEmailVar();
 		FunnyloadingTxt("loaderTxt",true,2000);
@@ -361,53 +364,35 @@
 		{
 			if(userEmail==null)
 			{
-				window.setTimeout(checkEmailVar, 2000);
+				window.setTimeout(checkEmailVar, 1000);
 			}
-			else //checking to see if the user exists in the main user DB
+			else
 			{
-				$.ajax({
-					type:'GET',
-					url:DCBBookingsCreateUserDBAPI,
-					success: function (data)
-					{
-						FunnyloadingTxt("loaderTxt",false,2000);
-						userDataFull = data;
-						//console.log(data)
-						var userExists = false;
-						for(var i =0; i<data["Items"].length; i++)
-						{
-							if(data["Items"][i]["email"]==userEmail) //if user email is already part of the big email list
-							{
-								userExists =true;
-								individualData = data["Items"][i];
-								dynamicGenerateUpcomingBookings(individualData);
-								dynamicGenerateYourResos(individualData);
-								dynamicGenerateBookmarkedResos(individualData);
-								populateAllResos(false,false,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
-
-								//console.log(userDataFull);
-							}
-						}
-						if(userExists==false) //if its not the sign up modal will open for them to complete the signup.
-						{
-							openStarterModal();
-						}
-						else
-						{
-							$("#Loader").fadeOut();
-						}
-					},
-					error: function (data)
-					{
-						console.log(data)
-
-					}
-				});
+				firstLoginCheck();
+				NProgress.inc();
+			}
+		}
+		function validateCheckIfExistandDelete()//makes sure the current user info is the most up to dataEmail
+		{
+			if(resosExistCheckAndDeleteComplete == true)
+			{
+				individualData = individualData.Items[0];
+				dynamicGenerateUpcomingBookings(individualData);
+				dynamicGenerateYourResos(individualData);
+				dynamicGenerateBookmarkedResos(individualData);
+				populateAllResos(false,false,false)
+				//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
+				$("#Loader").fadeOut();
+				NProgress.done();
+			}
+			else
+			{
+				NProgress.inc();
+				window.setTimeout(validateCheckIfExistandDelete,1000);
 			}
 		}
 	</script>
-	<script>
-		//modal Code for starter modal
+	<script>//modal Code for starter modal
 		var modal = document.getElementById("StarterModal");
 
 		// When the user clicks the button, open the modal
@@ -429,7 +414,10 @@
 		{
 			AddResosModal.style.display = "block";
 		}
-
+		function closeAddResos()
+		{
+			AddResosModal.style.display = "none";
+		}
 		// When the user clicks on <span> (x), close the modal
 		closeResosModalBtn.onclick = function() {
 		  AddResosModal.style.display = "none";

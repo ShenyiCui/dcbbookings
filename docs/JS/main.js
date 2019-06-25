@@ -638,6 +638,44 @@ function getAllUsers()//get the user data of all users
 	});
 }
 
+function firstLoginCheck()//called as an initilizer in the main login page, Will pull user information and check to see if user exists, if not, it'll fill in the data
+{
+    //checking to see if the user exists in the main user DB
+    $.ajax({
+        type:'GET',
+        url:DCBBookingsCreateUserDBAPI,
+        success: function (data)
+        {
+            FunnyloadingTxt("loaderTxt",false,2000);
+            NProgress.inc();
+            userDataFull = data;
+            //console.log(data)
+            var userExists = false;
+            for(var i =0; i<data["Items"].length; i++)
+            {
+                if(data["Items"][i]["email"]==userEmail) //if user email is already part of the big email list
+                {
+                    userExists = true;
+                    individualData = data["Items"][i];
+                }
+            }
+            if(userExists==false) //if its not the sign up modal will open for them to complete the signup.
+            {
+                openStarterModal();
+            }
+            else // user exists, calling the check if exist feature to see if a resource as been deleted. Making sure user info is the most up to date
+            {
+                checkIfResosExists();
+                validateCheckIfExistandDelete();
+            }
+        },
+        error: function (data)
+        {
+            errorModuleShow();
+        }
+    });
+}
+
 function checkAvailableUpload()//this method will check what option has been chosen for the upload code and then populate the modal accordingly by hiding and showing the different modals.
 {
 	$("#skipBtn").show()
@@ -1666,10 +1704,7 @@ function FunnyloadingTxt(elemID,start,delay)//function to load funny loading tex
 	var startFunnyLoadingText;
 	if(start == true)
 	{
-		max = randomLoadingText.length;
-		min = 0;
-		var random =Math.floor(Math.random() * (+max - +min)) + +min;
-		$("#" + elemID).html("<em>"+randomLoadingText[random]+"</em>")
+		$("#" + elemID).html("<em>Welcome! Please hold for few seconds while we load everything in</em>")
 	}
 	function loadText()
 	{
@@ -1745,7 +1780,7 @@ function loadingModal()
 	$("#whichWeekBtn").hide();
 	$("#whichWeekBtn").attr("onClick","")
 }
-function populateTimetableModal(timetableName)
+function populateTimetableModal(timetableName,resosID,resosType)
 //puts the timetable modal out of loading mode for the user
 {
 	$("#LoaderTimetable").hide();
@@ -1757,6 +1792,7 @@ function populateTimetableModal(timetableName)
 	if(resosAdmin)
 	{
 		$("#timetableSettings").show();
+        $("#timetableSettings").attr("onClick","getAResosSettingFromModal('"+resosID+"','"+resosType+"')")
 	}
 }
 
@@ -2227,7 +2263,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	//--->create table body > end
 	tbl +='</table">';
 	$("#timeTable").html(tbl);
-	populateTimetableModal("Room Timetable: <em>"+resosName+"</em>");
+	populateTimetableModal("Room Timetable: <em>"+resosName+"</em>", resosName,resosType);
 	timetableDocFunctionsRoom()//activating document functions for room
 
 }
@@ -2763,6 +2799,31 @@ function resosSaveChanges()
     alert("Hello")
 }
 
+function getAResosSettingFromModal(resosID, resosType)//called in the make booking page in the timetable modal to direct the user to the settings html page
+{
+    localStorage.SettingsSlideNum = "2";
+    localStorage.openResosSettingsID = resosID;
+    localStorage.openResosSettingsType = resosType;
+
+    self.location = "Settings.html"
+}
+function openedSettingsCheckPrelim()//called when the settings page is loaded in to see if there is anything that needs to be loaded in.
+{
+    if(localStorage.SettingsSlideNum)
+    {
+        currentSettingsSlide(Number(localStorage.SettingsSlideNum))
+        localStorage.removeItem("SettingsSlideNum");
+    }
+    if(localStorage.openResosSettingsID && localStorage.openResosSettingsType)
+    {
+        openResosSettings(localStorage.openResosSettingsID, localStorage.openResosSettingsType)
+        localStorage.removeItem("openResosSettingsID");
+        localStorage.removeItem("openResosSettingsType");
+        getMyResos();
+        changeSettingTitle('My Resource Settings');
+    }
+}
+
 function deleteResosFunc(resosID, resosType)//called when user clicks the btn to delete resos, confirmation will show
 {
     $.confirm
@@ -2963,7 +3024,15 @@ function checkIfResosExists() //Checks if Resos still exists, if it doens't Dele
                 resosDeleteList.push(tempList)
             }
         }
-        removeOldData()
+
+        if(resosDeleteList.length != 0)//if theres smth to delete call the next fucntion
+        {
+            removeOldData()
+        }
+        else //if the lsit is empty then nothing has changed, it won't call the next function. and the check resos func ends here.
+        {
+            resosExistCheckAndDeleteComplete = true;
+        }
     }
 
     var newRecentlyVistedArray;

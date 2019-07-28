@@ -882,7 +882,7 @@ h1,h2,h3,h4,p,label,a
 	height: 100%;
 	width: 77%;
 }
-/*Box for the front page, interacts with user, shows room subscription or device*/
+/*Box for the front page, interacts with user, shows room subscription or device the boxes of rooms n shit on the first page. That the user clicks into for bookings. Sorry Box is super fking general lol even i forgot what tf this was for after i came back*/
 .Box
 {
 	height: 80px;
@@ -1189,7 +1189,7 @@ viewPort_Content
 	width: 90%;
 }
 
-.SettingsSlide input
+.SettingsSlide input[type="text"]
 {
     width: 90%;
     padding: 7px 20px;
@@ -1200,7 +1200,7 @@ viewPort_Content
     transition: 0.5s;
     outline: none;
 }
-.SettingsSlide input:focus
+.SettingsSlide input[type="text"]:focus
 {
     border: 3px solid #555;
 }
@@ -1302,5 +1302,56 @@ viewPort_Content
 	border:solid 1px orangered;
 	margin: 15px 0px;
 	padding: 0px 10px;
-	border-radius: 5px; 
+	border-radius: 5px;
+}
+.indent
+{
+	margin-left: 50px;
+	margin-right: 50px;
+	text-align: justify;
+}
+#addAMilestone
+{
+	background-color:white;
+	width:"100%";
+	margin-left: 50px;
+	margin-top:0;
+	margin-right:50px;
+}
+#addAMilestone p
+{
+	margin:0;
+}
+#currentMilestones
+{
+	background-color:white;
+	width:"100%";
+	margin-left: 50px;
+	margin-top:0;
+	margin-right:50px;
+}
+#currentMilestones p
+{
+	margin:0;
+}
+.smallInput
+{
+	padding:5px;
+	width: 200px;
+    margin: 0px 5px 10px 10px;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+	text-align: center;
+}
+.smallInput:focus
+{
+    border: 3px solid #555;
+}
+#createMilestoneBtn
+{
+	width:72%;
+	border-radius:5px;
 }

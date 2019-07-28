@@ -7,6 +7,10 @@ var DCBBookingsCreateUserDBAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.
 var DCBBookingsResourceRoomAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Resos/resource/room";
 var DCBBookingsChangeUserInfoAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/ChangeUserInfo/user-changeinfo";
 var DCBBookingsAdminUserAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Admin/admins";//API that gives you access to admin users of DCBBookings
+var DCBBookingsAdminSettingsUserAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Admin/settings";
+//AdminSettings For Admin Settings APIs (currently only used to change n add milestones)
+var DCBBookingsSettingsWeekMilestone = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Settings/settings/weekmilestone"
+//API to change milestones in the settings pane. 
 
 //email of the current user
 var userEmail;
@@ -81,3 +85,5 @@ var randomLoadingText = ["Looking at kittens...","Playing with yarnballs...","Sn
 //array of Master Admins
 var allMasterAdmins = [];
 var masterAdmin = false; //will be true if you are a master admin
+
+var currentWeek = 1; // the current Week. 

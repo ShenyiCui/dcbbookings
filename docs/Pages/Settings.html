@@ -18,6 +18,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 	<script src="../JS/nprogress.js"></script>
 	<link rel="stylesheet" href="../CSS/nprogress.css">
+	<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
 </head>
 
 <body>
@@ -63,7 +65,7 @@
 		<br><br>
 
 		<div id="adminSettings">
-			<div onClick="currentSettingsSlide(6); changeSettingTitle('Change Current Week');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="generateMilestoneTable(); currentSettingsSlide(6); changeSettingTitle('Change Current Week &nbsp;<i onClick=\'showHelpMessageCW()\' class=\'fa fa-question-circle imgBtn\' aria-hidden=\'true\'></i>');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-sliders" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Change Current Week</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
@@ -100,6 +102,7 @@
 		<div id="settingsTitleCard">
 			<div style="margin-top: 5px;" id="HiddenMenuBtn"><i onClick="openSettingsNav();" class="fa fa-bars imgBtn"></i></div>
 			<p align="center" id="SettingsTitleP">Account Details</p>
+			<label align = "right"></label>
 		</div>
 
 		<!--Account Details 1-->
@@ -120,11 +123,67 @@
 		<div class="SettingsSlide"></div>
 
 		<!--Change Current Week 6-->
-		<div class="SettingsSlide"></div>
+		<div class="SettingsSlide">
+			<div id="addAMilestone">
+				<br>
+				<p style="font-size:18px;" align="center">Add a Milestone</p>
+				<br>
+				<center>
+					<p id="milestoneErrMsg"></p>
+					<div class="sameLine">
+						<label>Pick a Date:
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input id="pickADate" onchange="WeekBeginMilestone();" class="datepicker smallInput">
+						&nbsp;&nbsp;&nbsp;
+					</div>
+
+					<div class="sameLine">
+						<label>Week Begining:
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input id="WBChosen" class="smallInput" disabled>
+						&nbsp;&nbsp;&nbsp;
+					</div>
+
+					<div class="sameLine">
+						<label>It's a week:
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input id="WBWeekNum" class="smallInput" min="1" max="2" type="number">
+						&nbsp;&nbsp;&nbsp;
+					</div>
+					<br>
+					<button class="btnSuccessOutline" id="createMilestoneBtn">Create Milestone</button>
+					<br><br>
+				</center>
+			</div>
+			<br>
+			<div id="currentMilestones">
+				<p style="font-size:18px;" align="center">Current Milestones</p>
+				<br>
+				<p align="center" id="currentWeekTxt">Currently it is a week: #
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="#">Alternate Now</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</p>
+				<br><br>
+				<center>
+					<div id="currentMSTable"><em>[Processing Data...]</em></div>
+				</center>
+				<br><br>
+			</div>
+		</div>
 		<!--Admin Users 7-->
 		<div class="SettingsSlide">
 			<center>
-				<input placeholder="Email" id="emailInput">
+				<input type="text" placeholder="Email" id="emailInput">
 				<br>
 				<button class="btnSuccessOutline" id="addUserBtn">Add User</button>
 				<br><br><br>
@@ -256,7 +315,13 @@
 
 <script>//initilizers
 	FunnyloadingTxt("loaderTxt",true,2000);
-
+	$( function()//initializing datepicker
+	{
+    	$(".datepicker").datepicker({
+			dateFormat: 'D, dd M yy'
+		});
+  	});
+	
 	//autoscalers to make sure that the panel widths match
 	if ($(window).width() < 1280 && $(window).width() >= 1150)
 	{
@@ -286,6 +351,7 @@
 		}
 	});
 
+	NProgress.configure({ showSpinner: false });
 	NProgress.start();
 	getUserEmail();
 	validateEmail();
@@ -405,6 +471,24 @@
 		{
 			resosSettingsModal.style.display = "none";
 		}
+	}
+</script>
+<script>
+	function showHelpMessageCW()//will show a help modal containing information on the Change Week Settings
+	{
+		$.alert
+		({
+			theme: 'modern',
+			boxWidth: '700px',
+    		useBootstrap: false,
+			icon: 'fa fa-question-circle',
+			title: "<strong><p class=\"indent\">How it works:</p></strong>",
+			content: "<p class=\"indent\">The school operates on a bi-weekly system where the timetable changes every week, returning back to its original state every alternate week."+
+			"Hence, you see \"Week 1\" and \"Week 2\" in the timetable modal, indicating the current week's timetable its currently showing."+
+			"<br><br> The problem however, is that due to the schedule of holidays the schedule of weeks are not always alternating. "+
+			"Use this panel to set <em>milestones</em> which are dates where the week will automatically change to a different week, resetting the alternation cycle. "+
+			"<br><br>Alternatively you can also simply click the button to change the current week you are on now, also resetting the alternation cycle.</p>",
+		});
 	}
 </script>
 </html>

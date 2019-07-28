@@ -33,7 +33,6 @@ function bubble_Sort2DArray(a,sortIndex)//bubble sort algorithm, used throughout
     } while (swapp);
  return x;
 }
-
 function bubble_SortJSONArray(a,sortValue)//bubble sort algorithm, used throughout to sort JSON Arrays, sort value is the value inside the json object that will be sorted, secondary sort value will be the second data to be sorted iF the first sort array is equal. .
 {
     var swapp;
@@ -44,6 +43,27 @@ function bubble_SortJSONArray(a,sortValue)//bubble sort algorithm, used througho
         for (var i=0; i < n; i++)
         {
             if (x[i][sortValue] > x[i+1][sortValue])
+            {
+               var temp = x[i];
+               x[i] = x[i+1];
+               x[i+1] = temp;
+               swapp = true;
+            }
+        }
+        n--;
+    } while (swapp);
+ return x;
+}
+function bubble_SortJSONMilestoneArray(a,sortValue)//bubble sort algorithm, used throughout to sort JSON MILESTONE Arrays, sort value is the value inside the json object that will be sorted, secondary sort value will be the second data to be sorted iF the first sort array is equal
+{
+	var swapp;
+    var n = a.length-1;
+    var x=a;
+    do {
+        swapp = false;
+        for (var i=0; i < n; i++)
+        {
+            if (transformCurrentWeek(x[i][sortValue]) > transformCurrentWeek(x[i+1][sortValue]))
             {
                var temp = x[i];
                x[i] = x[i+1];
@@ -309,7 +329,7 @@ function confirmForgottenPassword(username,code,newPassword) // used to change t
 	  onSuccess: function(result) {
 		  console.log(result)
 		  $("#ForgotPassErrMsg2").css("color","green")
-		  $("#ForgotPassErrMsg2").html("Sucess, Password Changed")
+		  $("#ForgotPassErrMsg2").html("Success, Password Changed")
 		},
 	  // ...
 	  onFailure: function(err) {
@@ -1705,7 +1725,12 @@ function FunnyloadingTxt(elemID,start,delay)//function to load funny loading tex
 	if(start == true)
 	{
 		$("#" + elemID).html("<em>Welcome! Please hold for few seconds while we load everything in</em>")
+        window.setTimeout(startLoading,3000);
 	}
+    function startLoading()
+    {
+        startFunnyLoadingText = setInterval(loadText, delay);
+    }
 	function loadText()
 	{
 		max = randomLoadingText.length;
@@ -1713,8 +1738,6 @@ function FunnyloadingTxt(elemID,start,delay)//function to load funny loading tex
 		var random =Math.floor(Math.random() * (+max - +min)) + +min;
 		$("#" + elemID).html("<em>"+randomLoadingText[random]+"</em>")
 	}
-	startFunnyLoadingText = setInterval(loadText, delay);
-
 	if(start==false)
 	{
 		clearInterval(startFunnyLoadingText);
@@ -2812,6 +2835,11 @@ function openedSettingsCheckPrelim()//called when the settings page is loaded in
     if(localStorage.SettingsSlideNum)
     {
         currentSettingsSlide(Number(localStorage.SettingsSlideNum))
+        if(localStorage.SettingsSlideNum=="2")
+        {
+            getMyResos();
+            changeSettingTitle('My Resource Settings');
+        }
         localStorage.removeItem("SettingsSlideNum");
     }
     if(localStorage.openResosSettingsID && localStorage.openResosSettingsType)
@@ -2819,8 +2847,6 @@ function openedSettingsCheckPrelim()//called when the settings page is loaded in
         openResosSettings(localStorage.openResosSettingsID, localStorage.openResosSettingsType)
         localStorage.removeItem("openResosSettingsID");
         localStorage.removeItem("openResosSettingsType");
-        getMyResos();
-        changeSettingTitle('My Resource Settings');
     }
 }
 
@@ -2882,6 +2908,7 @@ function delResosFromServer(resosID, resosType) // actual deletion function AJAX
         success: function(data)
         {
             $("#resosSettingsErrMsg").html("Deleted From Main Server...")
+            localStorage.SettingsSlideNum = "2";
             window.setTimeout(reloadPg,2000);
         },
         error: function(data)
@@ -3213,4 +3240,575 @@ function errorModuleShow()//error module for lost of connection
             },
         }
     });
+}
+
+function WeekBeginMilestone()//used in the change week module to get the week begining of the chosen week
+{
+	var weekBegining = getWeekBegining($('.datepicker').datepicker('getDate'));
+	$("#WBChosen").val(weekBegining);
+	calculateCurrentWeek();
+}
+function generateMilestoneTable()
+{
+	$("#currentWeekTxt").html("Currently it is a week: # &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
+	calculateCurrentWeek();
+	currentWeekStall()
+	function currentWeekStall()
+	{
+		if(currentWeek == null)
+		{
+			window.setTimeout(currentWeekStall,1000)
+		}
+		else
+		{
+			$("#currentWeekTxt").html("Currently it is a week: "+currentWeek.toString()+" &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
+		}
+	}
+	removeTimetableEventListeners()
+	$("#currentMSTable").html("<em>Processing Data...</em>")
+	$.ajax({
+		type: 'GET',
+		url: DCBBookingsSettingsWeekMilestone,
+		success: function (data)
+		{
+			var sortedDates = bubble_SortJSONMilestoneArray(data.Items,"WeekBegining")
+			tbl = ''
+				//--->create data table > start
+
+			tbl += '<table class="table table-hover">'
+
+				//--->create table header > start
+				tbl += '<thead>';
+					tbl += '<tr>';
+						tbl += '<th></th>';
+						tbl += '<th>Week Begining</th>';
+						tbl += '<th>Week</th>';
+						tbl += '<th>Options</th>';
+					tbl += '</tr>';
+				tbl += '</thead>';
+				//--->create table header > end
+
+
+				//--->create table body > start
+				tbl += '<tbody>';
+
+					//--->create table body rows > start
+					$.each(data.Items, function (index, val)
+					{
+						//you can replace with your database row id
+						row_id = random_id();
+
+						//loop through ajax row data
+						tbl += '<tr id="' + row_id + '" row_id="' + row_id + '">';
+							tbl += '<td ><div col_name="emptyCol"></div></td>';
+							tbl += '<td ><div col_name="WeekBegining">' + val['WeekBegining'] + '</div></td>';
+							tbl += '<td ><div edit_type="click" class="row_data" col_name="Week">' + val['Week'] + '</div></td>';
+						//--->edit options > start
+						tbl += '<td>';
+
+						tbl += '<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="' + row_id + '" > Edit</a> | </span>';
+						tbl += '<span class="btn_delete"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Delete</a> </span>';
+
+						//only show this button if edit button is clicked
+						tbl += '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Save</a> | </span>';
+						tbl += '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="' + row_id + '"> Cancel</a></span>';
+
+						tbl += '</td>';
+						//--->edit options > end
+
+						tbl += '</tr>';
+					});
+
+					//--->create table body rows > end
+
+				tbl += '</tbody>';
+				//--->create table body > end
+
+			tbl += '</table>'
+				//--->create data table > end
+
+			//out put table data
+			$(document).find('#currentMSTable').html(tbl);
+
+			$(document).find('.btn_save').hide();
+			$(document).find('.btn_cancel').hide();
+		},
+		error: function (data) {
+			errorModuleShow()
+		}
+	});
+
+	//--->make div editable > start
+	$(document).on('click', '.row_data', function(event)
+	{
+		event.preventDefault();
+		if($(this).attr('edit_type') == 'button')
+		{
+			return false;
+		}
+		//make div editable
+		$(this).closest('div').attr('contenteditable', 'true');
+		//add bg css
+		$(this).addClass('editColor').css('padding','6px');
+		$(this).focus();
+		//--->add the original entry > start
+		//--->add the original entry > end
+	})
+	//--->make div editable > end
+
+	//--->save single field data > start
+	$(document).on('focusout', '.row_data', function(event)
+	{
+		
+		event.preventDefault();
+		if($(this).attr('edit_type') == 'button')
+		{
+			return false;
+		}
+
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		.removeClass('editColor') //add bg css
+		.css('padding','')
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+		
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+		var WeekBeginingPK = Cells[1].textContent;
+		
+		if((col_val == "1" || col_val == "2") && col_val.length != 0)
+		{
+			showUserOutputMsg
+			(
+				"success",
+				"Saving Data...",
+				3000
+			);
+			$.ajax({
+				type:'PATCH',
+				url:DCBBookingsSettingsWeekMilestone,
+				data: JSON.stringify(
+						{
+							"WeekBegining":extractHiddenContent(WeekBeginingPK).trim(),
+							"updateAttr":col_name,
+							"updateValue":col_val
+						}
+					  ),
+
+				contentType:"application/json",
+
+				success: function(data){
+					generateMilestoneTable()
+					showUserOutputMsg
+					(
+						"success",
+						"Data Saved... Updating table",
+						3000
+					);
+				},
+
+				error: function(data)
+				{
+					errorModuleShow()
+				}
+			});
+		}
+		else
+		{
+			showUserOutputMsg
+			(
+				"error",
+				"Field must be filled and the weeks can only be the values 1 or 2",
+				3000
+			);
+			generateMilestoneTable()
+		}
+		
+		var arr = {};
+		arr[col_name] = col_val;
+		//use the "arr"	object for your ajax call
+		$.extend(arr, {row_id:row_id});
+		//out put to show
+		console.log(JSON.stringify(arr, null, 2));
+	})
+	//--->save single field data > end
+
+	//--->button > AddMilestone > start
+	$(document).on('click', '#createMilestoneBtn', function(event)
+	{
+		$("#milestoneErrMsg").html("")
+
+		if($("#WBChosen").val().length!=0 && $("#WBWeekNum").val().length!=0 && $("#pickADate").val().length!=0 && ($("#WBWeekNum").val() == 1 ||$("#WBWeekNum").val() == 2))
+		{
+			showUserOutputMsg
+			(
+				"success",
+				"Input validated, Posting Data...",
+				3000
+			);
+			$.ajax({
+				type:'POST',
+				url:DCBBookingsSettingsWeekMilestone,
+				data: JSON.stringify(
+						{
+							"WeekBegining":$("#WBChosen").val(),
+							"Week":$("#WBWeekNum").val().toString()
+						}
+					  ),
+
+				contentType:"application/json",
+
+				success: function(data){
+					generateMilestoneTable()
+					$("#WBChosen").val("");
+					$("#WBWeekNum").val("");
+					$("#pickADate").val("");
+					showUserOutputMsg
+					(
+						"success",
+						"Data Posted...",
+						3000
+					);
+				},
+
+				error: function(data)
+				{
+					errorModuleShow()
+				}
+			});
+		}
+		else
+		{
+			showUserOutputMsg
+			(
+				"error",
+				"All fields must be filled and the weeks can only be the values 1 or 2",
+				3000
+			);
+			$("#WBChosen").val("");
+			$("#WBWeekNum").val("");
+			$("#pickADate").val("");
+		}
+		
+	});
+	//--->button > edit > end
+
+	//--->button > edit > start
+	$(document).on('click', '.btn_edit', function(event)
+	{
+		event.preventDefault();
+		var tbl_row = $(this).closest('tr');
+
+		var row_id = tbl_row.attr('row_id');
+
+		tbl_row.find('.btn_save').show();
+		tbl_row.find('.btn_cancel').show();
+
+		//hide edit button
+		tbl_row.find('.btn_edit').hide();
+		tbl_row.find('.btn_delete').hide();
+
+		//--->add the original entry > start
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			//this will help in case user decided to click on cancel button
+			$(this).attr('original_entry', $(this).html());
+		});
+		//--->add the original entry > end
+
+		//make the whole row editable
+		tbl_row.find('.row_data')
+		.attr('contenteditable', 'true')
+		.attr('edit_type', 'button')
+		.addClass('editColor')
+		.css('padding','3px')
+
+	});
+	//--->button > edit > end
+
+	//--->button > cancel > start
+	$(document).on('click', '.btn_cancel', function(event)
+	{
+		event.preventDefault();
+
+		var tbl_row = $(this).closest('tr');
+
+		var row_id = tbl_row.attr('row_id');
+
+		//hide save and cacel buttons
+		tbl_row.find('.btn_save').hide();
+		tbl_row.find('.btn_cancel').hide();
+
+		//show edit button
+		tbl_row.find('.btn_edit').show();
+		tbl_row.find('.btn_delete').show();
+
+		//make the whole row editable
+		tbl_row.find('.row_data')
+		.attr('edit_type', 'click')
+		.removeClass('editColor')
+		.css('padding','')
+
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			$(this).html( $(this).attr('original_entry') );
+		});
+	});
+	//--->button > cancel > end
+
+	//--->save whole row entery > start
+	$(document).on('click', '.btn_save', function(event)
+	{
+		event.preventDefault();
+		var tbl_row = $(this).closest('tr');
+		var row_id = tbl_row.attr('row_id');
+		//hide save and cacel buttons
+		tbl_row.find('.btn_save').hide();
+		tbl_row.find('.btn_cancel').hide();
+
+		//show edit button
+		tbl_row.find('.btn_edit').show();
+		tbl_row.find('.btn_delete').show();
+
+		//make the whole row editable
+		tbl_row.find('.row_data')
+		.attr('edit_type', 'click')
+		.removeClass('editColor')
+		.css('padding','')
+
+
+		editingMultiple = false;
+		editingSelect = false;
+
+		//--->get row data > start
+		var arr = {};
+		tbl_row.find('.row_data').each(function(index, val) // normal Text Data Save
+		{
+			var col_name = $(this).attr('col_name');
+			var col_val  =  $(this).html();
+
+			var Row = document.getElementById(row_id);
+			var Cells = Row.getElementsByTagName("td");
+			var WeekBeginingPK = Cells[1].textContent;
+
+			if((col_val == "1" || col_val == "2") && col_val.length != 0)
+			{
+				showUserOutputMsg
+				(
+					"success",
+					"Saving Data...",
+					3000
+				);
+				$.ajax({
+					type:'PATCH',
+					url:DCBBookingsSettingsWeekMilestone,
+					data: JSON.stringify(
+							{
+								"WeekBegining":extractHiddenContent(WeekBeginingPK).trim(),
+								"updateAttr":col_name,
+								"updateValue":col_val
+							}),
+					contentType:"application/json",
+					success: function(data){
+						generateMilestoneTable()
+						showUserOutputMsg
+						(
+							"success",
+							"Data Saved... Updating table",
+							3000
+						);
+					},
+					error: function(data)
+					{
+						errorModuleShow()
+					}
+				});
+			}
+			else
+			{
+				showUserOutputMsg
+				(
+					"error",
+					"Field must be filled and the weeks can only be the values 1 or 2",
+					3000
+				);
+				generateMilestoneTable()
+			}
+			
+			arr[col_name] = col_val;
+		});
+		//--->get row data > end
+
+		//use the "arr"	object for your ajax call
+		$.extend(arr, {row_id:row_id});
+		//out put to show
+		console.log(JSON.stringify(arr, null, 2))
+	});
+	//--->save whole row entery > end
+
+	//--->Delete whole row entry > start
+	$(document).on('click', '.btn_delete', function(event)
+	{
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+
+		var WeekBeginingPK = Cells[1].textContent;
+
+		$.ajax({
+			type:'DELETE',
+			url:DCBBookingsSettingsWeekMilestone,
+			data: JSON.stringify(
+				{
+					"WeekBegining":extractHiddenContent(WeekBeginingPK).trim()
+				}),
+			contentType:"application/json",
+			success: function(data){
+				generateMilestoneTable()
+			},
+			error: function(data)
+			{
+				errorModuleShow()
+			}
+		});
+	});
+	
+	function showUserOutputMsg(status, message, delay)
+	{
+		if(status=="success")
+		{
+			$("#milestoneErrMsg").css("color","green")
+		}
+		else if(status=="error")
+		{
+			$("#milestoneErrMsg").css("color","red")
+		}
+		
+		$("#milestoneErrMsg").html(message)
+		
+		window.setTimeout(clearMsg,delay)
+		
+		function clearMsg()
+		{
+			$("#milestoneErrMsg").html("");
+		}
+		
+	}
+}
+function calculateCurrentWeek()// calcualtes the current week for the timetable so they know what to use. returns the value 1 or 2
+{
+	currentWeek = null; 
+	var sortedDates;
+	var foundIndex; //index of the date that is needed. 
+	
+	$.ajax({
+		type: 'GET',
+		url: DCBBookingsSettingsWeekMilestone,
+		success: function (data)
+		{
+			sortedDates = bubble_SortJSONMilestoneArray(data.Items,"WeekBegining")
+			//console.log(sortedDates);
+			
+			//compare dates and then find the index of the date that is cloesest to ur milestone
+			
+			for(var i = sortedDates.length-1; i>-1; i--)
+			{
+				var currentDate = new Date();
+				
+				//console.log(currentDate)
+				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString()))
+				
+				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString())))
+				{
+					foundIndex = i-1; 
+				}
+			}
+			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex]["WeekBegining"]).toString()),new Date())-1;
+			
+			var numOfWeeksSince = Math.trunc(daysDiff/7);
+			var OddOrEvenWeeksSince = numOfWeeksSince % 2;
+			
+			if(OddOrEvenWeeksSince == 0) // if odd or even since is 0 it means an even number of weeks have passed so the num of weeks is the same else if its odd the current week will be alternate to the one on the milestone table
+			{
+				currentWeek = parseInt(sortedDates[foundIndex]["Week"])
+				if(currentWeek == 1)
+				{
+					currentWeek = 1
+				}
+				else if(currentWeek == 2)
+				{
+					currentWeek = 2
+				}
+			}
+			else if(OddOrEvenWeeksSince == 1)
+			{ 
+				currentWeek = parseInt(sortedDates[foundIndex]["Week"])
+				if(currentWeek == 1)
+				{
+					currentWeek = 2
+				}
+				else if(currentWeek == 2)
+				{
+					currentWeek = 1
+				}
+			}
+			
+			//console.log(sortedDates[foundIndex]['WeekBegining']); 
+			//console.log(daysDiff);			
+			//console.log(OddOrEvenWeeksSince)
+			//console.log(currentWeek)
+			
+			return currentWeek; 
+			
+		},
+		error: function (data)
+		{
+			errorModuleShow()
+		}
+	});
+}
+function DifferenceInDays(firstDate, secondDate) 
+{
+    return Math.round((secondDate-firstDate)/(1000*60*60*24));
+}
+function transformYYYYMMDDtoDate(YYYYMMDDS)//transfrom a string in the form of YYYYMMDD to a date.
+{
+	var dateString = YYYYMMDDS;
+	var year = dateString.substring(0,4);
+	var month = dateString.substring(4,6);
+	var day = dateString.substring(6,8);
+	var date = new Date(year, month-1, day);
+	return date;
+}
+function transformCurrentWeek(Week) //transfroms the current week into a week that can be compared using bubblesort.
+{
+	var monthConversion = 
+		'{"Jan":'+'"01"'+
+		',"Feb":'+'"02"'+
+		',"Mar":'+'"03"'+
+		',"Apr":'+'"04"'+
+		',"May":'+'"05"'+
+		',"Jun":'+'"06"'+
+		',"Jul":'+'"07"'+
+		',"Aug":'+'"08"'+
+		',"Sep":'+'"09"'+
+		',"Oct":'+'"10"'+
+		',"Nov":'+'"11"'+
+		',"Dec":'+'"12"'+'}';
+	var monthObj = JSON.parse(monthConversion);
+	var newDate = Week.substr(Week.indexOf(" ") + 1); //format Day Month Year
+	
+	var dateArray = newDate.split(" ");
+	
+	var dateString = dateArray[2] + monthObj[dateArray[1]] + dateArray[0]
+	
+	return parseInt(dateString)
 }

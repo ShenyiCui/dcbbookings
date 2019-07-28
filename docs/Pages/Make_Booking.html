@@ -356,6 +356,7 @@
 			}
 		});
 		//locking in loop until email is fetched
+		NProgress.configure({ showSpinner: false });
 		NProgress.start();
 		getUserEmail();
 		checkEmailVar();
@@ -383,11 +384,11 @@
 				populateAllResos(false,false,false)
 				//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
 				$("#Loader").fadeOut();
+				NProgress.inc();
 				NProgress.done();
 			}
 			else
 			{
-				NProgress.inc();
 				window.setTimeout(validateCheckIfExistandDelete,1000);
 			}
 		}
@@ -419,7 +420,8 @@
 			AddResosModal.style.display = "none";
 		}
 		// When the user clicks on <span> (x), close the modal
-		closeResosModalBtn.onclick = function() {
+		closeResosModalBtn.onclick = function() 
+		{
 		  AddResosModal.style.display = "none";
 		}
 

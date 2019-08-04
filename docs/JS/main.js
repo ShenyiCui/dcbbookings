@@ -406,7 +406,7 @@ function dynamicGenerateYourResos(data)//dynamically generate the list for your 
 		listOfItems = "";
 		for(var i = 0; i<sortedList.length; i++)
 		{
-			listOfItems += "<a href='#' onClick='viewResos(\""+sortedList[i][0]+"\",\""+sortedList[i][1]+"\");'><i class='fa fa-external-link' aria-hidden='true'></i>&nbsp;&nbsp;"+sortedList[i][0]+" : <em>"+sortedList[i][1]+"</em></a><br>"
+			listOfItems += "<a href='#' onClick='viewResos(\""+sortedList[i][0]+"\",\""+sortedList[i][1]+"\",\""+new Date()+"\");'><i class='fa fa-external-link' aria-hidden='true'></i>&nbsp;&nbsp;"+sortedList[i][0]+" : <em>"+sortedList[i][1]+"</em></a><br>"
 		}
 	}
 	//console.log(listOfItems);
@@ -449,7 +449,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 				bookMarkFunction = 'unBookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'//change the bookmark click function
 			}
 		}
-		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');">View</button></div>'
+		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button></div>'
 		allResosHTML += tempHTML;
 	}
 	if(allResosHTML == "")//fallback incase all 3 arrays are empty
@@ -481,7 +481,7 @@ function dynamicGenerateBookmarkedResos(userData)//requires user data in array f
 	{
 		var ResosID = BookmarkedResos[i][0]+":"+BookmarkedResos[i][1]+"BM"
 		bookMarkFunction = 'unBookmarkIt(\''+BookmarkedResos[i][0]+'\',\''+BookmarkedResos[i][1]+'\');'//change the bookmark click function
-		tempHTML = '<div id="'+ResosID+'" class="Box '+BookmarkedResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+BookmarkedResos[i][0]+'</strong><br><em>'+BookmarkedResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+BookmarkedResos[i][0]+'\',\''+BookmarkedResos[i][1]+'\');">View</button></div>'
+		tempHTML = '<div id="'+ResosID+'" class="Box '+BookmarkedResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+BookmarkedResos[i][0]+'</strong><br><em>'+BookmarkedResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+BookmarkedResos[i][0]+'\',\''+BookmarkedResos[i][1]+'\',\''+new Date()+'\');">View</button></div>'
 		BookmarkedResosHTML+=tempHTML;
 		//console.log(tempHTML);
 	}
@@ -1803,20 +1803,31 @@ function loadingModal()
 	$("#whichWeekBtn").hide();
 	$("#whichWeekBtn").attr("onClick","")
 }
-function populateTimetableModal(timetableName,resosID,resosType)
+function populateTimetableModal(timetableName,resosID,resosType,weekBegining)
 //puts the timetable modal out of loading mode for the user
 {
 	$("#LoaderTimetable").hide();
 	$("#preLimLoader").show()
 	$('#timeTableTitle').html(timetableName);
 	$("#whichWeekBtn").show();
-	$("#whichWeekBtn").html("Change Week")
-	$("#whichWeekBtn").attr("onClick","")
+	if(weekBegining == getWeekBegining(new Date()))
+	{
+		$("#whichWeekBtn").val("Change Week")
+	}
+	else
+	{
+		$("#whichWeekBtn").val(weekBegining)
+	}
+	$("#whichWeekBtn").attr("onChange","changeWeekFunc('"+resosID+"','"+resosType+"')")
 	if(resosAdmin)
 	{
 		$("#timetableSettings").show();
         $("#timetableSettings").attr("onClick","getAResosSettingFromModal('"+resosID+"','"+resosType+"')")
 	}
+}
+function changeWeekFunc(resosID, resosType)
+{
+	viewResos(resosID,resosType, $('#whichWeekBtn').datepicker('getDate'))
 }
 
 function removeTimetableEventListeners() //used in viewRoom's document functions to for listening for user activity
@@ -2087,7 +2098,7 @@ function checkIfResosAdmin()//function that checks whether or not you are the ad
 }
 
 //View Room Start
-function viewResos(resosID,resosType)
+function viewResos(resosID,resosType,weekBegining)
 {
 	openTimetableModal();
 	loadingModal();
@@ -2105,11 +2116,24 @@ function viewResos(resosID,resosType)
 		{
 			indiResosDataFetchSuccess = false;
 			//console.log(indiRoomData);
-			generateBookingTable(indiRoomData["Items"][0],resosType)
+			calculateCurrentWeek(new Date(weekBegining));
+			validateWeekChange()
+			
+		}
+	}
+	function validateWeekChange()
+	{
+		if(currentWeek==null)
+		{
+			window.setTimeout(validateWeekChange,1000)
+		}
+		else
+		{
+			generateBookingTable(indiRoomData["Items"][0],resosType,currentWeek-1,weekBegining)
 		}
 	}
 }
-function generateBookingTable(data,resosType) //generates table for user
+function generateBookingTable(data,resosType,weekNum,weekBegin) //generates table for user
 {
 	checkIfResosAdmin()
 	var tableRowLength = 5;//the length of the table you are making
@@ -2174,7 +2198,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	{
 		for(var i =0; i<fetchedUserBookings.length;i++)
 		{
-			if(fetchedUserBookings[i][fetchedUserBookings[i].length-1] == getWeekBegining(new Date()))//the last index of each period's data contains the weekbegining
+			if(fetchedUserBookings[i][fetchedUserBookings[i].length-1] == getWeekBegining(new Date(weekBegin)))//the last index of each period's data contains the weekbegining
 			{
 				userBookings.push(fetchedUserBookings[i]);
 			}
@@ -2184,21 +2208,22 @@ function generateBookingTable(data,resosType) //generates table for user
 	{
 		initialTable[userBookings[i][userBookings[i].length-2][0]][userBookings[i][userBookings[i].length-2][1]] = userBookings[i];
 	}
+	//console.log(initialTable);
 	//populating initital table with user bookings vals end
 
 	//console.log(data["PermaSchedule"][0]);
 	//populating initital table with permaSchd vals start
 	if(data["PermaSchedule"].length!=0)
 	{
-		for(var i =0; i<data["PermaSchedule"][0].length; i++) // how many days
+		for(var i =0; i<data["PermaSchedule"][weekNum].length; i++) // how many days CHANGE WEEK HERE. data["PermaSchedule"][0] for week 1 data["PermaSchedule"][1] for week 2
 		{
-			for(var j = 0; j<data["PermaSchedule"][0][0].length; j++)// how many periods per day
+			for(var j = 0; j<data["PermaSchedule"][weekNum][0].length; j++)// how many periods per day
 			{
 				//console.log(data["PermaSchedule"][0][i][j][0]);
-				if(data["PermaSchedule"][0][i][j][0] != unbookedval)//if data isn't unbooked in the perma sechdule the replace the booking with that
+				if(data["PermaSchedule"][weekNum][i][j][0] != unbookedval)//if data isn't unbooked in the perma sechdule the replace the booking with that
 				{
 					//console.log(initialTable[i][j]);
-					initialTable[i][j] = data["PermaSchedule"][0][i][j]
+					initialTable[i][j] = data["PermaSchedule"][weekNum][i][j]
 				}
 			}
 		}
@@ -2286,7 +2311,7 @@ function generateBookingTable(data,resosType) //generates table for user
 	//--->create table body > end
 	tbl +='</table">';
 	$("#timeTable").html(tbl);
-	populateTimetableModal("Room Timetable: <em>"+resosName+"</em>", resosName,resosType);
+	populateTimetableModal("Room Timetable: <em>"+resosName+"</em><br>Week Begining: "+getWeekBegining(new Date(weekBegin))+" Week "+currentWeek, resosName, resosType, getWeekBegining(new Date(weekBegin)));
 	timetableDocFunctionsRoom()//activating document functions for room
 
 }
@@ -3246,12 +3271,12 @@ function WeekBeginMilestone()//used in the change week module to get the week be
 {
 	var weekBegining = getWeekBegining($('.datepicker').datepicker('getDate'));
 	$("#WBChosen").val(weekBegining);
-	calculateCurrentWeek();
+	calculateCurrentWeek(new Date());
 }
 function generateMilestoneTable()
 {
 	$("#currentWeekTxt").html("Currently it is a week: # &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
-	calculateCurrentWeek();
+	calculateCurrentWeek(new Date());
 	currentWeekStall()
 	function currentWeekStall()
 	{
@@ -3703,7 +3728,8 @@ function generateMilestoneTable()
 		
 	}
 }
-function calculateCurrentWeek()// calcualtes the current week for the timetable so they know what to use. returns the value 1 or 2
+
+function calculateCurrentWeek(DateGiven)// calcualtes the current week for the timetable so they know what to use. returns the value 1 or 2
 {
 	currentWeek = null; 
 	var sortedDates;
@@ -3721,7 +3747,7 @@ function calculateCurrentWeek()// calcualtes the current week for the timetable 
 			
 			for(var i = sortedDates.length-1; i>-1; i--)
 			{
-				var currentDate = new Date();
+				var currentDate = new Date(DateGiven);
 				
 				//console.log(currentDate)
 				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString()))
@@ -3731,7 +3757,7 @@ function calculateCurrentWeek()// calcualtes the current week for the timetable 
 					foundIndex = i-1; 
 				}
 			}
-			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex]["WeekBegining"]).toString()),new Date())-1;
+			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex]["WeekBegining"]).toString()),DateGiven)-1;
 			
 			var numOfWeeksSince = Math.trunc(daysDiff/7);
 			var OddOrEvenWeeksSince = numOfWeeksSince % 2;

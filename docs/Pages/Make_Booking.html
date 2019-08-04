@@ -18,6 +18,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 		<script src="../JS/nprogress.js"></script>
 		<link rel="stylesheet" href="../CSS/nprogress.css">
+		<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
+		<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
 	</head>
 	<body>
 		<!--Loader showing up when the site is loading in-->
@@ -293,7 +295,7 @@
 		  <div class="timeTableModal-content">
 			<span id="closeTimetableModal" class="Modalclose">&times;</span>
 				<h3 id="timeTableTitle">Timetable:</h3>&nbsp;&nbsp;&nbsp;
-				<button id="whichWeekBtn">Change Week</button>
+				<input id="whichWeekBtn" class="datepicker" style="cursor: pointer; text-align: center;" title="Change Week">
 				<div id="timetableSettings" onclick=""><i class="fa fa-cog" aria-hidden="true"></i></div>
 				<div id="viewPort">
 					<div id="viewPort_Content"> <!--Viewport, where all the buttons and eca infomation shows-->
@@ -355,6 +357,14 @@
 				$("#closeSideNav").hide();
 			}
 		});
+		
+		$(function()//initializing datepicker
+		{
+			$(".datepicker").datepicker({
+				dateFormat: 'D, dd M yy'
+			});
+		});
+		
 		//locking in loop until email is fetched
 		NProgress.configure({ showSpinner: false });
 		NProgress.start();

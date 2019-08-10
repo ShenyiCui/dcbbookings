@@ -87,3 +87,7 @@ var allMasterAdmins = [];
 var masterAdmin = false; //will be true if you are a master admin
 
 var currentWeek = 1; // the current Week. 
+
+var currentResosID; // currentID the user is viewing
+var currentResosType; // current resostype the user is viewing
+var currentWeekBegining; //current week the user is looing at

@@ -1847,6 +1847,13 @@ function removeTimetableEventListeners() //used in viewRoom's document functions
 function timetableDocFunctionsRoom()
 {
 	removeTimetableEventListeners();
+	var coordinates = [] // stores the coordinates of the cell that was clicked.
+	var day = ""// stores the day of the cell clicked
+	var period = "" //stores the period of the cell that was clicked
+	var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked
+	var currentBookingState = "" // stores the current booking state of the cell you are on
+	var bookingDetails; // stores the current booking detailed information in an array
+	var timeStamp;//stores the timestamp the booking was made at. 
 	//--->Editing Viewport > start
 	$(document).on('click', '.row_data', function(event)
 	{
@@ -1861,12 +1868,6 @@ function timetableDocFunctionsRoom()
 		//selecting the currently clicked cell, adding the selected color class to it >>>> end
 
 		//exatracting the information from the cell you just clicked on >>>> start
-		var coordinates = [] // stores the coordinates of the cell that was clicked.
-		var day = ""// stores the day of the cell clicked
-		var period = "" //stores the period of the cell that was clicked
-		var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked
-		var currentBookingState = "" // stores the current booking state of the cell you are on
-		var bookingDetails; // stores the current booking detailed information in an array
 		//structure of each period in the fetched userbookings
 		/*
 		[0] - booking email
@@ -1879,6 +1880,7 @@ function timetableDocFunctionsRoom()
 		[7] - week begining
 		*/
 		//putting the coordinates into the variable
+		coordinates = [];
 		coordinates.push(parseInt($(this).closest('tr').attr('row_name')));
 		coordinates.push(parseInt($(this).attr('col_name')));
 		//console.log(coordinates);
@@ -1898,7 +1900,6 @@ function timetableDocFunctionsRoom()
 		//getting the hidden span content
 		var hiddenSpan = extractHiddenContent(fullCurrentStatus)
 		bookingDetails = hiddenSpan.split(' ')[1].split(',');
-
 		//exatracting the information from the cell you just clicked on >>>> end
 
 
@@ -1929,6 +1930,7 @@ function timetableDocFunctionsRoom()
 		}
 		else if(currentBookingState == bookval)//if booked state is booked
 		{
+			timeStamp = bookingDetails[4].replace(/_/g, ' ');
 			//structure of each period in the fetched userbookings
 			/*
 			[0] - booking email
@@ -2039,6 +2041,161 @@ function timetableDocFunctionsRoom()
 		}
 	});
 	//--->MakingviewPort Dissapear  when user clicks away > end
+	
+	//-->Quickbooking a period Start
+	$(document).on('click', '#bookBtn', function(event) 
+	{
+		//need to first see if the slot's been taken aready
+		//then if its not then it will excecute the Booking Function 
+
+		//structure of each period in the fetched userbookings
+		/*
+		[0] - booking value, unbooked, etc
+		[1] - booking email
+		[2] - perpectual, nonperpectual booking etc.
+		[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+		[4] - week 1, week 2 or both
+		[5] - timeStamp
+		[6] - ECADescription [name][description]
+		[7] - coordinate of booking [row][col] on the table
+		[8] - week begining
+		*/
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
+		
+		//getSpecificResos(resosID, resosType) 
+		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
+		
+		preLimLoader("Booking...") //output showing user the room is currently being booked
+		
+		event.preventDefault(); //prevent's default function from excecuting
+		
+		//console.log(coordinates) //in a [x,y] format row, col
+		//console.log(day) 
+		//console.log(period)
+		//console.log(fullCurrentStatus), Useless in this context
+		//console.log(currentBookingState), Useless in this context
+		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
+		//need to retrieve Week Begining. 
+		
+		getSpecificResos(currentResosID, currentResosType)
+		indiResosDataFetchSuccess = false;
+		validateResosFetch()
+		
+		var RoombookingSchedule = indiRoomData.Items[0].BookingSchedule
+		var intendedCoors = coordinates
+		var formattedCurrentDate = getWeekBegining(currentWeekBegining);
+		
+		function validateResosFetch()
+		{
+			if(indiResosDataFetchSuccess == false)
+			{
+				window.setTimeout(validateResosFetch,1000)
+			}
+			else
+			{
+				validatePeriodAvailbility()
+			}
+		}
+		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
+		{
+			console.log(indiRoomData)
+			
+			
+			if(RoombookingSchedule[0]=="Empty List")
+			{
+				RoombookingSchedule = [];
+				validatedAndBook()
+			}
+			else
+			{
+				if(RoombookingSchedule[RoombookingSchedule[0].length-1] != formattedCurrentDate && RoombookingSchedule[RoombookingSchedule[0].length-2] != intendedCoors) // will only allow book to occur if the room hasnt been taken. 
+				{
+					validatedAndBook()
+				}
+				else
+				{
+					preLimLoader("Error: Slot is already booked")
+					exitpreLimLoaderErr() //exiting the err output after a few seconds
+					viewResos(currentResosID,currentResosType,currentWeekBegining) //refreshes the room
+				}
+			}
+		}
+		
+		//booking start
+		function validatedAndBook()
+		{
+			var newPeriodObject = [];
+			//structure of each period in the fetched userbookings
+			/*
+			[0] - booking value, unbooked, etc
+			[1] - booking email
+			[2] - perpectual, nonperpectual booking etc.
+			[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+			[4] - week 1, week 2 or both
+			[5] - timeStamp
+			[6] - ECADescription [name][description]
+			[7] - coordinate of booking [row][col] on the table
+			[8] - week begining
+			*/
+			newPeriodObject.push(bookval)
+			newPeriodObject.push(userEmail)
+			newPeriodObject.push("NP")
+			newPeriodObject.push(-1)
+			var CurrentWeekString;
+			if(currentWeek==1)
+			{
+				CurrentWeekString = "Week1"
+			}
+			else if(currentWeek==2)
+			{
+				CurrentWeekString = "Week2"
+			}
+			newPeriodObject.push(CurrentWeekString)
+			newPeriodObject.push(getTimeStamp())
+			newPeriodObject.push("N.A")
+			newPeriodObject.push(intendedCoors)
+			newPeriodObject.push(formattedCurrentDate)
+			
+			console.log(newPeriodObject);
+			
+			RoombookingSchedule.push(newPeriodObject)
+			
+			Booking(currentResosID, RoombookingSchedule)
+		}
+		
+		function Booking(roomID, UpdatedBookingSchedule)
+		{
+			console.log(UpdatedBookingSchedule)
+			$.ajax
+		   ({
+				type:'PUT',
+				url:DCBBookingsResourceRoomAPI,
+				data: JSON.stringify(
+						{
+							"RoomID": roomID,
+							"updateAttr":"BookingSchedule",
+							"updateValue": UpdatedBookingSchedule
+						}
+					  ),
+
+				contentType:"application/json",
+
+				success: function(data){
+					exitpreLimLoader()
+					viewResos(roomID, "room", currentWeekBegining)
+				},
+
+				error: function(data)
+				{
+					errorModuleShow()
+				}
+		   });
+		}
+		
+		
+	});
+	//-->Quickbooking a period End
 }
 
 function getPeriod(colCoor, min30)//first parameter is a column coordinate of the cell you clicked, min 30 is whether or not it is a 30 min period room
@@ -2100,12 +2257,15 @@ function checkIfResosAdmin()//function that checks whether or not you are the ad
 //View Room Start
 function viewResos(resosID,resosType,weekBegining)
 {
+	currentResosID = resosID; // currentID the user is viewing
+	currentResosType = resosType; // current resostype the user is viewing
 	openTimetableModal();
 	loadingModal();
 	resosName = resosID;
 	getSpecificResos(resosID,resosType)
 	validateResosFetch()
 	indiResosDataFetchSuccess = false;
+	currentWeekBegining = new Date(weekBegining)
 	function validateResosFetch()
 	{
 		if(indiResosDataFetchSuccess == false)
@@ -2194,6 +2354,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	*/
 	var userBookings = []//array containing the userbookings for that week.
 	var fetchedUserBookings = data["BookingSchedule"] //array containing the fetched user bookings
+	console.log(fetchedUserBookings)
 	if(fetchedUserBookings[0]!="Empty List") // populating the userBookings array;
 	{
 		for(var i =0; i<fetchedUserBookings.length;i++)
@@ -2203,6 +2364,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 				userBookings.push(fetchedUserBookings[i]);
 			}
 		}
+		console.log(userBookings);
 	}
 	for(var i =0; i<userBookings.length; i++)
 	{
@@ -2771,7 +2933,7 @@ function getMyResos()//gets user resos and populates it on the search feature in
 		}
 	}
 }
-function openResosSettings(resosID, resosType)
+function openResosSettings(resosID, resosType) // open resos settings
 {
     $("#resosSettingsErrMsg").css("color","black")
     $("#resosSettingsErrMsg").html("")
@@ -3275,7 +3437,7 @@ function WeekBeginMilestone()//used in the change week module to get the week be
 }
 function generateMilestoneTable()
 {
-	$("#currentWeekTxt").html("Currently it is a week: # &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
+	$("#currentWeekTxt").html("Currently it is a week: # &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#" onClick="AlternateWeekNow();">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
 	calculateCurrentWeek(new Date());
 	currentWeekStall()
 	function currentWeekStall()
@@ -3286,7 +3448,7 @@ function generateMilestoneTable()
 		}
 		else
 		{
-			$("#currentWeekTxt").html("Currently it is a week: "+currentWeek.toString()+" &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
+			$("#currentWeekTxt").html("Currently it is a week: "+currentWeek.toString()+" &nbsp;&nbsp;&nbsp;&nbsp;" + '<a href="#" onClick="AlternateWeekNow();">Alternate Now</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
 		}
 	}
 	removeTimetableEventListeners()
@@ -3406,7 +3568,7 @@ function generateMilestoneTable()
 		
 		if((col_val == "1" || col_val == "2") && col_val.length != 0)
 		{
-			showUserOutputMsg
+			showUserOutputMsgMilestone
 			(
 				"success",
 				"Saving Data...",
@@ -3427,7 +3589,7 @@ function generateMilestoneTable()
 
 				success: function(data){
 					generateMilestoneTable()
-					showUserOutputMsg
+					showUserOutputMsgMilestone
 					(
 						"success",
 						"Data Saved... Updating table",
@@ -3443,7 +3605,7 @@ function generateMilestoneTable()
 		}
 		else
 		{
-			showUserOutputMsg
+			showUserOutputMsgMilestone
 			(
 				"error",
 				"Field must be filled and the weeks can only be the values 1 or 2",
@@ -3468,7 +3630,7 @@ function generateMilestoneTable()
 
 		if($("#WBChosen").val().length!=0 && $("#WBWeekNum").val().length!=0 && $("#pickADate").val().length!=0 && ($("#WBWeekNum").val() == 1 ||$("#WBWeekNum").val() == 2))
 		{
-			showUserOutputMsg
+			showUserOutputMsgMilestone
 			(
 				"success",
 				"Input validated, Posting Data...",
@@ -3491,7 +3653,7 @@ function generateMilestoneTable()
 					$("#WBChosen").val("");
 					$("#WBWeekNum").val("");
 					$("#pickADate").val("");
-					showUserOutputMsg
+					showUserOutputMsgMilestone
 					(
 						"success",
 						"Data Posted...",
@@ -3507,7 +3669,7 @@ function generateMilestoneTable()
 		}
 		else
 		{
-			showUserOutputMsg
+			showUserOutputMsgMilestone
 			(
 				"error",
 				"All fields must be filled and the weeks can only be the values 1 or 2",
@@ -3621,7 +3783,7 @@ function generateMilestoneTable()
 
 			if((col_val == "1" || col_val == "2") && col_val.length != 0)
 			{
-				showUserOutputMsg
+				showUserOutputMsgMilestone
 				(
 					"success",
 					"Saving Data...",
@@ -3639,7 +3801,7 @@ function generateMilestoneTable()
 					contentType:"application/json",
 					success: function(data){
 						generateMilestoneTable()
-						showUserOutputMsg
+						showUserOutputMsgMilestone
 						(
 							"success",
 							"Data Saved... Updating table",
@@ -3654,7 +3816,7 @@ function generateMilestoneTable()
 			}
 			else
 			{
-				showUserOutputMsg
+				showUserOutputMsgMilestone
 				(
 					"error",
 					"Field must be filled and the weeks can only be the values 1 or 2",
@@ -3705,30 +3867,113 @@ function generateMilestoneTable()
 			}
 		});
 	});
+}
+function AlternateWeekNow()
+{
+	var sortedDates; 
+	var PrimaryKey; 
+	var weekThatWillBeChanged; 
+	$.ajax({
+		type: 'GET',
+		url: DCBBookingsSettingsWeekMilestone,
+		success: function (data)
+		{
+			sortedDates = bubble_SortJSONMilestoneArray(data.Items,"WeekBegining")
+			//console.log(sortedDates);
+			
+			//compare dates and then find the index of the date that is cloesest to ur milestone
+			
+			for(var i = sortedDates.length-1; i>-1; i--)
+			{
+				var currentDate = new Date();
+				
+				//console.log(currentDate)
+				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString()))
+				
+				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString())))
+				{
+					foundIndex = i-1; 
+				}
+			}
+			PrimaryKey = sortedDates[foundIndex].WeekBegining;
+			weekThatWillBeChanged = sortedDates[foundIndex].Week;
+			
+			
+			//console.log(PrimaryKey + " "+ weekThatWillBeChanged);
+			ExcecuteChangeWeek(PrimaryKey, weekThatWillBeChanged)
+		},
+		error: function (data)
+		{
+			errorModuleShow()
+		}
+	});
 	
-	function showUserOutputMsg(status, message, delay)
+	function ExcecuteChangeWeek(PK, CurrentWeekNum)
 	{
-		if(status=="success")
+		var updateVal = "0";
+		if(CurrentWeekNum == 1)
 		{
-			$("#milestoneErrMsg").css("color","green")
+			updateVal = "2";
 		}
-		else if(status=="error")
+		else if(CurrentWeekNum == 2)
 		{
-			$("#milestoneErrMsg").css("color","red")
+			updateVal = "1";
 		}
+		showUserOutputMsgMilestone
+		(
+			"success",
+			"Saving Data...",
+			3000
+		);
 		
-		$("#milestoneErrMsg").html(message)
-		
-		window.setTimeout(clearMsg,delay)
-		
-		function clearMsg()
-		{
-			$("#milestoneErrMsg").html("");
-		}
-		
+		$.ajax({
+			type:'PATCH',
+			url:DCBBookingsSettingsWeekMilestone,
+			data: JSON.stringify(
+					{
+						"WeekBegining":PK.trim(),
+						"updateAttr":"Week",
+						"updateValue":updateVal
+					}),
+			contentType:"application/json",
+			success: function(data){
+				generateMilestoneTable()
+				showUserOutputMsgMilestone
+				(
+					"success",
+					"Data Saved... Updating table",
+					3000
+				);
+			},
+			error: function(data)
+			{
+				errorModuleShow()
+			}
+		});
 	}
 }
 
+function showUserOutputMsgMilestone(status, message, delay)
+{
+	if(status=="success")
+	{
+		$("#milestoneErrMsg").css("color","green")
+	}
+	else if(status=="error")
+	{
+		$("#milestoneErrMsg").css("color","red")
+	}
+
+	$("#milestoneErrMsg").html(message)
+
+	window.setTimeout(clearMsg,delay)
+
+	function clearMsg()
+	{
+		$("#milestoneErrMsg").html("");
+	}
+
+}
 function calculateCurrentWeek(DateGiven)// calcualtes the current week for the timetable so they know what to use. returns the value 1 or 2
 {
 	currentWeek = null; 
@@ -3801,7 +4046,7 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 		}
 	});
 }
-function DifferenceInDays(firstDate, secondDate) 
+function DifferenceInDays(firstDate, secondDate) //calculates the difference in days between 2 date objects
 {
     return Math.round((secondDate-firstDate)/(1000*60*60*24));
 }
@@ -3837,4 +4082,26 @@ function transformCurrentWeek(Week) //transfroms the current week into a week th
 	var dateString = dateArray[2] + monthObj[dateArray[1]] + dateArray[0]
 	
 	return parseInt(dateString)
+}
+
+function preLimLoader(loadingText)//used in the timetable function to load text about the user used in the timetable modal 
+{
+	$("#viewPort_Content").hide()
+	$("#preLimLoader").show()
+	$("#preLimLoader").html(loadingText)
+}
+function exitpreLimLoader()//used to exit the prelim loader 
+{
+	$("#viewPort_Content").hide()
+	$("#preLimLoader").show()
+	$("#preLimLoader").html("Event Successful...")
+	window.setTimeout(function(){
+		$("#preLimLoader").html("[Click on a Timeslot to View Bookings]")
+	},3000)
+}
+function exitpreLimLoaderErr()//used to exit the prelim loader in the event of an error
+{
+	window.setTimeout(function(){
+		$("#preLimLoader").html("[Click on a Timeslot to View Bookings]")
+	},3000)
 }

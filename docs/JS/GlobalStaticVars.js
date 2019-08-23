@@ -19,6 +19,9 @@ var userEmail;
 var userInfoFetchSuccess = false;
 var userInfoUpdateSuccess = false;
 
+//when true room infrmation would've been sucessfully updated
+var roomInfoUpdateSuccess = false; 
+
 //when true, resos would have been checked to see if it exists and if it doesn't it'll call a deletion function
 var resosExistCheckAndDeleteComplete = false;
 //list of resos that no longer exists and thus needs to be deleted, structure is a 2D array, inner array with structure

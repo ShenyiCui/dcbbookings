@@ -11,6 +11,8 @@
 //!! IMPORTANT write code that'll check whether or not the file the user uploaded is valid or not, check format to make sure SIMS doenst get custom and to make sure that the length and width of the files are correct.
 //write and figure out the 30 min upload code and table
 
+//you need to change how you store your data in each hidden span. 
+
 
 function bubble_Sort2DArray(a,sortIndex)//bubble sort algorithm, used throughout to sort arrays.
 {
@@ -1854,6 +1856,10 @@ function timetableDocFunctionsRoom()
 	var currentBookingState = "" // stores the current booking state of the cell you are on
 	var bookingDetails; // stores the current booking detailed information in an array
 	var timeStamp;//stores the timestamp the booking was made at. 
+	var RoombookingSchedule; // booking scheudle for the room. 
+	var intendedCoors; // stores the current coor the user is on
+	var formattedCurrentDate; // stores the formatted current date in DD, month thingy week Begining
+	var permaSchd; //stores the permanent scheudle of a room. 
 	//--->Editing Viewport > start
 	$(document).on('click', '.row_data', function(event)
 	{
@@ -1900,6 +1906,7 @@ function timetableDocFunctionsRoom()
 		//getting the hidden span content
 		var hiddenSpan = extractHiddenContent(fullCurrentStatus)
 		bookingDetails = hiddenSpan.split(' ')[1].split(',');
+		console.log(hiddenSpan)
 		//exatracting the information from the cell you just clicked on >>>> end
 
 
@@ -2082,9 +2089,8 @@ function timetableDocFunctionsRoom()
 		indiResosDataFetchSuccess = false;
 		validateResosFetch()
 		
-		var RoombookingSchedule = indiRoomData.Items[0].BookingSchedule
-		var intendedCoors = coordinates
-		var formattedCurrentDate = getWeekBegining(currentWeekBegining);
+		intendedCoors = coordinates
+		formattedCurrentDate = getWeekBegining(currentWeekBegining);
 		
 		function validateResosFetch()
 		{
@@ -2094,12 +2100,14 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
+				indiResosDataFetchSuccess = false;
+				RoombookingSchedule = indiRoomData.Items[0].BookingSchedule
 				validatePeriodAvailbility()
 			}
 		}
 		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
 		{
-			console.log(indiRoomData)
+			//console.log(indiRoomData)
 			
 			
 			if(RoombookingSchedule[0]=="Empty List")
@@ -2157,47 +2165,92 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push(intendedCoors)
 			newPeriodObject.push(formattedCurrentDate)
 			
-			console.log(newPeriodObject);
+			//console.log(newPeriodObject);
 			
 			RoombookingSchedule.push(newPeriodObject)
 			
-			Booking(currentResosID, RoombookingSchedule)
+			updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
+			
+			roomInfoUpdateSuccess = false; 
+			validateRoomInfoUpdate()	
+			
 		}
-		
-		function Booking(roomID, UpdatedBookingSchedule)
+		function validateRoomInfoUpdate()
 		{
-			console.log(UpdatedBookingSchedule)
-			$.ajax
-		   ({
-				type:'PUT',
-				url:DCBBookingsResourceRoomAPI,
-				data: JSON.stringify(
-						{
-							"RoomID": roomID,
-							"updateAttr":"BookingSchedule",
-							"updateValue": UpdatedBookingSchedule
-						}
-					  ),
-
-				contentType:"application/json",
-
-				success: function(data){
-					exitpreLimLoader()
-					viewResos(roomID, "room", currentWeekBegining)
-				},
-
-				error: function(data)
-				{
-					errorModuleShow()
-				}
-		   });
+			if(roomInfoUpdateSuccess == false)
+			{
+				window.setTimeout(validateRoomInfoUpdate, 1000)
+			}
+			else
+			{
+				viewResos(roomID, "room", currentWeekBegining)
+				roomInfoUpdateSuccess = false; 
+			}
 		}
-		
 		
 	});
 	//-->Quickbooking a period End
-}
+	
+	//deleting a period start
+	$(document).on('click', '#deleteBtn', function(event) 
+	{
+		preLimLoader("Deleting Event...")
+		event.preventDefault();
+		
+		intendedCoors = coordinates
+		formattedCurrentDate = getWeekBegining(currentWeekBegining);
+		RoombookingSchedule = indiRoomData.Items[0].BookingSchedule;
+		permaSchd = indiRoomData.Items[0].PermaSchedule;
+		//console.log(bookingDetails)
+		//console.log(RoombookingSchedule)
+		// we have to search for the booking in the room booking schedule, remove it, then plug it back into the equation. 
+		//if the booking doesnt exist in the scheulde it must exist in the permanent schedule. Find out if theyre in week 1 or week 2, then just pluck out the coordinate 
+		
+		console.log(RoombookingSchedule)
+		for(var i = RoombookingSchedule.length-1; i>-1; i--)
+		{
+			if(RoombookingSchedule[i][1] == bookingDetails[0] && RoombookingSchedule[i][2] == bookingDetails[1] && RoombookingSchedule[i][3] == parseInt(bookingDetails[2]) && RoombookingSchedule[i][4] == bookingDetails[3] && RoombookingSchedule[i][5] == bookingDetails[4] && RoombookingSchedule[i][6] == bookingDetails[5])
+			{
+				RoombookingSchedule.splice(i, 1);
+				console.log(RoombookingSchedule[i])
+				console.log(bookingDetails)
+			}
+		}
+		console.log(RoombookingSchedule)
+		
 
+	});
+	// deleting a period end
+}
+function updateRoomDetails(roomID, UpdateAttr, UpdateVal)//updates room detail, changes properties of anything. 
+{
+	//console.log(UpdatedBookingSchedule)
+	roomInfoUpdateSuccess = false; 
+	$.ajax
+   ({
+		type:'PUT',
+		url:DCBBookingsResourceRoomAPI,
+		data: JSON.stringify(
+				{
+					"RoomID": roomID,
+					"updateAttr":UpdateAttr,
+					"updateValue": UpdateVal
+				}
+			  ),
+
+		contentType:"application/json",
+
+		success: function(data){
+			exitpreLimLoader()
+			roomInfoUpdateSuccess = true; 
+		},
+
+		error: function(data)
+		{
+			errorModuleShow()
+		}
+   });
+}
 function getPeriod(colCoor, min30)//first parameter is a column coordinate of the cell you clicked, min 30 is whether or not it is a 30 min period room
 {
 	if(min30)

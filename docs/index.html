@@ -12,14 +12,92 @@
 		
 	</head>
 	
+	<!--Animation Background-->
+	<style>
+		html 
+		{
+			height: 100%;
+		}
+		body 
+		{
+			margin: 0;
+		}
+		.bg 
+		{
+			animation: slide 9s ease-in-out infinite alternate;
+			background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+			bottom: 0;
+			left: -50%;
+			opacity: .5;
+			position: fixed;
+			right: -50%;
+			top: 0;
+			z-index: -1;
+		}
+		.bg2 
+		{
+			animation-direction: alternate-reverse;
+			animation-duration: 12s;
+		}
+		.bg3 
+		{
+			animation-duration: 15s;
+		}
+		.content 
+		{
+			background-color: rgba(255,255,255,0);
+			border-radius: .25em;
+			box-shadow: 0 0 .25em rgba(0,0,0,0);
+			box-sizing: border-box;
+			left: 50%;
+			padding: 10vmin;
+			position: fixed;
+			text-align: center;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+		@font-face 
+		{
+   			font-family: 'Sans Serif';
+   		 	src: url('Fonts/Luna Regular/Luna-Regular.ttf');
+		}
+		.lunaFont
+		{
+			font-family: 'Sans Serif';
+		} 
+		 @keyframes slide 
+		{
+			 0% 
+			{
+			 transform:translateX(-25%);
+			}
+			 100% 
+			{
+			 transform:translateX(25%);
+			}
+		}
+	</style>
+	<!--Animation Background-->
+	
 	<body style="margin:0;">
-		<h1 align="center" id="mainTitle">DCB BOOKINGS</h1>
 		
-		<div class="box">
-			<img id="landingImg" src="Images/LandingImg.jpg">
+		<div id="logoTop">
+			<img src="Images/Dulwich Logo.png">
+		</div>
+		
+		<!--Moving Animation Background-->
+		<div class="bg"></div>
+		<div class="bg bg2"></div>
+		<div class="bg bg3"></div>
+		<!--Moving Animation Background-->
+				
+		<div class="content">
+			<h1 align="center" style="margin: 0; letter-spacing: 3px; " class="lunaFont" id="mainTitle">DCB BOOKINGS</h1>
 			<div class="text">
-				<h1 id="LandingImgText">Welcome</h1>
+				<input onClick="backToFirstSlide(); openSignInModal();" placeholder="Make a booking" class="searchBar" type="text">
+				<!--
 				<button id="signInBtn" onClick="backToFirstSlide(); openSignInModal();" class="landingBtn" style="vertical-align:middle"><span>Make a Booking </span></button>
+				-->
 			</div>
 		</div>
 
@@ -27,42 +105,45 @@
         <div id="signInModal" class="Modal"> 
     	 	<!-- Modal content -->
       		<div class="signInModal-content"> <span class="Modalclose">&times;</span>	  	
-        	  	<div class="SignUpSlideshow-container">
+        	  	<div class="SignUpSlideshow-container" class="oxygenFont">
         	  	  <!--Sign in Slide <slide 1>-->
 				  <div class="SignUpSlides">
-					  <h1>Sign In</h1>
+					  <p class="oxygenFont" style="margin-top: 25px; margin-bottom: 0;">Sign In</p>
 					  <p class="landingPageErrMsgs" id="LoginErrMsg"></p>
 					  <hr>
-					  <br><br><br>
+					  <br><br>
 					  <label for="email"><b>Email</b></label>
 					  <input id="signInEmail" type="text" placeholder="Enter Email" name="email">
+					  <br><br>
 					  <label for="email"><b>Password</b></label>
 					  <input id="signInPassword" type="password" placeholder="Enter Password" name="password">
-					  <button class="LandingModalBtns" onClick="loginNow();">Sign In</button>
+					  <br><br>
+					  <center><button class="LandingModalBtns" onClick="loginNow();">Sign In</button></center>
 					  <a href="#" onClick="plusSlides(1); $('#SignupErrMsg1').html('');" id="SignUpNow">Sign Up</a>
 					  <a href="#" onClick="currentSlide(4);" id="ForgotPass">Forgot Password</a>
 				  </div>
 				  <!--Sign up Slide 1 <slide 2>-->
 				  <div class="SignUpSlides">
-					  <img class="imgBtn" onClick="plusSlides(-1)" src="Images/Back.png" width="8%" style="margin: 0;"><h1 style="margin: 0;">Sign Up</h1>
+					  <img class="imgBtn" onClick="plusSlides(-1)" src="Images/Back.png" width="8%" style="margin: 0;">
+					  <p style="margin: 0;">Sign Up</p>
 					  <p class="landingPageErrMsgs" id="SignupErrMsg1"></p>
 					  <hr>
 					  <br><br>
-				      <br>
 					  <label for="email"><b>School Email</b></label>
 					  <input id="SignUpEmail" type="text" placeholder="Enter Email" name="email">
 					  <label for="email"><b>Password</b></label>
 					  <input id="SignUpPass1" type="password" placeholder="Enter Password" name="password">
 					  <label for="email"><b>Confirm Password</b></label>
 					  <input id="SignUpPass2" type="password" placeholder="Enter Password" name="password">
-					  <button class="LandingModalBtns" onClick="validifyPasswordEmailSignUp();">Next</button>
+					  <center><button class="LandingModalBtns" onClick="validifyPasswordEmailSignUp();">Next</button></center>
 				  </div>
 				  <!--Sign up Slide 2 <slide 3>-->
 				  <div class="SignUpSlides">
-			      	  <img class="imgBtn" onClick="plusSlides(-1)" src="Images/Back.png" width="8%" style="margin: 0;"><h1 style="margin: 0;">Sign Up</h1>
+			      	  <img class="imgBtn" onClick="plusSlides(-1)" src="Images/Back.png" width="8%" style="margin: 0;">
+			      	  <p style="margin: 0;">Sign Up</p>
 					  <p class="landingPageErrMsgs" id="SignupErrMsg2"></p>
 					  <hr>
-					  <br><br><br>
+					  <br><br>
 			      		<div class="custom-select">
 							<select id="whoAreYouSelect">
 								<option value="invalid">Who Are You:</option>
@@ -71,32 +152,34 @@
 							</select>
 				      	</div>
 				      <br><br><br><br><br><br><br><br><br><br>
-				      <button class="LandingModalBtns" onclick="validifyWhoYouAre()">Sign Up</button>
+				       <center><button class="LandingModalBtns" onclick="validifyWhoYouAre()">Sign Up</button></center>
 				  </div>
 				  <!--forget password flow Slide 1 <side 4>-->
 				  <div class="SignUpSlides">
-			      	  <img class="imgBtn" onClick="currentSlide(1)" src="Images/Back.png" width="8%" style="margin: 0;"><h1 style="margin: 0;">Forgot Password</h1>
+			      	  <img class="imgBtn" onClick="currentSlide(1)" src="Images/Back.png" width="8%" style="margin: 0;">
+			      	  <p style="margin: 0;">Forgot Password</p>
 					  <p class="landingPageErrMsgs" id="ForgotPassErrMsg1"></p>
 					  <hr>
-					  <br><br><br>
+					  <br><br>
 			      	  <label for="email"><b>School Email</b></label>
 					  <input id="ForgetPassEmail" type="text" placeholder="Enter Email" name="email">
 				      <br><br><br><br><br><br><br><br><br>				      
-				      <button class="LandingModalBtns" onClick="verifyNextForgetPass($('#ForgetPassEmail').val());">Next</button>
+				       <center><button class="LandingModalBtns" onClick="verifyNextForgetPass($('#ForgetPassEmail').val());">Next</button></center>
 				  </div>
 				  <!--forget password flow Slide 2 <side 5>-->
 				  <div class="SignUpSlides">
-			      	  <img class="imgBtn" onClick="plusSlides(-1)" src="Images/Back.png" width="8%" style="margin: 0;"><h1 style="margin: 0;">Forgot Password</h1>
+			      	  <img class="imgBtn" onClick="plusSlides(-1)" src="Images/Back.png" width="8%" style="margin: 0;">
+			      	  <p style="margin: 0;">Forgot Password</p>
 					  <p class="landingPageErrMsgs" id="ForgotPassErrMsg2"></p>
 					  <hr>
-					  <br><br><br>
+					  <br><br>
 			      	  <label for="email"><b>Code Recieved In Email</b></label>
 					  <input id="forgetPassCode" type="text" placeholder="Enter Code" name="Code">
 			      	  <label for="Password1"><b>New Password</b></label>
 					  <input id="forgetPassNPass" type="password" placeholder="Enter Code" name="Password1">
 			      	  <label for="Password2"><b>Confirm New Password</b></label>
 					  <input id="forgetPassNPassConfirm" type="password" placeholder="Enter Code" name="Password2">
-				      <button onClick="verifyPasswordForgetPass($('#forgetPassCode').val(),$('#forgetPassNPass').val(),$('#forgetPassNPassConfirm').val())" class="LandingModalBtns">Change Password</button>
+				       <center><button onClick="verifyPasswordForgetPass($('#forgetPassCode').val(),$('#forgetPassNPass').val(),$('#forgetPassNPassConfirm').val())" class="LandingModalBtns">Change Password</button></center>
 				  </div>
 				</div>
           	</div>

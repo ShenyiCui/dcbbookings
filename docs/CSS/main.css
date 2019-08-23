@@ -2,9 +2,40 @@
 /**/
 /*font-family: 'Titillium Web', sans-serif;*/
 
+@font-face 
+{
+	font-family: 'Sans Serif Luna';
+	src: url('../Fonts/Luna Regular/Luna-Regular.ttf');
+}
+.lunaFont
+{
+	font-family: 'Sans Serif Luna';
+} 
+
+@font-face 
+{
+	font-family: 'Sans Serif Oxygen';
+	src: url('../Fonts/Oxygen Regular/Oxygen-Regular.ttf');
+}
+.oxygenFont
+{
+	font-family: 'Sans Serif Oxygen';
+} 
+
+@font-face 
+{
+	font-family: 'Sans Serif Hiragino';
+	src: url('../Fonts/Hiragino Sans GB/Hiragino-Sans-GB.ttc');
+}
+.HiraginoFont
+{
+	font-family: 'Sans Serif Hiragino';
+} 
+
 h1,h2,h3,h4,p,label,a
 {
-	font-family: 'Roboto', sans-serif;/*applying font roboto*/
+	font-family:'Sans Serif Oxygen';
+	/*'Roboto', sans-serif;*/ /*applying font roboto*/
 }
 .landingPageErrMsgs /*errmsgs to display to the user code*/
 {
@@ -12,6 +43,32 @@ h1,h2,h3,h4,p,label,a
 	position: absolute;
 }
 
+#logoTop
+{
+	background-color: rgba(255,255,255,0.90);
+	width: 60px;
+	height: 100px;
+	padding:5px 10px 0 10px; 
+	margin-left: 60px;
+	margin-top: 0px; 
+}
+#logoTop img
+{
+	width: 100%;
+	margin: 0;
+}
+.searchBar
+{
+	width: 80%;
+	padding: 15px;
+	margin: 20px 0 10px 0;
+	display: inline-block;
+	border: none;
+	background:rgba(255,255,255,1.00);
+	border-radius: 25px;
+	outline: none;
+	font-size: 17px;
+}
 
 #landingImg /*landing img index page code*/
 /*https://css-tricks.com/almanac/properties/o/object-fit/*/
@@ -25,6 +82,7 @@ h1,h2,h3,h4,p,label,a
 	font-size: 50px;
 	padding-top: 0.5%;
 	font-weight:600;
+	color:white;
 }
 .box /*code for the box with the text and the button ontop of the landing img*/
 {
@@ -141,14 +199,12 @@ h1,h2,h3,h4,p,label,a
 /* signup Modal Content */
 .signInModal-content
 {
-  	background-color:rgba(233,233,233,1.00);
+  	background-color:rgba(255,255,255,1.00);
 	margin: auto;
 	padding: 20px;
-	border-radius: 25px;
-	border: 3px solid black;
 	width: 300px;
-	height: 425px;
-	margin-top: 100px;
+	height: 400px;
+	margin-top: 160px;
 }
 
 /*starter modal content*/
@@ -205,12 +261,14 @@ h1,h2,h3,h4,p,label,a
 /* Full-width input fields for the Signup Modals content */
 .signInModal-content input[type=text], input[type=password]
 {
-  width: 90%;
-  padding: 15px;
-  margin: 5px 0 10px 0;
-  display: inline-block;
-  border: none;
-  background:rgba(255,255,255,1.00);
+	width: 90%;
+	padding: 15px;
+	margin: 5px 0 10px 0;
+	display: inline-block;
+	border: #404040 solid 0.5px;
+	border-radius: 25px;
+	background:rgba(255,255,255,1.00);
+	font-family: 'Sans Serif Hiragino';
 }
 
 /* Add a background color when the inputs get focus or the Signup Modals content*/
@@ -223,7 +281,7 @@ h1,h2,h3,h4,p,label,a
 /*start SignUpModal Buttons*/
 .LandingModalBtns
 {
-	background-color: #555555; /* gray */
+	background-color: #404040; /* gray */
 	border: none;
 	color: white;
 	padding: 16px 32px;
@@ -235,7 +293,8 @@ h1,h2,h3,h4,p,label,a
 	-webkit-transition-duration: 0.4s; /* Safari */
 	transition-duration: 0.4s;
 	cursor: pointer;
-	width: 100%;
+	width: 80%;
+	border-radius: 20px;
 }
 .LandingModalBtns:hover
 {
@@ -264,7 +323,7 @@ h1,h2,h3,h4,p,label,a
 /*HyperLink Inside Signupmodal the forgetpass hyperlink CSS*/
 #ForgotPass
 {
-	margin-left: 151px;
+	margin-left: 148px;
 	margin-top: 10px;
 	text-decoration: none;
 	color:black;

@@ -94,7 +94,7 @@
 		<div class="content">
 			<h1 align="center" style="margin: 0; letter-spacing: 3px; " class="lunaFont" id="mainTitle">DCB BOOKINGS</h1>
 			<div class="text">
-				<input onClick="backToFirstSlide(); openSignInModal();" placeholder="Make a booking" class="searchBar" type="text">
+				<input id="searchMainPage" onClick="backToFirstSlide(); openSignInModal();" placeholder="Make a booking" class="searchBar">
 				<!--
 				<button id="signInBtn" onClick="backToFirstSlide(); openSignInModal();" class="landingBtn" style="vertical-align:middle"><span>Make a Booking </span></button>
 				-->
@@ -188,7 +188,13 @@
     	
 	</body>
 	
-	
+	<script>//revolving loop to clear searchinput
+		window.setInterval(clearSearch, 500); 
+		function clearSearch()
+		{
+			$("#searchMainPage").val("")
+		}
+	</script>
 	<script>
 		//modal Code LoginSignup
 		var modal = document.getElementById("signInModal");

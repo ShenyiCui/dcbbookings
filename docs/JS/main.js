@@ -1421,7 +1421,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 						periodData.push("unbooked")
 						periodData.push(userEmail)
 						periodData.push("perpetual")
-						periodData.push("Week1")
+						periodData.push("Week2")
 						dayData.push(periodData)
 					}
 					else //if its not empty its a lesson
@@ -1429,7 +1429,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 						periodData.push("lesson")
 						periodData.push(userEmail)
 						periodData.push("perpetual")
-						periodData.push("Week1")
+						periodData.push("Week2")
 						dayData.push(periodData)
 					}
 				}
@@ -1439,7 +1439,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					periodData.push("unbooked")
 					periodData.push(userEmail)
 					periodData.push("perpetual")
-					periodData.push("Week1")
+					periodData.push("Week2")
 					dayData.push(periodData)
 				}
 				week2Data.push(dayData);
@@ -1905,8 +1905,9 @@ function timetableDocFunctionsRoom()
 		currentBookingState = fullCurrentStatus.split(' ')[0]
 		//getting the hidden span content
 		var hiddenSpan = extractHiddenContent(fullCurrentStatus)
-		bookingDetails = hiddenSpan.split(' ')[1].split(',');
-		console.log(hiddenSpan)
+		hiddenSpan = hiddenSpan.substr(hiddenSpan.indexOf(" ") + 1);
+		bookingDetails = hiddenSpan.split('%');
+		//console.log(bookingDetails)
 		//exatracting the information from the cell you just clicked on >>>> end
 
 
@@ -2177,13 +2178,13 @@ function timetableDocFunctionsRoom()
 		}
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
-				viewResos(roomID, "room", currentWeekBegining)
+				viewResos(currentResosID, "room", currentWeekBegining)
 				roomInfoUpdateSuccess = false; 
 			}
 		}
@@ -2206,19 +2207,106 @@ function timetableDocFunctionsRoom()
 		// we have to search for the booking in the room booking schedule, remove it, then plug it back into the equation. 
 		//if the booking doesnt exist in the scheulde it must exist in the permanent schedule. Find out if theyre in week 1 or week 2, then just pluck out the coordinate 
 		
-		console.log(RoombookingSchedule)
-		for(var i = RoombookingSchedule.length-1; i>-1; i--)
+		//converts the booking schedule within the hiddenspan back into it's original state in the initaltable period 3 dimentional array. START
+		var bookingDetailsArrayConverted = [];
+		bookingDetailsArrayConverted.push(currentBookingState)
+		for(var i = 0; i<bookingDetails.length; i++)
 		{
-			if(RoombookingSchedule[i][1] == bookingDetails[0] && RoombookingSchedule[i][2] == bookingDetails[1] && RoombookingSchedule[i][3] == parseInt(bookingDetails[2]) && RoombookingSchedule[i][4] == bookingDetails[3] && RoombookingSchedule[i][5] == bookingDetails[4] && RoombookingSchedule[i][6] == bookingDetails[5])
+			if(i == 2)
 			{
-				RoombookingSchedule.splice(i, 1);
-				console.log(RoombookingSchedule[i])
-				console.log(bookingDetails)
+				bookingDetailsArrayConverted.push(parseInt(bookingDetails[i]))
+			}
+			else if(i == 6)
+			{
+				bookingDetailsArrayConverted.push(bookingDetails[i].split(",").map(Number));
+			}
+			else
+			{
+				bookingDetailsArrayConverted.push(bookingDetails[i])
 			}
 		}
-		console.log(RoombookingSchedule)
+		//converts the booking schedule within the hiddenspan back into it's original state in the initaltable period 3 dimentional array. END
 		
+		//console.log(bookingDetailsArrayConverted);
+		//Deleting away from the userBookingSchedule. Array Start
+		var deletedFromUserBookingSchd = false; 
+		//console.log(RoombookingSchedule);
+		for(var i = RoombookingSchedule.length-1; i>-1; i--)
+		{
+			if(compareArray(RoombookingSchedule[i],bookingDetailsArrayConverted))
+			{
+				deletedFromUserBookingSchd = true; 
+				RoombookingSchedule.splice(i, 1);
+				if(RoombookingSchedule.length == 0)
+				{
+					RoombookingSchedule.push("Empty List");
+				}
+			}
+		}
+		//console.log(RoombookingSchedule)
+		//Deleting away from the roombookingSchedule. Array End
 
+		//Deleting away from the permanment schedule Array start
+		
+		//needs to figure out the week, and the coordinates, then purge from the permsched array. 
+		
+		if(deletedFromUserBookingSchd == false)
+		{
+			var newEmptyPeriod = [];
+			//console.log(bookingDetails)
+			var weekYoureDeletingFrom; 
+			if(bookingDetails[2] == "Week1")
+			{
+				weekYoureDeletingFrom = 0;
+				newEmptyPeriod.push("unbooked")
+				newEmptyPeriod.push(userEmail)
+				newEmptyPeriod.push("perpetual")
+				newEmptyPeriod.push("Week1")
+			}
+			else if(bookingDetails[2] == "Week2")
+			{
+				weekYoureDeletingFrom = 1; 
+				newEmptyPeriod.push("unbooked")
+				newEmptyPeriod.push(userEmail)
+				newEmptyPeriod.push("perpetual")
+				newEmptyPeriod.push("Week2")
+			}
+			/*
+			console.log("")
+			console.log(weekYoureDeletingFrom)
+			console.log(intendedCoors)
+			console.log(newEmptyPeriod)
+			console.log("")
+			*/
+			permaSchd[weekYoureDeletingFrom][intendedCoors[0]][intendedCoors[1]] = newEmptyPeriod; 
+		}
+		//Deleting away from the permanment schedule Array end
+		
+		//Starting the Update of the new room schedule
+		roomInfoUpdateSuccess = false; 
+		if(deletedFromUserBookingSchd == false)
+		{
+			updateRoomDetails(currentResosID, "PermaSchedule", permaSchd)
+			validateUpdate();
+		}
+		else
+		{
+			updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
+			validateUpdate();
+		}
+		
+		function validateUpdate()
+		{
+			if(roomInfoUpdateSuccess == false)
+			{
+				window.setTimeout(validateUpdate,1000);
+			}
+			else
+			{
+				viewResos(currentResosID, "room", currentWeekBegining)
+				roomInfoUpdateSuccess = false; 
+			}
+		}
 	});
 	// deleting a period end
 }
@@ -2407,7 +2495,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	*/
 	var userBookings = []//array containing the userbookings for that week.
 	var fetchedUserBookings = data["BookingSchedule"] //array containing the fetched user bookings
-	console.log(fetchedUserBookings)
+	//console.log(fetchedUserBookings)
 	if(fetchedUserBookings[0]!="Empty List") // populating the userBookings array;
 	{
 		for(var i =0; i<fetchedUserBookings.length;i++)
@@ -2417,7 +2505,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 				userBookings.push(fetchedUserBookings[i]);
 			}
 		}
-		console.log(userBookings);
+		//console.log(userBookings);
 	}
 	for(var i =0; i<userBookings.length; i++)
 	{
@@ -2428,6 +2516,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 
 	//console.log(data["PermaSchedule"][0]);
 	//populating initital table with permaSchd vals start
+	//console.log(data["PermaSchedule"]);
 	if(data["PermaSchedule"].length!=0)
 	{
 		for(var i =0; i<data["PermaSchedule"][weekNum].length; i++) // how many days CHANGE WEEK HERE. data["PermaSchedule"][0] for week 1 data["PermaSchedule"][1] for week 2
@@ -2515,7 +2604,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 				var hiddenState = initialTable[i][j][1];
 				for(var k = 2; k<initialTable[i][j].length; k++)
 				{
-					hiddenState = hiddenState + "," + initialTable[i][j][k];
+					hiddenState = hiddenState + "%" + initialTable[i][j][k];
 				}
 				var newString = bookState +' <span class="hidden">'+hiddenState+'</span>'
 				tbl +='<td ><div class="'+bookState+' row_data pointerCursor" edit_type="click" col_name="'+j+'">'+newString+'</div></td>';
@@ -4158,3 +4247,60 @@ function exitpreLimLoaderErr()//used to exit the prelim loader in the event of a
 		$("#preLimLoader").html("[Click on a Timeslot to View Bookings]")
 	},3000)
 }
+
+// compares 2 arrays to see if they are the same. If they are it'll return true, if not true it'll return false. 
+function compareArray(a, b) 
+{
+	var valuesEqual = true; 
+	// if length is not equal 
+	if(a.length!=b.length) 
+	{
+		valuesEqual = false; 
+	}
+	else
+	{ 
+		// comapring each element of array 
+		for(var i=0;i<a.length;i++) 
+		{
+			if(Array.isArray(a[i]) && Array.isArray(b[i]))
+			{
+				valuesEqual = compareArray2(a[i],b[i])
+			}
+			//console.log("value 1: "+a[i] + "\nvalue 2: "+b[i])
+			//console.log("current value comparison: " + (a[i]===b[i]))
+			else if(a[i]!=b[i]) 
+			{
+				valuesEqual = false; 
+			}
+		}	
+	}
+	return valuesEqual
+}
+// compares 2 arrays to see if they are the same. If they are it'll return true, if not true it'll return false. 
+function compareArray2(a, b) 
+{
+	var valuesEqual = true; 
+	// if length is not equal 
+	if(a.length!=b.length) 
+	{
+		valuesEqual = false; 
+	}
+	else
+	{ 
+		// comapring each element of array 
+		for(var i=0;i<a.length;i++) 
+		{
+			if(Array.isArray(a[i]) && Array.isArray(b[i]))
+			{
+				valuesEqual = compareArray(a[i],b[i])
+			}
+			//console.log("value 1: "+a[i] + "\nvalue 2: "+b[i])
+			//console.log("current value comparison: " + (a[i]===b[i]))
+			else if(a[i]!=b[i]) 
+			{
+				valuesEqual = false; 
+			}
+		}	
+	}
+	return valuesEqual
+};

@@ -1306,7 +1306,7 @@ function readCustomUploadCSV(min30) //read data and populate it in an giant link
 				dayData = [];
 				for(var j = 1; j<cell_data.length;j++)
 				{
-					periodData=[cell_data[j],userEmail,"perpetual","Week1"]
+					periodData=[cell_data[j],userEmail,"P","Week1"]
 					dayData.push(periodData);
 				}
 				week1Data.push(dayData);
@@ -1317,7 +1317,7 @@ function readCustomUploadCSV(min30) //read data and populate it in an giant link
 				dayData = [];
 				for(var j = 1; j<cell_data.length;j++)
 				{
-					periodData=[cell_data[j],userEmail,"perpetual","Week2"]
+					periodData=[cell_data[j],userEmail,"P","Week2"]
 					dayData.push(periodData);
 				}
 				week2Data.push(dayData);
@@ -1384,7 +1384,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					{
 						periodData.push("unbooked")
 						periodData.push(userEmail)
-						periodData.push("perpetual")
+						periodData.push("P")
 						periodData.push("Week1")
 						dayData.push(periodData)
 					}
@@ -1392,7 +1392,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					{
 						periodData.push("lesson")
 						periodData.push(userEmail)
-						periodData.push("perpetual")
+						periodData.push("P")
 						periodData.push("Week1")
 						dayData.push(periodData)
 					}
@@ -1402,7 +1402,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					periodData = [];
 					periodData.push("unbooked")
 					periodData.push(userEmail)
-					periodData.push("perpetual")
+					periodData.push("P")
 					periodData.push("Week1")
 					dayData.push(periodData)
 				}
@@ -1420,7 +1420,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					{
 						periodData.push("unbooked")
 						periodData.push(userEmail)
-						periodData.push("perpetual")
+						periodData.push("P")
 						periodData.push("Week2")
 						dayData.push(periodData)
 					}
@@ -1428,7 +1428,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					{
 						periodData.push("lesson")
 						periodData.push(userEmail)
-						periodData.push("perpetual")
+						periodData.push("P")
 						periodData.push("Week2")
 						dayData.push(periodData)
 					}
@@ -1438,7 +1438,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 					periodData = [];
 					periodData.push("unbooked")
 					periodData.push(userEmail)
-					periodData.push("perpetual")
+					periodData.push("P")
 					periodData.push("Week2")
 					dayData.push(periodData)
 				}
@@ -1860,6 +1860,8 @@ function timetableDocFunctionsRoom()
 	var intendedCoors; // stores the current coor the user is on
 	var formattedCurrentDate; // stores the formatted current date in DD, month thingy week Begining
 	var permaSchd; //stores the permanent scheudle of a room. 
+	var weekNow; //stores the current week now. If its variable currentWeek == 0 then weekNow will be Week1, else it'll be Week2
+	
 	//--->Editing Viewport > start
 	$(document).on('click', '.row_data', function(event)
 	{
@@ -2118,15 +2120,23 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				if(RoombookingSchedule[RoombookingSchedule[0].length-1] != formattedCurrentDate && RoombookingSchedule[RoombookingSchedule[0].length-2] != intendedCoors) // will only allow book to occur if the room hasnt been taken. 
+				var freeForBooking = true; 
+				for(var i = 0; i < RoombookingSchedule.length; i++)
 				{
-					validatedAndBook()
+					if(RoombookingSchedule[i][RoombookingSchedule[0].length-1] == formattedCurrentDate && RoombookingSchedule[i][RoombookingSchedule[0].length-2] == intendedCoors) // will only allow book to occur if the room hasnt been taken. 
+					{
+						freeForBooking = false; 
+					}
 				}
-				else
+				if(freeForBooking == false)
 				{
 					preLimLoader("Error: Slot is already booked")
 					exitpreLimLoaderErr() //exiting the err output after a few seconds
 					viewResos(currentResosID,currentResosType,currentWeekBegining) //refreshes the room
+				}
+				else
+				{
+					validatedAndBook()
 				}
 			}
 		}
@@ -2191,6 +2201,363 @@ function timetableDocFunctionsRoom()
 		
 	});
 	//-->Quickbooking a period End
+	
+	//-->quicklocking a period Start
+	$(document).on('click', '#quickLockBtn', function(event) 
+	{
+		//need to first see if the slot's been taken aready
+		//then if its not then it will excecute the Booking Function 
+
+		//structure of each period in the fetched userbookings
+		/*
+		[0] - booking value, unbooked, etc
+		[1] - booking email
+		[2] - perpectual, nonperpectual booking etc.
+		[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+		[4] - week 1, week 2 or both
+		[5] - timeStamp
+		[6] - ECADescription [name][description]
+		[7] - coordinate of booking [row][col] on the table
+		[8] - week begining
+		*/
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
+		
+		//getSpecificResos(resosID, resosType) 
+		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
+		
+		preLimLoader("Locking Period...") //output showing user the room is currently being booked
+		
+		event.preventDefault(); //prevent's default function from excecuting
+		
+		//console.log(coordinates) //in a [x,y] format row, col
+		//console.log(day) 
+		//console.log(period)
+		//console.log(fullCurrentStatus), Useless in this context
+		//console.log(currentBookingState), Useless in this context
+		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
+		//need to retrieve Week Begining. 
+		
+		getSpecificResos(currentResosID, currentResosType)
+		indiResosDataFetchSuccess = false;
+		validateResosFetch()
+		
+		intendedCoors = coordinates
+		formattedCurrentDate = getWeekBegining(currentWeekBegining);
+		
+		function validateResosFetch()
+		{
+			if(indiResosDataFetchSuccess == false)
+			{
+				window.setTimeout(validateResosFetch,1000)
+			}
+			else
+			{
+				indiResosDataFetchSuccess = false;
+				RoombookingSchedule = indiRoomData.Items[0].BookingSchedule
+				validatePeriodAvailbility()
+			}
+		}
+		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
+		{
+			//console.log(indiRoomData)
+			
+			
+			if(RoombookingSchedule[0]=="Empty List")
+			{
+				RoombookingSchedule = [];
+				validatedAndBook()
+			}
+			else
+			{
+				var freeForBooking = true; 
+				for(var i = 0; i < RoombookingSchedule.length; i++)
+				{
+					if(RoombookingSchedule[i][RoombookingSchedule[0].length-1] == formattedCurrentDate && RoombookingSchedule[i][RoombookingSchedule[0].length-2] == intendedCoors) // will only allow book to occur if the room hasnt been taken. 
+					{
+						freeForBooking = false; 
+					}
+				}
+				if(freeForBooking == false)
+				{
+					preLimLoader("Error: Slot is already booked")
+					exitpreLimLoaderErr() //exiting the err output after a few seconds
+					viewResos(currentResosID,currentResosType,currentWeekBegining) //refreshes the room
+				}
+				else
+				{
+					validatedAndBook()
+				}
+			}
+		}
+		
+		//booking start
+		function validatedAndBook()
+		{
+			var newPeriodObject = [];
+			//structure of each period in the fetched userbookings
+			/*
+			[0] - booking value, unbooked, etc
+			[1] - booking email
+			[2] - perpectual, nonperpectual booking etc.
+			[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+			[4] - week 1, week 2 or both
+			[5] - timeStamp
+			[6] - ECADescription [name][description]
+			[7] - coordinate of booking [row][col] on the table
+			[8] - week begining
+			*/
+			newPeriodObject.push(lockval)
+			newPeriodObject.push(userEmail)
+			newPeriodObject.push("NP")
+			newPeriodObject.push(-1)
+			var CurrentWeekString;
+			if(currentWeek==1)
+			{
+				CurrentWeekString = "Week1"
+			}
+			else if(currentWeek==2)
+			{
+				CurrentWeekString = "Week2"
+			}
+			newPeriodObject.push(CurrentWeekString)
+			newPeriodObject.push(getTimeStamp())
+			newPeriodObject.push("N.A")
+			newPeriodObject.push(intendedCoors)
+			newPeriodObject.push(formattedCurrentDate)
+			
+			//console.log(newPeriodObject);
+			
+			RoombookingSchedule.push(newPeriodObject)
+			
+			updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
+			
+			roomInfoUpdateSuccess = false; 
+			validateRoomInfoUpdate()	
+			
+		}
+		function validateRoomInfoUpdate()
+		{
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			{
+				window.setTimeout(validateRoomInfoUpdate, 1000)
+			}
+			else
+			{
+				viewResos(currentResosID, "room", currentWeekBegining)
+				roomInfoUpdateSuccess = false; 
+			}
+		}
+		
+	});
+	//-->quicklocking a period End
+	
+	//-->locking a lesson period Start
+	$(document).on('click', '#lessonLockBtn', function(event) 
+	{
+		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson. 
+		
+		//need to first see if the slot's been taken aready
+		//then if its not then it will excecute the Booking Function 
+
+		//structure of each period in the fetched userbookings
+		/*
+		[0] - booking value, unbooked, etc
+		[1] - booking email
+		[2] - perpectual, nonperpectual booking etc.
+		[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+		[4] - week 1, week 2 or both
+		[5] - timeStamp
+		[6] - ECADescription [name][description]
+		[7] - coordinate of booking [row][col] on the table
+		[8] - week begining
+		*/
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
+		
+		//getSpecificResos(resosID, resosType) 
+		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
+		
+		preLimLoader("Creating Lesson...") //output showing user the room is currently being booked
+		event.preventDefault(); //prevent's default function from excecuting
+		
+		//console.log(coordinates) //in a [x,y] format row, col
+		//console.log(day) 
+		//console.log(period)
+		//console.log(fullCurrentStatus), Useless in this context
+		//console.log(currentBookingState), Useless in this context
+		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
+		//need to retrieve Week Begining. 
+		
+		getSpecificResos(currentResosID, currentResosType)
+		indiResosDataFetchSuccess = false;
+		validateResosFetch()
+		
+		intendedCoors = coordinates
+		formattedCurrentDate = getWeekBegining(currentWeekBegining);
+		//console.log(formattedCurrentDate)
+		
+		function validateResosFetch()
+		{
+			if(indiResosDataFetchSuccess == false)
+			{
+				window.setTimeout(validateResosFetch,1000)
+			}
+			else
+			{
+				indiResosDataFetchSuccess = false;
+				
+				RoombookingSchedule = indiRoomData.Items[0].BookingSchedule;
+				permaSchd = indiRoomData.Items[0].PermaSchedule;
+				
+				validatePeriodAvailbility()
+			}
+		}
+		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
+		{
+			//console.log(indiRoomData)
+			
+			
+			if(RoombookingSchedule[0]=="Empty List")
+			{
+				RoombookingSchedule = [];
+				validatedAndBook()
+			}
+			else
+			{
+				var freeForBooking = true; 
+				
+				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah... 
+				
+				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array. 
+				//console.log(currentWeek)
+				if(currentWeek == 1)  
+				{
+					weekNow = "Week1"
+				}
+				else if(currentWeek == 2)
+				{
+					weekNow = "Week2"
+				}
+				//console.log(permaSchd);
+				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere. 
+				for(var i = 0; i < RoombookingSchedule.length; i++)
+				{
+					/*console.log(RoombookingSchedule[i][4] + " : "+ weekNow)
+					console.log(RoombookingSchedule[i][RoombookingSchedule[0].length-2] + " : "+ intendedCoors)
+					
+					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2"))
+					console.log(compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))
+					
+					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))*/
+					
+					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken. 
+					{
+						
+						freeForBooking = false; 
+						indexOfBookingThatsInterrupting = i;
+					}
+				}
+				if(freeForBooking == false)
+				{
+					confirmLesson()
+				}
+				else
+				{
+					validatedAndBook()
+				}
+			}
+		}
+		
+		//booking start
+		function validatedAndBook()
+		{
+			var newPeriodObject = [];
+			//structure of each period in the fetched userbookings
+			/*
+			[0] - booking value, unbooked, etc
+			[1] - booking email
+			[2] - perpectual, nonperpectual booking etc.
+			[3] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+			[4] - week 1, week 2 or both
+			[5] - timeStamp
+			[6] - ECADescription [name][description]
+			[7] - coordinate of booking [row][col] on the table
+			[8] - week begining
+			*/
+			newPeriodObject.push(lessonval)
+			newPeriodObject.push(userEmail)
+			newPeriodObject.push("P")
+			newPeriodObject.push(weekNow)
+			
+			permaSchd[currentWeek-1][intendedCoors[0]][intendedCoors[1]] = newPeriodObject
+						
+			updateRoomDetails(currentResosID, "PermaSchedule", permaSchd)
+			
+			roomInfoUpdateSuccess = false; 
+			validateRoomInfoUpdate()	
+			
+		}
+		function validateRoomInfoUpdate()
+		{
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			{
+				window.setTimeout(validateRoomInfoUpdate, 1000)
+			}
+			else
+			{
+				viewResos(currentResosID, "room", currentWeekBegining)
+				roomInfoUpdateSuccess = false; 
+			}
+		}
+		
+		function confirmLesson()
+		{
+			var PoNP;
+			if(RoombookingSchedule[indexOfBookingThatsInterrupting][2] == "P")
+			{
+				PoNP = "Perpetual"
+			}
+			else if(RoombookingSchedule[indexOfBookingThatsInterrupting][2] == "NP")
+			{
+				PoNP = "Non-Perpetual"
+			}
+			$.confirm
+			({
+				boxWidth: '480px',
+				useBootstrap: false,
+				icon: 'fa fa-warning',
+				title: 'Confirm Booking',
+				content: 'Booking this lesson will override some of your other user\'s bookings are you sure you want to continue? <br><br><strong>Type: </strong>'+PoNP+'<br><strong>Week Begining: </strong>'+RoombookingSchedule[indexOfBookingThatsInterrupting][RoombookingSchedule[0].length-1]+'<br><strong>User: </strong>'+RoombookingSchedule[indexOfBookingThatsInterrupting][1]+'<br><strong>Coordinates: </strong>[' + RoombookingSchedule[indexOfBookingThatsInterrupting][RoombookingSchedule[0].length-2][0]+', '+ RoombookingSchedule[indexOfBookingThatsInterrupting][RoombookingSchedule[0].length-2][1]+']',
+				theme: 'modern',
+				draggable: false,
+				buttons:
+				{
+					confirm:
+					{
+						btnClass: 'btn-green',
+						text:'Book',
+						action: function()
+						{
+							validatedAndBook()
+						}
+					},
+					cancel:
+					{
+						text:'Cancel',
+						action: function()
+						{
+							preLimLoader("Exiting function...")
+							exitpreLimLoaderErr() //exiting the err output after a few seconds
+							//viewResos(currentResosID,currentResosType,currentWeekBegining) //refreshes the room
+						}
+					},
+				}
+			});
+		}
+		
+	});
+	//-->locking a lesson period End
 	
 	//deleting a period start
 	$(document).on('click', '#deleteBtn', function(event) 
@@ -2260,7 +2627,7 @@ function timetableDocFunctionsRoom()
 				weekYoureDeletingFrom = 0;
 				newEmptyPeriod.push("unbooked")
 				newEmptyPeriod.push(userEmail)
-				newEmptyPeriod.push("perpetual")
+				newEmptyPeriod.push("P")
 				newEmptyPeriod.push("Week1")
 			}
 			else if(bookingDetails[2] == "Week2")
@@ -2268,7 +2635,7 @@ function timetableDocFunctionsRoom()
 				weekYoureDeletingFrom = 1; 
 				newEmptyPeriod.push("unbooked")
 				newEmptyPeriod.push(userEmail)
-				newEmptyPeriod.push("perpetual")
+				newEmptyPeriod.push("P")
 				newEmptyPeriod.push("Week2")
 			}
 			/*
@@ -2470,7 +2837,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 		{
 			periodData[0]=unbookedval;
 			periodData[1]="email@temp.com";
-			periodData[2]="perpetual";
+			periodData[2]="P";
 			periodData[3]="Week1";
 			dayData.push(periodData);
 		}
@@ -4304,3 +4671,4 @@ function compareArray2(a, b)
 	}
 	return valuesEqual
 };
+

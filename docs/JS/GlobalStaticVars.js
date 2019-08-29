@@ -49,7 +49,7 @@ var individualData;
 //Individual Room Data
 var indiRoomData;
 var resosName; // used to store the resos ID the user is currently viewing
-var currentWeek; // used to store the current week, 0 for week 1, 1 for week 2
+//var currentWeek; // used to store the current week, 0 for week 1, 1 for week 2
 var currentWeekB //used to store the current weekbegining
 var resosAdmin = false; //boolean, used to store whether or not you are the true admin of a room.
 var clickBookedEmail = ""; //used to store the email of the person who booked the room.

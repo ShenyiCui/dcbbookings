@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 		<script src="../JS/nprogress.js"></script>
+		<script src="../JS/moment.js"></script>
 		<link rel="stylesheet" href="../CSS/nprogress.css">
 		<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
 		<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
@@ -43,7 +44,7 @@
 					</select>
 				</div>
 				<br><br><br><br><br>
-				<button class="LandingModalBtns" onClick="completeSignUp();">Complete Sign Up</button>
+				<center><button class="LandingModalBtns" onClick="completeSignUp();">Complete Sign Up</button></center>
 			</div>
 		</div>
 
@@ -122,7 +123,7 @@
 						<input type="text" id="department" placeholder="Department:" name="department">
 						<label>Description:</label>
 						<textarea id="AddResosDescription"></textarea>
-						<button class="LandingModalBtns" onClick="addRoomNext1();">Next</button>
+						<center><button class="LandingModalBtns" onClick="addRoomNext1();">Next</button></center>
 						<p id="AddResosAddRoomErrMsg1" class="AddResosErrMsg"></p>
 					</div>
 
@@ -149,7 +150,7 @@
 						<input type="checkbox" id="planAheadCB">&nbsp;Plan Ahead [Close booking ability 30 minutes ahead of time]<br>
 						<input type="checkbox" id="30MinPeriodCB">&nbsp;30 minute period [Split each period into 30 minute sections]<br><br>
 
-						<button class="LandingModalBtns" onClick="addRoomNext2();">Next</button>
+						<center><button class="LandingModalBtns" onClick="addRoomNext2();">Next</button></center>
 						<p id="AddResosAddRoomErrMsg2" class="AddResosErrMsg"></p>
 					</div>
 
@@ -307,8 +308,9 @@
 						<label id="bookingStatus">.......</label><br>
 						<br>
 						<button id="bookBtn">Quick Book</button>
-						<button id="rbookBtn">Book Recurring</button>
-						<button id="quickLockBtn">Lock</button>
+						<button id="rbookBtn">Book Recurringly</button>
+						<button id="quickLockBtn">Quick Lock</button>
+						<button id="rLockBtn">Lock Recurringly</button>
 						<button id="lessonLockBtn">Lesson</button>
 						<button id="deleteBtn">Delete</button>
 						<button id="contactBtn">Contact</button>
@@ -323,8 +325,34 @@
 				<!--loader for when the page loads within the timetable modolue-->
 				<div id="LoaderTimetable">
 					<img style="margin-bottom: 80px;" width="10%" src="../Images/loader.gif">
+					<br><br>
 				</div>
 		  </div>
+		</div>
+		
+		<!--Recurring booking module, same class of a high z-index-->
+		<div id="BookRecurring" class="HigherModal">
+			<div class="BookRecuring-content">
+				<span id="bookRecurringCloseBtn" class="Modalclose">&times;</span>
+				<input placeholder="ECA:" type="text" id="eca"><br>
+				<input placeholder="Description" type="text" id="ecaDes"><br>
+				<select id="AlternatingWeeks">
+					<option value="Week1">Week 1s Only</option>
+					<option value="Week2">Week 2s Only</option>
+					<option value="Week1Week2">Week 1 & Week 2</option>
+				</select>
+				<br>
+				<select id="Recurrence" onChange="checkRecurrence()">
+					<option value="P">Perpetual Recurrence</option>
+					<option value="NP">Non-Perpetual Recurrence</option>
+				</select>
+				<br>
+				<input id="startDate" disabled onChange="ChangeToWeekBegining_BR_SD();" class="datepicker" type="text" placeholder="Starting Week Begining" /><br>
+				<input id="endDate" onChange="ChangeToWeekBegining_BR_ED();" class="datepicker" type="text" placeholder="Ending Week Begining" /><br>
+				<br>
+				<center><button id="BookRecrBtn" class="LandingModalBtns">Book</button></center>
+				<p id="RBookErrMsg"><br></p>
+			</div>
 		</div>
 	</body>
 
@@ -466,6 +494,35 @@
 		  {
 			AddResosModal.style.display = "none";
 		  }
+		  else if (event.target == recurringBookingModal)
+		  {
+			recurringBookingModal.style.display = "none";
+		  }
+		}
+	</script>
+	<script>//Modal Code for recurring bookings
+		var recurringBookingModal = document.getElementById("BookRecurring");
+
+		// Get the <span> element that closes the modal
+		var closeRecuringBookingBtn = document.getElementById("bookRecurringCloseBtn");
+		// When the user clicks the button, open the modal
+		function openRecurringModal()
+		{
+			recurringBookingModal.style.display = "block";
+			$("#startDate").hide()
+			$("#endDate").hide()
+			
+			$("#startDate").val("")
+			$("#endDate").val("")
+			$("#Recurrence").val("P")
+			
+			checkRecurrence()
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		closeRecuringBookingBtn.onclick = function()
+		{
+		  recurringBookingModal.style.display = "none";
 		}
 	</script>
 	<script>//complete signup Procedure
@@ -585,6 +642,72 @@
 				currentAResosSlide(1);
 			}
 			addRoomClearAll();
+		}
+	</script>
+	<script>//Book recuring for start date and end date. It'll change random dates to week beginings
+		function ChangeToWeekBegining_BR_SD()
+		{
+			$("#RBookErrMsg").html("");
+			window.setTimeout(changeNow, 100)
+			function changeNow()
+			{
+				var YYYYMMDD = transformCurrentWeek($("#startDate").val());
+				//console.log(YYYYMMDD)
+				var dateChosen = transformYYYYMMDDtoDate(YYYYMMDD.toString());
+				//console.log(dateChosen)
+				$("#startDate").val(getWeekBegining(dateChosen));
+				$("#endDate").show()
+				
+				if($("#startDate").val() == "Invalid Date")
+				{
+					$("#endDate").hide()
+				}
+			}	
+		}
+		function ChangeToWeekBegining_BR_ED()
+		{
+			$("#RBookErrMsg").html("");
+			window.setTimeout(validateDateFirst, 100)
+			function validateDateFirst()
+			{
+				var startDate = transformCurrentWeek($("#startDate").val());
+				var endDate = transformCurrentWeek($("#endDate").val());
+				
+				if(startDate > endDate)
+				{
+					$("#RBookErrMsg").html("Your end date must be after your start date...")
+					$("#endDate").val("")
+				}
+				else
+				{
+					changeNow();
+				}
+			}
+			function changeNow()
+			{
+				var YYYYMMDD = transformCurrentWeek($("#endDate").val());
+				//console.log(YYYYMMDD)
+				var dateChosen = transformYYYYMMDDtoDate(YYYYMMDD.toString());
+				//console.log(dateChosen)
+				$("#endDate").val(getWeekBegining(dateChosen));
+			}
+		}
+		function checkRecurrence()
+		{
+			$("#RBookErrMsg").html("");
+			if($("#Recurrence").val()=="P")
+			{
+				$("#startDate").hide()
+				$("#endDate").hide()
+			}
+			else if($("#Recurrence").val()=="NP")
+			{
+				$("#startDate").show()
+				$("#endDate").hide()
+				
+				$("#startDate").val(getWeekBegining(new Date(currentWeekBegining)))
+				ChangeToWeekBegining_BR_SD();
+			}
 		}
 	</script>
 </html>

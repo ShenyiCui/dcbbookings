@@ -765,6 +765,7 @@ function createResos(resosType) //creates new Resos depending on the type you en
 		var BookingSched = ["Empty List"];
 		var Depart = $("#department").val().trim();
 		var Descript = addResosRoomDescription.getContent().trim()+" "+getTimeStamp();
+		var BookRights = $("#BookingRights").val().trim();
 
 		var Min30P = "";
 		if($("#30MinPeriodCB").prop('checked'))
@@ -806,7 +807,8 @@ function createResos(resosType) //creates new Resos depending on the type you en
 				"PermaSchedule":PermaSched,
 				"PlanAhead":PlanAH,
 				"RoomAdmin":RoomAdm,
-				"RoomID":RoomI
+				"RoomID":RoomI,
+				"BookingRights":BookRights
 			}),
 			contentType:"application/json",
 			success:function(data)
@@ -1037,25 +1039,6 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 			}
 		}
 	}
-}
-
-//SideNav code open and close it when screen gets too small
-function openNav(val1,val2,val3)
-{
-	document.getElementById("sideMenu").style.width = "20%";
-	document.getElementById("sideMenu").style.minWidth = "250px";
-	document.getElementById("searchBarContainer").style.width = val3;
- 	document.getElementById("allResosContainer").style.marginLeft = val1;
-	document.getElementById("allResosContainer").style.width = val2;
-
-}
-function closeNav()
-{
-	document.getElementById("sideMenu").style.width = "0";
-	document.getElementById("sideMenu").style.minWidth = "0";
-	document.getElementById("searchBarContainer").style.width = "100%";
- 	document.getElementById("allResosContainer").style.marginLeft = "3%";
-	document.getElementById("allResosContainer").style.width = "97%";
 }
 
 //add room logic start-->
@@ -4195,6 +4178,7 @@ function openResosSettings(resosID, resosType) // open resos settings
 			nicEditors.findEditor("DescriptionVal").setContent(str);
 
 			$("#accessRightSelect").val(roomItem.AccessRights);
+			$("#bookingRightSelect").val(roomItem.BookingRights);
 			var admins = roomItem.RoomAdmin
 
 			$("#RoomAdmin1").val(admins[0])
@@ -4226,7 +4210,7 @@ function openResosSettings(resosID, resosType) // open resos settings
 }
 function resosSaveChanges()
 {
-    alert("Hello")
+    var roomItemFromData = indiRoomData["Items"][0];
 }
 
 function getAResosSettingFromModal(resosID, resosType)//called in the make booking page in the timetable modal to direct the user to the settings html page

@@ -22,12 +22,47 @@
 		<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
 		<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
 	</head>
-	<body>
+	
+	<style>
+		html 
+		{
+			height: 100%;
+		}
+		body 
+		{
+			margin: 0;
+		}
+		.MainPageSearch 
+		{
+			background-color: rgba(255,255,255,0);
+			color:black;
+			border-radius: .25em;
+			box-shadow: 0 0 .25em rgba(0,0,0,0);
+			box-sizing: border-box;
+			left: 50%;
+			padding: 10vmin;
+			position: fixed;
+			text-align: center;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+		@font-face 
+		{
+   			font-family: 'Sans Serif';
+   		 	src: url('../Fonts/Luna Regular/Luna-Regular.ttf');
+		}
+		.lunaFont
+		{
+			font-family: 'Sans Serif';
+		} 
+	</style>
+	
+	<body style="background-color: #044e6b; color: white;">
 		<!--Loader showing up when the site is loading in-->
 		<div id="Loader" class="loader">
 			<img width="12.5%" src="../Images/loader.gif">
 			<br><br><br><br><br><br><br>
-			<p id="loaderTxt"></p>
+			<p style="color:black;" id="loaderTxt"></p>
 		</div>
 
         <!-- Starter Modal enter information-->
@@ -47,54 +82,55 @@
 				<center><button class="LandingModalBtns" onClick="completeSignUp();">Complete Sign Up</button></center>
 			</div>
 		</div>
-
+	
 		<!--Navigation panel Start-->
 		<div id="navBar" class="topnav">
-			<div id="title">
-				<p>DCB BOOKINGS</p>
+			<div id="logoTop2">
+				<img src="../Images/Dulwich Logo.png">
 			</div>
+	  	
 		  	<div class="dropdown">
-				<div class="dropbtn"><i style="font-size: 20px;" class="fa fa-bars imgBtn"></i></div>
+		  		<div class="dropbtn">
+		  			<i style="font-size: 35px; color:black;" class="fa fa-bars imgBtn"></i>
+		  		</div>
 				<div class="dropdown-content">
-					<a href="Settings.html">Settings</a>
-					<a href="#">Sign Out</a>
+					<a href="#">All Resources</a>
+					<a href="#">Create New Resource</a>
+					<a href="#">Upcoming Bookings</a>
+		   			<a href="#">Report a Bug</a>
 			    </div>
 			</div>
-		</div>
-
-		<div id="searchBarContainer">
-			<div id="HiddenMenuBtn"><i onClick="openNav('260px',($(window).width()-260).toString()+'px',($(window).width()-250).toString()+'px');" class="fa fa-bars imgBtn"></i></div>
-			<div class="search-container">
-			 	<input type="text" placeholder="Search... <Device, Room, Subscription, Email...>" name="search">
-		  	</div>
-		</div>
-
-		<div id="sideMenu" class="sidenav">
-			<p class="closebtn" id="closeSideNav" onclick="closeNav()">&times;</p>
-
-			<div id="UpcomingBookings" class="sideMenuBox">
-				<strong><p class="sideNavTitle">Your Upcoming Bookings:</p></strong>
-
-				<div class="listOfItems" id="upcomingBookingsList">
-					<!--<a href="#">Empty List</a>-->
-				</div>
-
-			</div>
-			<hr>
-			<div id="MyResos" class="sideMenuBox">
-				<strong><p class="sideNavTitle">Your Resources:</p></strong>
-
-				<div class="listOfItems" id="MyResosList">
-					<!--<a href="#">Empty List</a>-->
-				</div>
-
-				<div id="bottomBtns">
-					<button id="AddRoomBtn" class="btnSuccessOutline sameLine ManageResosBtns" onClick="openAddResos(); backToFirstAResosSlide();">Add a Resource</button>
-				</div>
-			</div>
+			
+			<div id="SettingsBtnTopNav">
+ 	 			<i style="font-size: 35px; color:black;" onclick="window.location='Settings.html'" class="fa fa-cog imgBtn"></i>
+ 	 		</div>
+ 	 		
+ 	 		<div id="BookmarkBtnTopNav">
+ 	 			<i style="font-size: 35px; color:black;" class="fa fa-bookmark imgBtn"></i>
+ 	 		</div>
+ 	 		
+ 	 		<div id="HomeBtnTopNav">
+ 	 			<i style="font-size: 40px; color:black;" class="fa fa-home imgBtn"></i>
+ 	 		</div>
+ 	 		
 		</div>
 		<!--Navigation panel end-->
-
+		
+		<div class="MainPageSearch">
+			<h1 align="center" style="margin: 0; letter-spacing: 3px; " class="lunaFont" id="mainTitle">DCB BOOKINGS</h1>
+			<div class="text">
+				<input placeholder="Search for a resource..." class="searchBar">
+			</div>
+			<br>
+			<p style="margin: 0 0 0 14px; color: white;" align="left" id="whatResultsText">Recently Visted:</p>
+			<div id="SearchResultsAndRV">
+				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
+				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
+				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
+				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
+			</div>
+		</div>
+		
 		<!--Modal To Add a Resource start-->
 		<div id="addResourceModal" class="Modal">
 			<!--Add resourceModalContent Content-->
@@ -140,7 +176,16 @@
 								<option value="TeacherStudent">Make room available to both Teachers and Students</option>
 							</select>
 						</div>
-						<br><br><br>
+						<br>
+						<div class="custom-select">
+							<select id="BookingRights">
+								<option value="invalid">Booking Rights:</option>
+								<option value="NoValidation">No validation required for user to book periods</option>
+								<option value="StudentValidation">Make ONLY students validate their bookings with admin users</option>
+								<option value="AllValidation">Make ALL users validate their bookings with admin users</option>
+							</select>
+						</div>
+						<br>
 						<label>Room Admin:</label>
 						<input type="text" id="RoomAdmin1" name="Admin1" readonly>
 
@@ -148,8 +193,9 @@
 						<input type="text" id="RoomAdmin2" placeholder="Other Admins [ Enter Emails ]:" name="Admin2">
 
 						<input type="checkbox" id="planAheadCB">&nbsp;Plan Ahead [Close booking ability 30 minutes ahead of time]<br>
-						<input type="checkbox" id="30MinPeriodCB">&nbsp;30 minute period [Split each period into 30 minute sections]<br><br>
-
+						<input type="checkbox" id="30MinPeriodCB">&nbsp;30 minute period [Split each period into 30 minute sections]<br>
+						
+						<br>
 						<center><button class="LandingModalBtns" onClick="addRoomNext2();">Next</button></center>
 						<p id="AddResosAddRoomErrMsg2" class="AddResosErrMsg"></p>
 					</div>
@@ -258,38 +304,7 @@
 				</div>
 			</div>
 		</div>
-
 		<!--Modal To Add a Resource end-->
-		<div id="allResosContainer">
-
-			<div id="RecentlyVisitedResos">
-				<p class="MainPageP">Recently Visited Resources:</p>
-				<div class="Box room">
-					<i class="fa fa-bookmark-o imgBtn bookmark" aria-hidden="true"></i>
-					<p><strong>Technology 5</strong><br><em>room</em></p>
-					<button class="btnSuccessOutline">View</button>
-				</div>
-			</div>
-
-			<hr>
-
-			<div id="BookedmarkedResos">
-				<p class="MainPageP">Bookmarked Resources:</p>
-				<div id="bookmarkedResosBoxes">
-					<em><p>Loading...</p></em>
-				</div>
-			</div>
-
-			<hr>
-
-			<div id="allResos">
-				<p class="MainPageP">All Resources:</p>
-				<div id="allResosBoxes">
-					<em><p>Loading...</p></em>
-				</div>
-			</div>
-
-		</div>
 
 		<!--Show Timetable Module-->
 		<div id="timeTableModal" class="Modal">
@@ -357,35 +372,6 @@
 	</body>
 
 	<script>//initilizers
-		//for small screens
-		if ($(window).width() < 1130)
-		{
-			closeNav();
-			$("#HiddenMenuBtn").show();
-			$("#closeSideNav").show();
-		}
-		else
-		{
-			openNav("23%","77%","80%");
-			$("#HiddenMenuBtn").hide();
-			$("#closeSideNav").hide();
-		}
-		$(window).resize(function()
-		{
-			if ($(window).width() < 1130)
-			{
-				closeNav();
-				$("#HiddenMenuBtn").show();
-				$("#closeSideNav").show();
-		  	}
-			else
-		 	{
-				openNav("23%","77%","80%");
-				$("#HiddenMenuBtn").hide();
-				$("#closeSideNav").hide();
-			}
-		});
-		
 		$(function()//initializing datepicker
 		{
 			$(".datepicker").datepicker({
@@ -398,7 +384,7 @@
 		NProgress.start();
 		getUserEmail();
 		checkEmailVar();
-		FunnyloadingTxt("loaderTxt",true,2000);
+		FunnyloadingTxt("loaderTxt", true, 2000);
 		function checkEmailVar() // could be moreefficient if you searched for the specific user email
 		{
 			if(userEmail==null)

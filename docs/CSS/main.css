@@ -56,7 +56,24 @@ h1,h2,h3,h4,p,label,a
 {
 	width: 100%;
 	margin: 0;
+	z-index: 20;
 }
+#logoTop2
+{
+	background-color: rgba(255,255,255,0.90);
+	width: 80px;
+	height: 106.20472441px;
+	padding:5px 10px 0 10px; 
+	margin-left: 60px;
+	margin-top: 0px; 
+}
+#logoTop2 img
+{
+	width: 100%;
+	margin: 0;
+	z-index: 20;
+}
+
 .searchBar
 {
 	width: 80%;
@@ -522,16 +539,14 @@ h1,h2,h3,h4,p,label,a
 #navBar /*navbar code for the top*/
 {
 	position: fixed;
-	height: 50px;
+	height: 106.20472441px;
 	width:100%;
 	top:0;
 	left:0;
 	right:0;
 	color:white;
-	background-color: #0C1F3F;
+	background-color: #699FB0;
 	display:flex;
-	align-items: center;
-	justify-content: center;
 	z-index: 4;
 }
 #title p /*navbar code for the top, title code*/
@@ -582,29 +597,60 @@ h1,h2,h3,h4,p,label,a
   border: 3px solid #555;
 }
 
+#SettingsBtnTopNav
+{
+	width: 20px;
+	height: 20px;
+	margin-right: 20px;
+	margin-left: 2px;
+	margin-top: 10px;
+	position: absolute;
+	right:0;
+}
+#BookmarkBtnTopNav
+{
+	width: 20px;
+	height: 20px;
+	margin-right: 20px;
+	margin-left: 2px;
+	margin-top: 10px;
+	position: absolute;
+	right:80px;
+}
+#HomeBtnTopNav
+{
+	width: 20px;
+	height: 20px;
+	margin-right: 23px;
+	margin-left: 2px;
+	margin-top: 8px;
+	position: absolute;
+	right:125px;
+}
+
 /*dropdown Code*/
 .dropbtn
 {
 	width: 20px;
 	height: 20px;
-	background-color:#0C1F3F;
-	margin-right: 15px;
+	margin-right: 20px;
 	margin-left: 2px;
-	margin-top: 2px;
+	margin-top: 10px;
 }
 .dropdown
 {
 	position: absolute;
-	right:0;
+	right:40px;
 	display: inline-block;
 }
 .dropdown-content
 {
 	display: none;
 	position: absolute;
-	right:0px;
+	top: 45px;
+	right:5px;
 	background-color: #f1f1f1;
-	min-width: 100px;
+	min-width: 170px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
 	z-index: 1;
 }
@@ -1006,7 +1052,7 @@ h1,h2,h3,h4,p,label,a
 /*Box for the front page, interacts with user, shows room subscription or device the boxes of rooms n shit on the first page. That the user clicks into for bookings. Sorry Box is super fking general lol even i forgot what tf this was for after i came back*/
 .Box
 {
-	height: 80px;
+	height: 85px;
 	width: 130px;
 	border-radius: 5px;
 	position: relative;
@@ -1042,8 +1088,8 @@ h1,h2,h3,h4,p,label,a
 /*Room, Subscription, and Device color for box*/
 .room
 {
-	background-color: #0E7C7B;
-	color:white;
+	background-color: #DCDEDE;
+	color:black;
 }
 .subscription
 {
@@ -1475,4 +1521,11 @@ viewPort_Content
 {
 	width:72%;
 	border-radius:5px;
+}
+
+#SearchResultsAndRV
+{
+	min-width: 590px;
+	max-height: 400px;
+	overflow-y: auto;
 }

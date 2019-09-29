@@ -403,19 +403,51 @@ function dynamicGenerateYourResos(data)//dynamically generate the list for your 
 	var listOfItems;
 	if(data["userControlledResources"]=="Empty List")
 	{
-		listOfItems = "<a href='#'>"+data["userControlledResources"][0]+"</a>"
+		$("#whatResultsText").html("Your Resources:")
+		listOfItems = "<em>[You do not manage any resources]<br>You may create one with the options dropdown on the top right corner</em>"
+		$("#EmptyMsg").html(listOfItems);
 	}
 	else
 	{
 		var sortedList = bubble_Sort2DArray(data["userControlledResources"],0);
-		listOfItems = "";
-		for(var i = 0; i<sortedList.length; i++)
+		
+		allResosHTML = "" //HTML for appending to the main page for All Resos
+		//allResos [roomid, resostype]
+		var bookmarkClass = "fa fa-bookmark-o imgBtn bookmark"; //will change depending on whether or not your box is a bookmarkedBox
+		var bookMarkFunction = "";
+		var tempObject = [];
+		var tempHTML = "";
+		var ResosID = "";//id of each box
+		allResos = [];
+		// !!IMPORTATNT design fallback in the generate allresos section if the array is empty
+
+		for(var i = 0; i<sortedList.length; i++) // generating Big Array containing all the roomIDs and their Resos Type
 		{
-			listOfItems += "<a href='#' onClick='viewResos(\""+sortedList[i][0]+"\",\""+sortedList[i][1]+"\",\""+new Date()+"\");'><i class='fa fa-external-link' aria-hidden='true'></i>&nbsp;&nbsp;"+sortedList[i][0]+" : <em>"+sortedList[i][1]+"</em></a><br>"
+			tempObject = [];
+			tempObject.push(sortedList[i][0]);
+			tempObject.push(sortedList[i][1]);
+			allResos.push(tempObject);
 		}
-	}
-	//console.log(listOfItems);
-	$("#MyResosList").html(listOfItems);
+		//have to add the 2 other for loops for datadevice and datasub
+		for(var i = 0; i<allResos.length; i++)
+		{
+			bookMarkFunction = 'bookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'
+			ResosID = allResos[i][0]+":"+allResos[i][1]; //"resosID:ResosType"
+			bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
+			for(var j = 0; j<data["bookmarkedResources"].length; j++)//checking if resos is bookmarked
+			{
+				if(data["bookmarkedResources"][j][0] == allResos[i][0] && data["bookmarkedResources"][j][1] == allResos[i][1]) // if resos is bookmarked by the user both resos type and resos ID must match
+				{
+					bookmarkClass = "fa fa-bookmark imgBtn bookmark"; //change the bookmarkClassImg
+					bookMarkFunction = 'unBookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'//change the bookmark click function
+				}
+			}
+			tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button></div>'
+			allResosHTML += tempHTML;
+		}
+		$("#EmptyMsg").html("");
+		$("#SearchResultsAndRV").html(allResosHTML);
+	}	
 }
 function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //requires dataRoom, DataDevice data sub and user data in array from, not raw JSON Form.
 {
@@ -494,12 +526,25 @@ function dynamicGenerateBookmarkedResos(userData)//requires user data in array f
 	{
 		BookmarkedResosHTML = "<em><p>Empty List...</p></em>"
 	}
-	$("#bookmarkedResosBoxes").html(BookmarkedResosHTML);
+	$("#SearchResultsAndRV").html(BookmarkedResosHTML);
 }
 
 function populateYourResos()
 {
-	userInfoFetchSuccess = false;
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em>LOADING...</em>");
+	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
+	$("#viewTextMainPage").html("[My Resources]")
+	$("#searchBarAndTitle").hide();
+	
+	$("#MainPageModule").removeClass("MainPageSearch")
+	$("#MainPageModule").addClass("moveUpSearch")
+	
+	$("#SearchResultsAndRV").removeClass("withSearchBarWidth")
+	$("#SearchResultsAndRV").addClass("withoutSearchBarWidth")
+	
+	roomDataFetchSuccess = false;
+	userInfoFetchSuccess = false; 
 	validateUserInfoFetched();
 	getUserInfo(userEmail);
 	function validateUserInfoFetched()
@@ -592,7 +637,20 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 }
 function populateBookmarkedResos()
 {
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em>LOADING...</em>");
+	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
+	$("#viewTextMainPage").html("[Bookmarks]")
+	$("#searchBarAndTitle").hide();
+	
+	$("#MainPageModule").removeClass("MainPageSearch")
+	$("#MainPageModule").addClass("moveUpSearch")
+	
+	$("#SearchResultsAndRV").removeClass("withSearchBarWidth")
+	$("#SearchResultsAndRV").addClass("withoutSearchBarWidth")
+	
 	roomDataFetchSuccess = false;
+	userInfoFetchSuccess = false; 
 	validateFetchRoom();
 	getAllRooms();
 	function validateFetchRoom() // will not continue until it knows that room has been fetched
@@ -1589,12 +1647,9 @@ function generatePreviewTable(data,min30)
 
 //bookmark and unbookmark function. Will populate the online DB with the new booking.
 function bookmarkIt(resosID, resosType)// function to bookmark a certain room
-{
-	$("#allResosBoxes").css("color","black")
-	$("#allResosBoxes").html("<em><p>Processing Request...</p></em>");
-
-	$("#bookmarkedResosBoxes").css("color","black")
-	$("#bookmarkedResosBoxes").html("<em><p>Processing Request...</p></em>");
+{	
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em><p>Processing Request...</p></em>");
 
 	userInfoFetchSuccess = false;
 	validateFetchedUserInfo();
@@ -1646,18 +1701,15 @@ function bookmarkIt(resosID, resosType)// function to bookmark a certain room
 			$("#bookmarkedResosBoxes").html("<em><p>Populating new values...</p></em>");
 			$("#allResosBoxes").html("<em><p>Populating new values...</p></em>");
 
-			populateAllResos(true,true,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
+			 populateBookmarkedResos()//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
 		}
 	}
 
 }
 function unBookmarkIt(resosID, resosType)// function to bookmark a certain room
 {
-	$("#allResosBoxes").css("color","black")
-	$("#allResosBoxes").html("<em><p>Processing Request...</p></em>");
-
-	$("#bookmarkedResosBoxes").css("color","black")
-	$("#bookmarkedResosBoxes").html("<em><p>Processing Request...</p></em>");
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em><p>Processing Request...</p></em>");
 
 	userInfoFetchSuccess = false;
 	validateFetchedUserInfo();
@@ -1698,7 +1750,7 @@ function unBookmarkIt(resosID, resosType)// function to bookmark a certain room
 			$("#bookmarkedResosBoxes").html("<em><p>Populating new values...</p></em>");
 			$("#allResosBoxes").html("<em><p>Populating new values...</p></em>");
 
-			populateAllResos(true,true,false)//parameters: populateBookmarks? truefalse, populate RecentlyVisited? truefalse, populae your resos? truefalse
+			populateBookmarkedResos()//parameters: populateBookmarks? truefalse, populate RecentlyVisited? truefalse, populae your resos? truefalse
 		}
 	}
 
@@ -3730,6 +3782,20 @@ function extractHiddenContent(s)//extracts the hidden content from within a span
   return span.textContent || span.innerText;
 };
 
+function goBackToRV()
+{
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em>[Please Visit a Resource]</em>");
+	$("#whatResultsText").html('Recently Visted:')
+	$("#viewTextMainPage").html("")
+	$("#searchBarAndTitle").show();
+	
+	$("#MainPageModule").addClass("MainPageSearch")
+	$("#MainPageModule").removeClass("moveUpSearch")
+	
+	$("#SearchResultsAndRV").addClass("withSearchBarWidth")
+	$("#SearchResultsAndRV").removeClass("withoutSearchBarWidth")
+}
 
 function generateAdminTable() // generates admin table and the doc functions that come with it
 {

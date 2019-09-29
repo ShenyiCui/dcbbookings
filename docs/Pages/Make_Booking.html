@@ -32,20 +32,6 @@
 		{
 			margin: 0;
 		}
-		.MainPageSearch 
-		{
-			background-color: rgba(255,255,255,0);
-			color:black;
-			border-radius: .25em;
-			box-shadow: 0 0 .25em rgba(0,0,0,0);
-			box-sizing: border-box;
-			left: 50%;
-			padding: 10vmin;
-			position: fixed;
-			text-align: center;
-			top: 50%;
-			transform: translate(-50%, -50%);
-		}
 		@font-face 
 		{
    			font-family: 'Sans Serif';
@@ -57,7 +43,7 @@
 		} 
 	</style>
 	
-	<body style="background-color: #044e6b; color: white;">
+	<body style="background-color: #044e6b; color: black;">
 		<!--Loader showing up when the site is loading in-->
 		<div id="Loader" class="loader">
 			<img width="12.5%" src="../Images/loader.gif">
@@ -88,6 +74,8 @@
 			<div id="logoTop2">
 				<img src="../Images/Dulwich Logo.png">
 			</div>
+			
+			<h1 id="viewTextMainPage" class="lunaFont centerOfText" align="center" style="font-size: 35px; margin: 30px 0 0 220px; letter-spacing: 3px;"></h1>
 	  	
 		  	<div class="dropdown">
 		  		<div class="dropbtn">
@@ -95,7 +83,8 @@
 		  		</div>
 				<div class="dropdown-content">
 					<a href="#">All Resources</a>
-					<a href="#">Create New Resource</a>
+					<a href="javascript:openAddResos();">Create New Resource</a>
+					<a href="javascript:populateYourResos();">My Resources</a>
 					<a href="#">Upcoming Bookings</a>
 		   			<a href="#">Report a Bug</a>
 			    </div>
@@ -106,7 +95,7 @@
  	 		</div>
  	 		
  	 		<div id="BookmarkBtnTopNav">
- 	 			<i style="font-size: 35px; color:black;" class="fa fa-bookmark imgBtn"></i>
+ 	 			<i style="font-size: 35px; color:black;" class="fa fa-bookmark imgBtn" onClick="populateBookmarkedResos()"></i>
  	 		</div>
  	 		
  	 		<div id="HomeBtnTopNav">
@@ -116,18 +105,17 @@
 		</div>
 		<!--Navigation panel end-->
 		
-		<div class="MainPageSearch">
-			<h1 align="center" style="margin: 0; letter-spacing: 3px; " class="lunaFont" id="mainTitle">DCB BOOKINGS</h1>
-			<div class="text">
-				<input placeholder="Search for a resource..." class="searchBar">
+		<div id="MainPageModule" class="MainPageSearch">
+			<div id="searchBarAndTitle">
+				<h1 align="center" style="margin: 0; letter-spacing: 3px; " class="lunaFont" id="mainTitle">DCB BOOKINGS</h1>
+				<div class="text">
+					<input onChange="Search();" placeholder="Search for a resource..." class="searchBar">
+				</div>
 			</div>
 			<br>
 			<p style="margin: 0 0 0 14px; color: white;" align="left" id="whatResultsText">Recently Visted:</p>
-			<div id="SearchResultsAndRV">
-				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
-				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
-				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
-				<div class="Box room"><i class="fa fa-bookmark imgBtn bookmark" aria-hidden="true"></i><p><strong>Technology 1</strong><br><em>room</em></p><button class="btnSuccessOutline">View</button></div>
+			<div id="SearchResultsAndRV" class="withSearchBarWidth">
+				<p id="EmptyMsg" style="color: white; margin: 0;"><em>[Please Visit a Resource]</em></p>
 			</div>
 		</div>
 		
@@ -402,10 +390,10 @@
 			if(resosExistCheckAndDeleteComplete == true)
 			{
 				individualData = individualData.Items[0];
-				dynamicGenerateUpcomingBookings(individualData);
-				dynamicGenerateYourResos(individualData);
-				dynamicGenerateBookmarkedResos(individualData);
-				populateAllResos(false,false,false)
+				//dynamicGenerateUpcomingBookings(individualData);
+				//dynamicGenerateYourResos(individualData);
+				//dynamicGenerateBookmarkedResos(individualData);
+				//populateAllResos(false,false,false)
 				//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
 				$("#Loader").fadeOut();
 				NProgress.inc();

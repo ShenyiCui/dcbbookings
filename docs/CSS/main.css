@@ -1523,9 +1523,58 @@ viewPort_Content
 	border-radius:5px;
 }
 
-#SearchResultsAndRV
+.withoutSearchBarWidth
 {
 	min-width: 590px;
-	max-height: 400px;
+	height: 700px;
+	max-height: 700px;
+	min-height: 700px;
 	overflow-y: auto;
+}
+.withSearchBarWidth
+{
+	min-width: 590px;
+	max-height: 500px;
+	overflow-y: auto;
+}
+.centerOfText
+{
+	border-radius: .25em;
+	box-shadow: 0 0 .25em rgba(0,0,0,0);
+	box-sizing: border-box;
+	left: 53%;
+	padding: 8vmin;
+	position: fixed;
+	text-align: center;
+	top:40px;
+	transform: translate(-95%, -50%);
+	width: 550px
+}
+.MainPageSearch 
+{
+	background-color: rgba(255,255,255,0);
+	color:black;
+	border-radius: .25em;
+	box-shadow: 0 0 .25em rgba(0,0,0,0);
+	box-sizing: border-box;
+	left: 50%;
+	padding: 10vmin;
+	position: fixed;
+	text-align: center;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+.moveUpSearch
+{
+	background-color: rgba(255,255,255,0);
+	color:black;
+	border-radius: .25em;
+	box-shadow: 0 0 .25em rgba(0,0,0,0);
+	box-sizing: border-box;
+	left: 50%;
+	padding: 10vmin;
+	position: fixed;
+	text-align: center;
+	top: 520px;
+	transform: translate(-50%, -50%);
 }

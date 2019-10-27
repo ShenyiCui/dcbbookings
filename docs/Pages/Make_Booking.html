@@ -82,7 +82,7 @@
 		  			<i style="font-size: 35px; color:black;" class="fa fa-bars imgBtn"></i>
 		  		</div>
 				<div class="dropdown-content">
-					<a href="#">All Resources</a>
+					<a href="javascript:populateAllResos();">All Resources</a>
 					<a href="javascript:openAddResos();">Create New Resource</a>
 					<a href="javascript:populateYourResos();">My Resources</a>
 					<a href="#">Upcoming Bookings</a>
@@ -91,15 +91,15 @@
 			</div>
 			
 			<div id="SettingsBtnTopNav">
- 	 			<i style="font-size: 35px; color:black;" onclick="window.location='Settings.html'" class="fa fa-cog imgBtn"></i>
+ 	 			<i style="font-size: 35px; color:black;" onclick="window.location='Settings.html'" class="fa fa-cog imgBtn" title="Settings"></i>
  	 		</div>
  	 		
  	 		<div id="BookmarkBtnTopNav">
- 	 			<i style="font-size: 35px; color:black;" class="fa fa-bookmark imgBtn" onClick="populateBookmarkedResos()"></i>
+ 	 			<i style="font-size: 35px; color:black;" class="fa fa-bookmark imgBtn" onClick="populateBookmarkedResos()" title="Bookmarks"></i>
  	 		</div>
  	 		
  	 		<div id="HomeBtnTopNav">
- 	 			<i style="font-size: 40px; color:black;" class="fa fa-home imgBtn"></i>
+ 	 			<i style="font-size: 40px; color:black;" class="fa fa-home imgBtn" title="Home"></i>
  	 		</div>
  	 		
 		</div>
@@ -115,7 +115,7 @@
 			<br>
 			<p style="margin: 0 0 0 14px; color: white;" align="left" id="whatResultsText">Recently Visted:</p>
 			<div id="SearchResultsAndRV" class="withSearchBarWidth">
-				<p id="EmptyMsg" style="color: white; margin: 0;"><em>[Please Visit a Resource]</em></p>
+				<p id="EmptyMsg" style="color: white; margin: 0;"><em>Loading...</em></p>
 			</div>
 		</div>
 		
@@ -140,20 +140,20 @@
 
 					<!--Add Room Slide 1, <Slide 2>-->
 					<div class="AddResosSlide">
-						<img class="imgBtn" onClick="currentAResosSlide(1)" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+						<img class="imgBtn" onClick="currentAResosSlide(1); $('#addRoom1').show(); $('#addRoom2').show(); $('#skipBtn').show(); $('#addRoom4').show();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
 						<h1 align="center">Add Room</h1>
 						<br>
 						<input type="text" id="RoomID" placeholder="Room Name:" name="primaryKey">
 						<input type="text" id="department" placeholder="Department:" name="department">
 						<label>Description:</label>
 						<textarea id="AddResosDescription"></textarea>
-						<center><button class="LandingModalBtns" onClick="addRoomNext1();">Next</button></center>
+						<center><button id="addRoom1" class="LandingModalBtns" onClick="addRoomNext1();">Next</button></center>
 						<p id="AddResosAddRoomErrMsg1" class="AddResosErrMsg"></p>
 					</div>
 
 					<!--Add Room Slide 2, <Slide 3>-->
 					<div class="AddResosSlide">
-						<img class="imgBtn" onClick="plusAResosSlides(-1)" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+						<img class="imgBtn" onClick="plusAResosSlides(-1); $('#addRoom1').show(); $('#addRoom2').show(); $('#skipBtn').show(); $('#addRoom4').show();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
 						<h1 align="center">Add Room</h1>
 						<br>
 						<div class="custom-select">
@@ -184,14 +184,14 @@
 						<input type="checkbox" id="30MinPeriodCB">&nbsp;30 minute period [Split each period into 30 minute sections]<br>
 						
 						<br>
-						<center><button class="LandingModalBtns" onClick="addRoomNext2();">Next</button></center>
+						<center><button id="addRoom2" class="LandingModalBtns" onClick="addRoomNext2();">Next</button></center>
 						<p id="AddResosAddRoomErrMsg2" class="AddResosErrMsg"></p>
 					</div>
 
 					<!--Add Room Slide 3 <Slide 4>-->
 					<div class="AddResosSlide">
 						<div class="modal-header">
-							<img class="imgBtn" onClick="plusAResosSlides(-1); preTimeableClasses();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+							<img class="imgBtn" onClick="plusAResosSlides(-1); preTimeableClasses(); $('#addRoom1').show(); $('#addRoom2').show(); $('#skipBtn').show(); $('#addRoom4').show();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
 							<h1 align="center">Add Room</h1>
 						</div>
 
@@ -256,7 +256,7 @@
 
 					<!--Add Room Slide 4 <Slide 5>-->
 					<div class="AddResosSlide">
-						<img class="imgBtn" onClick="plusAResosSlides(-1); preReviewInfoClasses();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
+						<img class="imgBtn" onClick="plusAResosSlides(-1); preReviewInfoClasses(); $('#addRoom1').show(); $('#addRoom2').show(); $('#skipBtn').show(); $('#addRoom4').show();" src="../Images/Back.png" width="2.5%" style="margin: 0;">
 						<h1 align="center">Add Room <em>[Review Information]:</em></h1>
 						<em><p align="center">All settings can be modified later</p></em>
 						<br>
@@ -285,7 +285,7 @@
 						<strong><label class="reviewTitles">Schedule:</label></strong>
 						<div id="reviewInfoPreviewInfo"></div>
 						<br>
-						<button class="createResosBtn" onClick="createResos('room')">Create Resource</button>
+						<button id="addRoom4" class="createResosBtn" onClick="createResos('room')">Create Resource</button>
 						<p id="AddResosAddRoomErrMsg4" class="AddResosErrMsg"></p>
 						<br>
 					</div>
@@ -395,6 +395,7 @@
 				//dynamicGenerateBookmarkedResos(individualData);
 				//populateAllResos(false,false,false)
 				//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
+				populateRecentlyVisted();
 				$("#Loader").fadeOut();
 				NProgress.inc();
 				NProgress.done();
@@ -426,6 +427,10 @@
 		function openAddResos()
 		{
 			AddResosModal.style.display = "block";
+			addRoomClearAll()
+			currentAResosSlide(1)
+			$("#addresosContent").addClass("width700");
+			$("#addresosContent").removeClass("width80Percent");
 		}
 		function closeAddResos()
 		{

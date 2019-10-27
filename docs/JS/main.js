@@ -493,7 +493,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	{
 		allResosHTML = "Empty List..."
 	}
-	$("#allResosBoxes").html(allResosHTML);
+	$("#SearchResultsAndRV").html(allResosHTML);
 }
 function dynamicGenerateBookmarkedResos(userData)//requires user data in array from, not raw JSON Form.
 {
@@ -567,9 +567,21 @@ function populateYourResos()
 	}
 }
 
-function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates the all Resos HTML in main page
+function populateAllResos() // populates the all Resos HTML in main page
 //first 3 boolean parameters, when true, this function will also automically populate the bookmark div and the recently visited div and the your resos list, if these paramters aare true.
 {
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em>LOADING...</em>");
+	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
+	$("#viewTextMainPage").html("[All Resources]")
+	$("#searchBarAndTitle").hide();
+	
+	$("#MainPageModule").removeClass("MainPageSearch")
+	$("#MainPageModule").addClass("moveUpSearch")
+	
+	$("#SearchResultsAndRV").removeClass("withSearchBarWidth")
+	$("#SearchResultsAndRV").addClass("withoutSearchBarWidth")
+	
 	roomDataFetchSuccess = false;
 	validateFetchRoom();
 	getAllRooms();
@@ -578,15 +590,6 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 		//output messages to make the wait seem more bearable
 		$("#allResosBoxes").css("color","black")
 		$("#allResosBoxes").html("<em><p>Fetching all room data...</p></em>");
-		if(bookmarkPop == true)
-		{
-			$("#bookmarkedResosBoxes").css("color","black")
-			$("#bookmarkedResosBoxes").html("<em><p>Fetching all room data...</p></em>");
-		}
-		if(yourResosPop == true)
-		{
-			$("#MyResosList").html("<em><p>Processing Data...</p></em>")
-		}
 		//output messages end
 
 		if(roomDataFetchSuccess == false) //if data is not fetched
@@ -606,14 +609,6 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 	{
 		//output messages to make the wait seem more bearable
 		$("#allResosBoxes").html("<em><p>Success! building new HTML</p></em>");
-		if(bookmarkPop == true)
-		{
-			$("#bookmarkedResosBoxes").html("<em><p>Success! building new HTML</p></em>");
-		}
-		if(yourResosPop == true)
-		{
-			$("#MyResosList").html("<em><p>Success! building new HTML</p></em>")
-		}
 		//output messages end
 
 		if(userInfoFetchSuccess == false)
@@ -623,14 +618,6 @@ function populateAllResos(bookmarkPop,recentVisitPop,yourResosPop) // populates 
 		else
 		{
 			dynamicGenerateAllResos(allRooms["Items"],[],[],individualData["Items"][0]) //parameters are: dataRoom, DataDeviece, datasubscription, user data
-			if(bookmarkPop==true)
-			{
-				dynamicGenerateBookmarkedResos(individualData["Items"][0]);
-			}
-			if(yourResosPop == true)
-			{
-				dynamicGenerateYourResos(individualData["Items"][0]);
-			}
 			userInfoFetchSuccess = false;
 		}
 	}
@@ -882,7 +869,7 @@ function createResos(resosType) //creates new Resos depending on the type you en
 				{
 					fetchAndUpdateMultiAdminControlledResos("room",RoomAdm)//updating user information
 				}
-
+				closeAddResos()
 			},
 			error:function(data)
 			{
@@ -971,7 +958,7 @@ function fetchAndUpdateUserControlledResos(resoType) // get user info and then u
 		{
 			$(errMsgID).css("color","green");
 			$(errMsgID).html("Success! Resource succesfully created <br> User info sucessfully fetched and updated");
-			populateAllResos(false,false,true)//updates all resos, but will not update the bookmark tab and the recently visited tab. but will update the your resos tabs
+			populateYourResos();//updates all resos, but will not update the bookmark tab and the recently visited tab. but will update the your resos tabs
 			userInfoUpdateSuccess = false;
 		}
 	}
@@ -1086,7 +1073,7 @@ function fetchAndUpdateMultiAdminControlledResos(resoType,adminArray)// get user
 			{
 				$(errMsgID).css("color","green");
 				$(errMsgID).html("Success! Resource succesfully created <br> User info sucessfully fetched and updated");
-				populateAllResos(false,false,true)//updates all resos, but will not update the bookmark tab and the recently visited tab. but will update the your resos tabs
+				populateYourResos();//updates all resos, but will not update the bookmark tab and the recently visited tab. but will update the your resos tabs
 				userInfoUpdateSuccess = false;
 				//checking if loop needs to be rerun
 				if(i<iStop)
@@ -1119,6 +1106,7 @@ function addRoomClearAll()//clears all the input fields from previous entries
 }
 function addRoomNext1() // checking to see if all fields are filled and to see if primary key repeats
 {
+	$("#addRoom1").hide();
 	$("#AddResosAddRoomErrMsg1").css("color","black");
 	$("#AddResosAddRoomErrMsg1").html("Processing Information...");
 	var addResosRoomDescription = new nicEditors.findEditor('AddResosDescription');
@@ -1143,6 +1131,7 @@ function addRoomNext1() // checking to see if all fields are filled and to see i
 	}
 	else // fields are not all filled
 	{
+		$("#addRoom1").show();
 		$("#AddResosAddRoomErrMsg1").css("color","red");
 		$("#AddResosAddRoomErrMsg1").html("Err, Fields cannot be empty");
 	}
@@ -1180,6 +1169,7 @@ function validateAddRoom1() //checking to see if primary key repeats
 }
 function addRoomNext2() //checking to make sure that select isnt invalid
 {
+	$("#addRoom2").hide();
 	if($("#AccessRightsSelect").val()!="invalid")
 	{
 		plusAResosSlides(1);
@@ -1224,12 +1214,14 @@ function addRoomNext2() //checking to make sure that select isnt invalid
 	}
 	else
 	{
+		$("#addRoom2").show();
 		$("#AddResosAddRoomErrMsg2").css("color","red");
 		$("#AddResosAddRoomErrMsg2").html("Err, you must make a selection");
 	}
 }
 function AddResosSkip()//function called when users skip the upload feature.
 {
+	$("#addRoom3").hide();
 	plusAResosSlides(1);
 	timetableHTML = "Empty Permanent Schedule, User Skipped Upload"; // skipped so preview Upload Table is null;
 	populateReviewInfo();
@@ -1868,6 +1860,144 @@ function populateTimetableModal(timetableName,resosID,resosType,weekBegining)
 function changeWeekFunc(resosID, resosType)
 {
 	viewResos(resosID,resosType,  moment($('#whichWeekBtn').datepicker('getDate')).add(30, 'm').toDate())
+}
+
+function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited list
+{
+	var recentlyVisitedTemp = [];
+	var emptyList = [];
+	var currentData;
+	userInfoFetchSuccess = false;
+	getUserInfo(userEmail);
+	checkUserFetch();
+	function checkUserFetch()
+	{
+		if(userInfoFetchSuccess == false)
+		{
+			window.setTimeout(checkUserFetch, 1000);
+		}
+		else
+		{
+			currentData = individualData.Items[0].recentlyBookedResources;
+			if(currentData[0]=="Empty List")
+			{
+				emptyList.push(resosID)
+				emptyList.push(resosType)
+				recentlyVisitedTemp.push(emptyList)
+			}
+			else
+			{
+				recentlyVisitedTemp = currentData;
+				
+				if(recentlyVisitedTemp.length >= 4)
+				{
+					recentlyVisitedTemp.shift();
+				}
+				
+				emptyList.push(resosID)
+				emptyList.push(resosType)
+				
+				var doesntExist = true; 
+				
+				for(var i =0; i<recentlyVisitedTemp.length; i++)
+				{
+					if(emptyList == recentlyVisitedTemp[i])
+					{
+						doesntExist = false; 
+					}
+				}
+				
+				if(doesntExist == true)
+				{
+					recentlyVisitedTemp.push(emptyList)
+				}
+				
+			}
+			
+			updateUserInfo("recentlyBookedResources",recentlyVisitedTemp)
+			
+			userInfoUpdateSuccess = false;
+			validateUpdate()
+			function validateUpdate()
+			{
+				if(userInfoUpdateSuccess == false)
+				{
+					window.setTimeout(validateUpdate,1000);
+				}
+				else
+				{
+					userInfoUpdateSuccess = false; 
+				}
+			}
+			
+		}
+	}
+}
+
+function populateRecentlyVisted()
+{
+	userInfoFetchSuccess = false;
+	getUserInfo(userEmail);
+
+	checkUserFetch();
+	function checkUserFetch()
+	{
+		if(userInfoFetchSuccess == false)
+		{
+			window.setTimeout(checkUserFetch, 1000);
+		}
+		else
+		{
+			console.log(individualData.Items[0].recentlyBookedResources)
+			if(individualData.Items[0].recentlyBookedResources[0]!="Empty List")
+			{
+				generateRecentlyVisitedHTML(individualData.Items[0].recentlyBookedResources);
+			}
+			userInfoFetchSuccess = false;
+		}
+	}
+}
+function generateRecentlyVisitedHTML(data)
+{
+	allResosHTML = "" //HTML for appending to the main page for All Resos
+	//allResos [roomid, resostype]
+	var bookmarkClass = "fa fa-bookmark-o imgBtn bookmark"; //will change depending on whether or not your box is a bookmarkedBox
+	var bookMarkFunction = "";
+	var tempObject = [];
+	var tempHTML = "";
+	var ResosID = "";//id of each box
+	allResos = [];
+	var userData = individualData.Items[0];
+	// !!IMPORTATNT design fallback in the generate allresos section if the array is empty
+	for(var i = 0; i<data.length; i++) // generating Big Array containing all the roomIDs and their Resos Type
+	{
+		tempObject = [];
+		tempObject.push(data[i][0]);
+		tempObject.push(data[i][1]);
+		allResos.push(tempObject);
+	}
+	//have to add the 2 other for loops for datadevice and datasub
+	for(var i = 0; i<allResos.length; i++)
+	{
+		bookMarkFunction = 'bookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'
+		ResosID = allResos[i][0]+":"+allResos[i][1]; //"resosID:ResosType"
+		bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
+		for(var j = 0; j<userData["bookmarkedResources"].length; j++)//checking if resos is bookmarked
+		{
+			if(userData["bookmarkedResources"][j][0] == allResos[i][0] && userData["bookmarkedResources"][j][1] == allResos[i][1]) // if resos is bookmarked by the user both resos type and resos ID must match
+			{
+				bookmarkClass = "fa fa-bookmark imgBtn bookmark"; //change the bookmarkClassImg
+				bookMarkFunction = 'unBookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'//change the bookmark click function
+			}
+		}
+		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button></div>'
+		allResosHTML += tempHTML;
+	}
+	if(allResosHTML == "")//fallback incase all 3 arrays are empty
+	{
+		allResosHTML = "<em>[Please Visit a Resource]</em>"
+	}
+	$("#SearchResultsAndRV").html(allResosHTML);
 }
 
 function removeTimetableEventListeners() //used in viewRoom's document functions to for listening for user activity
@@ -3481,6 +3611,7 @@ function checkIfResosAdmin()//function that checks whether or not you are the ad
 //View Room Start
 function viewResos(resosID,resosType,weekBegining)
 {
+	addToRecentlyVisted(resosID,resosType)
 	currentResosID = resosID; // currentID the user is viewing
 	currentResosType = resosType; // current resostype the user is viewing
 	openTimetableModal();
@@ -3587,7 +3718,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	
 	var userBookings = []//array containing the userbookings for that week.
 	var fetchedUserBookings = data["BookingSchedule"] //array containing the fetched user bookings
-	console.log(fetchedUserBookings)
+	//console.log(fetchedUserBookings)
 	
 	if(fetchedUserBookings[0]!="Empty List") // populating the userBookings array;
 	{
@@ -3795,6 +3926,7 @@ function goBackToRV()
 	
 	$("#SearchResultsAndRV").addClass("withSearchBarWidth")
 	$("#SearchResultsAndRV").removeClass("withoutSearchBarWidth")
+	populateRecentlyVisted();
 }
 
 function generateAdminTable() // generates admin table and the doc functions that come with it

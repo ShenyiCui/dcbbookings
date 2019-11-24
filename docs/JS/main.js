@@ -1889,10 +1889,6 @@ function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited l
 			{
 				recentlyVisitedTemp = currentData;
 				
-				if(recentlyVisitedTemp.length >= 4)
-				{
-					recentlyVisitedTemp.shift();
-				}
 				
 				emptyList.push(resosID)
 				emptyList.push(resosType)
@@ -1901,7 +1897,7 @@ function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited l
 				
 				for(var i =0; i<recentlyVisitedTemp.length; i++)
 				{
-					if(emptyList == recentlyVisitedTemp[i])
+					if(compareArray(emptyList,recentlyVisitedTemp[i]))
 					{
 						doesntExist = false; 
 					}
@@ -1909,6 +1905,10 @@ function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited l
 				
 				if(doesntExist == true)
 				{
+					if(recentlyVisitedTemp.length >= 4)
+					{
+						recentlyVisitedTemp.shift();
+					}
 					recentlyVisitedTemp.push(emptyList)
 				}
 				
@@ -3916,7 +3916,7 @@ function extractHiddenContent(s)//extracts the hidden content from within a span
 function goBackToRV()
 {
 	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
-	$("#EmptyMsg").html("<em>[Please Visit a Resource]</em>");
+	$("#EmptyMsg").html("<em>Loading...</em>");
 	$("#whatResultsText").html('Recently Visted:')
 	$("#viewTextMainPage").html("")
 	$("#searchBarAndTitle").show();
@@ -4289,22 +4289,88 @@ function getAllAdmins()//gets all admins and puts them in the allMasterAdmins ar
 	});
 }
 
-function searchMyResos() //search My resos list code
+function Search() //search My resos list code
 {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("searchResosInput");
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myResosList");
-    li = ul.getElementsByTagName("li");
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
+	var dataOfRoomsList = []
+	var tempRoomsList = []
+	var dataOfRooms = allRooms.Items;
+	var bookmarkedResos = individualData.Items[0].bookmarkedResources // array
+	
+	//console.log(bookmarkedResos)
+	
+	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+	$("#EmptyMsg").html("<em>LOADING...</em>");
+	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
+	
+	for(var i = 0; i<dataOfRooms.length; i++)
+	{
+		//console.log(dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()))
+		
+		//console.log(dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase()))
+		
+		if
+		(
+			dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()) 
+		   ||
+		    dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
+			
+		)
+		{
+			tempRoomsList = []
+			tempRoomsList.push(dataOfRooms[i].RoomID)
+			tempRoomsList.push("room")
+			
+			dataOfRoomsList.push(tempRoomsList)
+			console.log(dataOfRoomsList)
+		}
+	}
+	console.log(dataOfRoomsList)
+	//populating List
+	var tempHTML = "";
+	var searchResos = "";
+	bookmarkedResos
+	for(var i = 0; i<dataOfRoomsList.length; i++)
+	{
+		var ResosID = ""
+		
+		for(var j = 0; j<bookmarkedResos.length; j++)
+		{
+			var foundBookmark = false; 
+			
+			//console.log(bookmarkedResos[i])
+			//console.log(dataOfRoomsList[i])
+
+			if(compareArray(bookmarkedResos[j],dataOfRoomsList[i]))
+			{
+				foundBookmark = true; 	
+			}
+			
+		}
+		
+		
+		
+		if(foundBookmark == true)
+		{
+			//Bookmarked Resos
+			ResosID = dataOfRoomsList[i][0]+":"+dataOfRoomsList[i][1]+"BM"
+			bookMarkFunction = 'BookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
+			bookmarkClass = "fa fa-bookmark imgBtn bookmark";
+		}
+		else
+		{
+			//unbookedmarked Resos
+			ResosID = dataOfRoomsList[i][0]+":"+dataOfRoomsList[i][1]
+			bookMarkFunction = 'unBookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
+			bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
+		}
+		
+		tempHTML = '<div id="'+ResosID+'" class="Box '+dataOfRoomsList[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+dataOfRoomsList[i][0]+'</strong><br><em>'+dataOfRoomsList[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button></div>'
+		
+		searchResos+=tempHTML;
+	}
+	//populating list end
+	$("#SearchResultsAndRV").html(searchResos);
+	
 }
 function getMyResos()//gets user resos and populates it on the search feature in settings in slide 2, Open Slide
 {

@@ -4291,85 +4291,96 @@ function getAllAdmins()//gets all admins and puts them in the allMasterAdmins ar
 
 function Search() //search My resos list code
 {
-	var dataOfRoomsList = []
-	var tempRoomsList = []
-	var dataOfRooms = allRooms.Items;
-	var bookmarkedResos = individualData.Items[0].bookmarkedResources // array
-	
-	//console.log(bookmarkedResos)
-	
-	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
-	$("#EmptyMsg").html("<em>LOADING...</em>");
-	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
-	
-	for(var i = 0; i<dataOfRooms.length; i++)
+	if($("#searchForResos").val().trim().toLowerCase().length != 0)
 	{
-		//console.log(dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()))
-		
-		//console.log(dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase()))
-		
-		if
-		(
-			dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()) 
-		   ||
-		    dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
-			
-		)
-		{
-			tempRoomsList = []
-			tempRoomsList.push(dataOfRooms[i].RoomID)
-			tempRoomsList.push("room")
-			
-			dataOfRoomsList.push(tempRoomsList)
-			console.log(dataOfRoomsList)
-		}
-	}
-	console.log(dataOfRoomsList)
-	//populating List
-	var tempHTML = "";
-	var searchResos = "";
-	bookmarkedResos
-	for(var i = 0; i<dataOfRoomsList.length; i++)
-	{
-		var ResosID = ""
-		
-		for(var j = 0; j<bookmarkedResos.length; j++)
-		{
-			var foundBookmark = false; 
-			
-			//console.log(bookmarkedResos[i])
-			//console.log(dataOfRoomsList[i])
 
-			if(compareArray(bookmarkedResos[j],dataOfRoomsList[i]))
+
+		var dataOfRoomsList = []
+		var tempRoomsList = []
+		var dataOfRooms = allRooms.Items;
+		var bookmarkedResos = individualData.Items[0].bookmarkedResources // array
+
+		//console.log(bookmarkedResos)
+
+		$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+		$("#EmptyMsg").html("<em>LOADING...</em>");
+		$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
+
+		for(var i = 0; i<dataOfRooms.length; i++)
+		{
+			//console.log(dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()))
+
+			//console.log(dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase()))
+
+			if
+			(
+				dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()) 
+			   ||
+				dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
+
+			)
 			{
-				foundBookmark = true; 	
+				tempRoomsList = []
+				tempRoomsList.push(dataOfRooms[i].RoomID)
+				tempRoomsList.push("room")
+
+				dataOfRoomsList.push(tempRoomsList)
+				console.log(dataOfRoomsList)
 			}
-			
 		}
-		
-		
-		
-		if(foundBookmark == true)
+		console.log(dataOfRoomsList)
+		//populating List
+		var tempHTML = "";
+		var searchResos = "";
+		bookmarkedResos
+		for(var i = 0; i<dataOfRoomsList.length; i++)
 		{
-			//Bookmarked Resos
-			ResosID = dataOfRoomsList[i][0]+":"+dataOfRoomsList[i][1]+"BM"
-			bookMarkFunction = 'BookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
-			bookmarkClass = "fa fa-bookmark imgBtn bookmark";
+			var ResosID = ""
+
+			for(var j = 0; j<bookmarkedResos.length; j++)
+			{
+				var foundBookmark = false; 
+
+				//console.log(bookmarkedResos[i])
+				//console.log(dataOfRoomsList[i])
+
+				if(compareArray(bookmarkedResos[j],dataOfRoomsList[i]))
+				{
+					foundBookmark = true; 	
+				}
+
+			}
+
+
+
+			if(foundBookmark == true)
+			{
+				//Bookmarked Resos
+				ResosID = dataOfRoomsList[i][0]+":"+dataOfRoomsList[i][1]+"BM"
+				bookMarkFunction = 'BookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
+				bookmarkClass = "fa fa-bookmark imgBtn bookmark";
+			}
+			else
+			{
+				//unbookedmarked Resos
+				ResosID = dataOfRoomsList[i][0]+":"+dataOfRoomsList[i][1]
+				bookMarkFunction = 'unBookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
+				bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
+			}
+
+			tempHTML = '<div id="'+ResosID+'" class="Box '+dataOfRoomsList[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+dataOfRoomsList[i][0]+'</strong><br><em>'+dataOfRoomsList[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button></div>'
+
+			searchResos+=tempHTML;
 		}
-		else
+		//populating list end
+		$("#SearchResultsAndRV").html(searchResos);
+
+		if(dataOfRoomsList.length == 0)
 		{
-			//unbookedmarked Resos
-			ResosID = dataOfRoomsList[i][0]+":"+dataOfRoomsList[i][1]
-			bookMarkFunction = 'unBookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
-			bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
+			$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
+			$("#EmptyMsg").html("<em>No Search Results Found...</em>");
 		}
-		
-		tempHTML = '<div id="'+ResosID+'" class="Box '+dataOfRoomsList[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+dataOfRoomsList[i][0]+'</strong><br><em>'+dataOfRoomsList[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button></div>'
-		
-		searchResos+=tempHTML;
 	}
-	//populating list end
-	$("#SearchResultsAndRV").html(searchResos);
 	
 }
 function getMyResos()//gets user resos and populates it on the search feature in settings in slide 2, Open Slide

@@ -4293,8 +4293,6 @@ function Search() //search My resos list code
 {
 	if($("#searchForResos").val().trim().toLowerCase().length != 0)
 	{
-
-
 		var dataOfRoomsList = []
 		var tempRoomsList = []
 		var dataOfRooms = allRooms.Items;
@@ -4306,6 +4304,8 @@ function Search() //search My resos list code
 		$("#EmptyMsg").html("<em>LOADING...</em>");
 		$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
 
+		//console.log(dataOfRooms[0]);
+		
 		for(var i = 0; i<dataOfRooms.length; i++)
 		{
 			//console.log(dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()))
@@ -4317,6 +4317,7 @@ function Search() //search My resos list code
 				dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()) 
 			   ||
 				dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
+				
 
 			)
 			{
@@ -4325,7 +4326,24 @@ function Search() //search My resos list code
 				tempRoomsList.push("room")
 
 				dataOfRoomsList.push(tempRoomsList)
-				console.log(dataOfRoomsList)
+				//console.log(dataOfRoomsList)
+			}
+			else
+			{
+				for(var j = 0; j<dataOfRooms[i].RoomAdmin.length; j++)
+				{
+					if
+					(
+						dataOfRooms[i].RoomAdmin[j].trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
+					)
+					{
+						tempRoomsList = []
+						tempRoomsList.push(dataOfRooms[i].RoomID)
+						tempRoomsList.push("room")
+
+						dataOfRoomsList.push(tempRoomsList)
+					}
+				}
 			}
 		}
 		console.log(dataOfRoomsList)

@@ -811,6 +811,7 @@ function createResos(resosType) //creates new Resos depending on the type you en
 		var Depart = $("#department").val().trim();
 		var Descript = addResosRoomDescription.getContent().trim()+" "+getTimeStamp();
 		var BookRights = $("#BookingRights").val().trim();
+		//alert(BookRights)
 
 		var Min30P = "";
 		if($("#30MinPeriodCB").prop('checked'))
@@ -1170,7 +1171,7 @@ function validateAddRoom1() //checking to see if primary key repeats
 function addRoomNext2() //checking to make sure that select isnt invalid
 {
 	$("#addRoom2").hide();
-	if($("#AccessRightsSelect").val()!="invalid")
+	if($("#AccessRightsSelect").val()!="invalid" && $("#BookingRights").val()!="invalid")
 	{
 		plusAResosSlides(1);
 		checkAvailableUpload();
@@ -1948,7 +1949,7 @@ function populateRecentlyVisted()
 		}
 		else
 		{
-			console.log(individualData.Items[0].recentlyBookedResources)
+			//console.log(individualData.Items[0].recentlyBookedResources)
 			if(individualData.Items[0].recentlyBookedResources[0]!="Empty List")
 			{
 				generateRecentlyVisitedHTML(individualData.Items[0].recentlyBookedResources);
@@ -2103,6 +2104,7 @@ function timetableDocFunctionsRoom()
 		$("#rbookBtn").hide();
 		$("#lessonLockBtn").hide();
 		$("#quickLockBtn").hide();
+		$("#approveBtn").hide();
 		$("#rLockBtn").hide();
 		$("#preLimLoader").hide();
 
@@ -2270,6 +2272,123 @@ function timetableDocFunctionsRoom()
 				$("#bookingStatus").html("<strong>Status: </strong> locked")
 			}
 		}
+		else if(currentBookingState == pendingval)
+		{
+			timeStamp = bookingDetails[4].replace(/_/g, ' ');
+			//structure of each period in the fetched userbookings
+			/*
+			[0] - booking email
+			[1] - perpectual, nonperpectual booking etc.
+			[2] - HowManyWeeks your non-perpectual booking will go for [startWeekBegining][EndWeekBegining] or just -1
+			[3] - week 1, week 2 or both
+			[4] - timeStamp
+			[5] - ECADescription [name][description]
+			[6] - coordinate of booking [row][col] on the table
+			[7] - week begining
+			*/
+			
+			//Structure of lesson / Recurring Lock
+			/*
+			[0] - booking value, unbooked, etc
+			[1] - booking email
+			[2] - perpectual, nonperpectual booking etc.
+			[3] - week 1, week 2 or both
+			*/
+			
+			clickBookedEmail = bookingDetails[0];
+			//console.log(bookingDetails)
+			if(userEmail == clickBookedEmail)//if user is the one who made the booking
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> pending <strong><em>[Timestamp: "+timeStamp+"]</em></strong><br><strong>Email: </strong>"+clickBookedEmail)
+				$("#deleteBtn").show();
+				if($(this).hasClass("disable"))//if time to make booking has elasped.
+				{
+					$("#deleteBtn").attr("disabled", "disabled");
+					if(Recurrence=true)
+					{
+						$("#deleteBtn").removeAttr("disabled");
+					}
+				}
+				else
+				{
+					$("#deleteBtn").removeAttr("disabled");
+				}
+			}
+			else
+			{
+				$("#bookingStatus").html("<strong>Status: </strong> pending <strong><em>[Timestamp: "+timeStamp+"]</em></strong><br><strong>Email: </strong>"+clickBookedEmail)
+				$("#contactBtn").show();
+				if($(this).hasClass("disable"))
+				{
+					$("#contactBtn").attr("disabled", "disabled");
+					if(Recurrence=true)
+					{
+						$("#contactBtn").removeAttr("disabled");
+					}
+				}
+				else
+				{
+					$("#contactBtn").removeAttr("disabled");
+				}
+			}
+			if(resosAdmin == true)
+			{
+				$("#deleteBtn").show();
+				$("#deleteBtn").removeAttr("disabled");
+				$("#approveBtn").show();
+			}
+			
+			if(bookingDetails[2] != "-1" || bookingDetails[5] != "N.A")
+			{
+				var onWhatWeek = bookingDetails[3]; 
+				if(bookingDetails[3] == "Week1Week2")
+				{
+					onWhatWeek = "Week 1 & Week 2"
+				}
+				else if(bookingDetails[3] == "Week1")
+				{
+					onWhatWeek = "Week 1"
+				}
+				else if(bookingDetails[3] == "Week2")
+				{
+					onWhatWeek = "Week 2"
+				}
+				
+				var weekStart; 
+				var weekEnd; 
+				
+				var weekStartNum; 
+				var weekEndNum;
+				
+				var weeksLeft; 
+				if(bookingDetails[1] == "NP")
+				{
+					weekStart = getWeekBegining(new Date(currentWeekBegining));
+					weekEnd = bookingDetails[2].split(",")[2]+","+bookingDetails[2].split(",")[3]
+					
+					weekStartNum = transformCurrentWeek(weekStart)
+					weekEndNum = transformCurrentWeek(weekEnd)
+					
+					//console.log(weekStart)
+					//console.log(weekEnd)
+					//console.log(weekStartNum)
+					//console.log(weekEndNum)
+					weeksLeft = DifferenceInDays(transformYYYYMMDDtoDate(weekStartNum.toString()),transformYYYYMMDDtoDate(weekEndNum.toString()))
+					weeksLeft = Math.trunc(weeksLeft / 7) + 1
+					
+				}
+				else if(bookingDetails[1] == "P")
+				{
+					weeksLeft = "Perpetual"
+				}
+				$("#Description").html(
+					"<strong>ECA:</strong> " + bookingDetails[5].split(",")[0] + "<br>" + 
+					"<strong>Description:</strong> " + bookingDetails[5].split(",")[1] + "<br>" + 
+					"<strong>On Week:</strong> " + onWhatWeek + "<br>" + 
+					"<strong>Weeks Left:</strong> " + weeksLeft + "<br>"
+				)
+			}
+		}
 
 		//populating the viewport with extracted information from the cell >>>> end
 	});
@@ -2418,7 +2537,30 @@ function timetableDocFunctionsRoom()
 			[2] - perpectual, nonperpectual booking etc.
 			[3] - week 1, week 2 or both
 			*/
-			newPeriodObject.push(bookval)
+			if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
+			{
+				newPeriodObject.push(bookval)
+			}
+			else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
+			{
+				if(individualData.Items[0].role=="Student")
+				{
+					newPeriodObject.push(pendingval)
+				}
+				else
+				{
+					newPeriodObject.push(bookval)
+				}
+			}
+			else if(indiRoomData.Items[0].BookingRights=="AllValidation")
+			{
+				alert("Hello!")
+				newPeriodObject.push(pendingval)
+			}
+			console.log(indiRoomData.Items[0].BookingRights)
+			console.log(indiRoomData)
+			//console.log(individualData)
+			
 			newPeriodObject.push(userEmail)
 			newPeriodObject.push("NP")
 			newPeriodObject.push(-1)
@@ -2437,7 +2579,7 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push(intendedCoors)
 			newPeriodObject.push(formattedCurrentDate)
 			
-			//console.log(newPeriodObject);
+			console.log(newPeriodObject);
 			
 			RoombookingSchedule.push(newPeriodObject)
 			
@@ -3660,6 +3802,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 		lockval = "locked";
 		lessonval = "lesson";
 		unbookedval = "unbooked";
+		pendingval = "pending";
 		min30Periods = false;
 	}
 	else
@@ -3669,6 +3812,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 		lockval = "lck";
 		lessonval = "lsn";
 		unbookedval = "unb";
+		pendingval = "pnd";
 		min30Periods = true;
 	}
 	//building initial empty table start
@@ -4346,7 +4490,7 @@ function Search() //search My resos list code
 				}
 			}
 		}
-		console.log(dataOfRoomsList)
+		//console.log(dataOfRoomsList)
 		//populating List
 		var tempHTML = "";
 		var searchResos = "";

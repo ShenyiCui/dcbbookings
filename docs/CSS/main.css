@@ -992,6 +992,10 @@ h1,h2,h3,h4,p,label,a
 {
 	color: gray;
 }
+.pending
+{
+	color:#4d4d4d;
+}
 .bkd
 {
 	color:red;
@@ -1007,6 +1011,10 @@ h1,h2,h3,h4,p,label,a
 .lck
 {
 	color: gray;
+}
+.pnd
+{
+	color:#4d4d4d;
 }
 .hidden
 {

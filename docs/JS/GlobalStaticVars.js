@@ -81,6 +81,7 @@ var bookval;
 var lockval;
 var lessonval;
 var unbookedval;
+var pendingval;
 
 //random loading text that'll give you fun messages to look at
 var randomLoadingText = ["Looking at kittens...","Playing with yarnballs...","Sniffing catnip...","Scratching the post...","Sharpening claws...","Stalking a mouse..."]

@@ -95,3 +95,8 @@ var currentWeek = 1; // the current Week.
 var currentResosID; // currentID the user is viewing
 var currentResosType; // current resostype the user is viewing
 var currentWeekBegining; //current week the user is looing at
+
+var approveGoAhead = [false,false]; //allows the approval to go ahead
+	//[0]- deletion completed
+	//[1]- approval button activated 
+var bookDetsPerma;

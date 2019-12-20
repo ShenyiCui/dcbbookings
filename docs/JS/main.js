@@ -2027,12 +2027,15 @@ function timetableDocFunctionsRoom()
 	var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked
 	var currentBookingState = "" // stores the current booking state of the cell you are on
 	var bookingDetails; // stores the current booking detailed information in an array
+	
 	var timeStamp;//stores the timestamp the booking was made at. 
 	var RoombookingSchedule; // booking scheudle for the room. 
 	var intendedCoors; // stores the current coor the user is on
 	var formattedCurrentDate; // stores the formatted current date in DD, month thingy week Begining
 	var permaSchd; //stores the permanent scheudle of a room. 
 	var weekNow; //stores the current week now. If its variable currentWeek == 0 then weekNow will be Week1, else it'll be Week2
+	
+	
 	
 	//--->Editing Viewport > start
 	$(document).on('click', '.row_data', function(event)
@@ -2091,6 +2094,10 @@ function timetableDocFunctionsRoom()
 		var hiddenSpan = extractHiddenContent(fullCurrentStatus)
 		hiddenSpan = hiddenSpan.substr(hiddenSpan.indexOf(" ") + 1);
 		bookingDetails = hiddenSpan.split('%');
+		if(bookingDetails.length==8)
+		{
+			bookDetsPerma = bookingDetails
+		}
 		//console.log(bookingDetails)
 		//exatracting the information from the cell you just clicked on >>>> end
 
@@ -2537,28 +2544,36 @@ function timetableDocFunctionsRoom()
 			[2] - perpectual, nonperpectual booking etc.
 			[3] - week 1, week 2 or both
 			*/
-			if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
+			//console.log(indiRoomData.Items[0])
+			if(!indiRoomData.Items[0].RoomAdmin.includes(userEmail))
 			{
-				newPeriodObject.push(bookval)
-			}
-			else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
-			{
-				if(individualData.Items[0].role=="Student")
-				{
-					newPeriodObject.push(pendingval)
-				}
-				else
+				if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
 				{
 					newPeriodObject.push(bookval)
 				}
+				else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
+				{
+					if(individualData.Items[0].role=="Student")
+					{
+						newPeriodObject.push(pendingval)
+					}
+					else
+					{
+						newPeriodObject.push(bookval)
+					}
+				}
+				else if(indiRoomData.Items[0].BookingRights=="AllValidation")
+				{
+					//alert("Hello!")
+					newPeriodObject.push(pendingval)
+				}
 			}
-			else if(indiRoomData.Items[0].BookingRights=="AllValidation")
+			else
 			{
-				alert("Hello!")
-				newPeriodObject.push(pendingval)
+				newPeriodObject.push(bookval)
 			}
-			console.log(indiRoomData.Items[0].BookingRights)
-			console.log(indiRoomData)
+			//console.log(indiRoomData.Items[0].BookingRights)
+			//console.log(indiRoomData)
 			//console.log(individualData)
 			
 			newPeriodObject.push(userEmail)
@@ -2579,7 +2594,7 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push(intendedCoors)
 			newPeriodObject.push(formattedCurrentDate)
 			
-			console.log(newPeriodObject);
+			//console.log(newPeriodObject);
 			
 			RoombookingSchedule.push(newPeriodObject)
 			
@@ -3231,7 +3246,15 @@ function timetableDocFunctionsRoom()
 	//deleting a period start
 	$(document).on('click', '#deleteBtn', function(event) 
 	{
-		preLimLoader("Deleting Event...")
+		if(approveGoAhead[1]==true)
+		{
+			preLimLoader("Approving... <em>[Step 1]</em>")
+		}
+		else
+		{
+			preLimLoader("Deleting Event...")
+		}
+		
 		event.preventDefault();
 		
 		intendedCoors = coordinates
@@ -3338,6 +3361,7 @@ function timetableDocFunctionsRoom()
 		
 		//Starting the Update of the new room schedule
 		roomInfoUpdateSuccess = false; 
+		approveGoAhead[0] = false;
 		if(deletedFromUserBookingSchd == false)
 		{
 			updateRoomDetails(currentResosID, "PermaSchedule", permaSchd)
@@ -3357,7 +3381,7 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				viewResos(currentResosID, "room", currentWeekBegining)
+				viewResos(currentResosID, "room", currentWeekBegining) 
 				roomInfoUpdateSuccess = false; 
 			}
 		}
@@ -3369,6 +3393,148 @@ function timetableDocFunctionsRoom()
 		openRecurringModal()
 	});
 	//Booking a Recurring booking end
+	
+	//Approve Booking for users
+	//approveBtn
+	$(document).on('click', '#approveBtn', function(event) 
+	{
+		var newPeriodObject=[];
+		
+		approveGoAhead[0]=false
+		approveGoAhead[1] = true;
+		
+		preLimLoader("Validating...")
+		validate();
+		function validate()
+		{
+			if(bookDetsPerma == null)
+			{
+				window.setTimeout(validate,1000);
+			}
+			else
+			{
+				waitingforDetails();
+			}
+		}
+		
+		
+		function waitingforDetails()
+		{
+			//console.log(bookDetsPerma)
+			var ECADESnName = "N.A"
+			var DateToDate = -1
+			if(bookDetsPerma[5]!="N.A")
+			{
+				ECADESnName = bookDetsPerma[5].split(',');
+			}
+			if(bookDetsPerma[2]!="-1")
+			{
+				DateToDate = [];
+				var temp = bookDetsPerma[2].split(",");
+				
+				DateToDate.push(temp[0] + "," +temp[1])
+				DateToDate.push(temp[2] + "," +temp[3])
+				
+			}
+			var Coors = bookDetsPerma[6].split(',').map(Number);
+			//console.log(DateToDate)
+			newPeriodObject.push(bookval)
+			newPeriodObject.push(bookDetsPerma[0])
+			newPeriodObject.push(bookDetsPerma[1])
+			newPeriodObject.push(DateToDate)//
+			newPeriodObject.push(bookDetsPerma[3])
+			newPeriodObject.push(bookDetsPerma[4])
+			newPeriodObject.push(ECADESnName)
+			newPeriodObject.push(Coors)
+			newPeriodObject.push(bookDetsPerma[7])
+
+			//deleting pending
+			
+			
+			validateDeleted()
+			document.getElementById("deleteBtn").click(); 
+			
+			function validateDeleted()
+			{
+				if(approveGoAhead[0]==false)
+				{
+					window.setTimeout(validateDeleted,1000)
+				}
+				else
+				{
+					approveGoAhead[0]=false
+					approveGoAhead[1]=false
+					startApprove();
+				}
+			}
+
+			//approving booking
+			function startApprove()
+			{
+				preLimLoader("Approving... <em>[Step 2]</em>") //output showing user the room is currently being booked
+
+				event.preventDefault(); //prevent's default function from excecuting
+
+				//console.log(coordinates) //in a [x,y] format row, col
+				//console.log(day) 
+				//console.log(period)
+				//console.log(fullCurrentStatus), Useless in this context
+				//console.log(currentBookingState), Useless in this context
+				//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
+				//need to retrieve Week Begining. 
+				
+				
+				indiResosDataFetchSuccess = false;
+				
+				var RoombookingSchedule;
+				validateResosFetch()
+				getSpecificResos(currentResosID, currentResosType)
+				
+				function validateResosFetch()
+				{
+					if(indiResosDataFetchSuccess == false)
+					{
+						window.setTimeout(validateResosFetch,1000)
+					}
+					else
+					{
+						indiResosDataFetchSuccess = false;
+						RoombookingSchedule = indiRoomData.Items[0].BookingSchedule
+						addArrayNBook()
+					}
+				}
+				
+				function addArrayNBook()
+				{
+					if(RoombookingSchedule[0]=="Empty List")
+					{
+						RoombookingSchedule = []
+					}
+					RoombookingSchedule.push(newPeriodObject)
+					updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
+					validateRoomInfoUpdate();
+				}
+
+				function validateRoomInfoUpdate()
+				{
+					if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+					{
+						window.setTimeout(validateRoomInfoUpdate, 1000)
+					}
+					else
+					{
+						viewResos(currentResosID, "room", currentWeekBegining)
+						roomInfoUpdateSuccess = false; 
+						//document.getElementById("deleteBtn").click();
+					}
+				}
+
+			}
+		}
+		
+		
+	});
+	//Approve booking for users end
 	
 	//Booking a Recurring booking start from the rbookModal
 	$(document).on('click', '#BookRecrBtn', function(event) 
@@ -3565,7 +3731,34 @@ function timetableDocFunctionsRoom()
 			[3] - week 1, week 2 or both
 			*/
 			
-			newPeriodObject.push(bookval)
+			if(!indiRoomData.Items[0].RoomAdmin.includes(userEmail))
+			{
+				if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
+				{
+					newPeriodObject.push(bookval)
+				}
+				else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
+				{
+					if(individualData.Items[0].role=="Student")
+					{
+						newPeriodObject.push(pendingval)
+					}
+					else
+					{
+						newPeriodObject.push(bookval)
+					}
+				}
+				else if(indiRoomData.Items[0].BookingRights=="AllValidation")
+				{
+					//alert("Hello!")
+					newPeriodObject.push(pendingval)
+				}
+			}
+			else
+			{
+				newPeriodObject.push(bookval)
+			}
+
 			newPeriodObject.push(userEmail)
 			newPeriodObject.push(PoNP)
 			newPeriodObject.push(newStartEndWeekObject)
@@ -3587,7 +3780,35 @@ function timetableDocFunctionsRoom()
 				console.log(newDateBegin)
 				
 				newPeriodObject = []
-				newPeriodObject.push(bookval)
+				
+				if(!indiRoomData.Items[0].RoomAdmin.includes(userEmail))
+				{
+					if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
+					{
+						newPeriodObject.push(bookval)
+					}
+					else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
+					{
+						if(individualData.Items[0].role=="Student")
+						{
+							newPeriodObject.push(pendingval)
+						}
+						else
+						{
+							newPeriodObject.push(bookval)
+						}
+					}
+					else if(indiRoomData.Items[0].BookingRights=="AllValidation")
+					{
+						//alert("Hello!")
+						newPeriodObject.push(pendingval)
+					}
+				}
+				else
+				{
+					newPeriodObject.push(bookval)
+				}
+				
 				newPeriodObject.push(userEmail)
 				newPeriodObject.push(PoNP)
 				newPeriodObject.push(newStartEndWeekObject)
@@ -4004,6 +4225,11 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	$("#timeTable").html(tbl);
 	populateTimetableModal("Room Timetable: <em>"+resosName+"</em><br>Week Begining: "+getWeekBegining(new Date(weekBegin))+" Week "+currentWeek, resosName, resosType, getWeekBegining(new Date(weekBegin)));
 	timetableDocFunctionsRoom()//activating document functions for room
+	
+	if(approveGoAhead[1] == true)
+	{
+		approveGoAhead[0] = true;
+	}
 
 }
 function getSpecificResos(resosID, resosType) // gets the information of a very specific resosID
@@ -5634,14 +5860,19 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 			for(var i = sortedDates.length-1; i>-1; i--)
 			{
 				currentDate = new Date(DateGiven);
-				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString()))
-				
-				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString())))
+				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i].WeekBegining).toString()))
+				//console.log(sortedDates)
+				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i].WeekBegining).toString())))
 				{
 					foundIndex = i-1; 
 				}
 			}
+			if(foundIndex == null)
+			{
+				foundIndex = sortedDates.length-1;
+			}
 			
+			//console.log(foundIndex)
 			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex]["WeekBegining"]).toString()),DateGiven)-1;
 			
 			var numOfWeeksSince = Math.trunc(daysDiff/7);
@@ -5742,10 +5973,13 @@ function exitpreLimLoader()//used to exit the prelim loader
 {
 	$("#viewPort_Content").hide()
 	$("#preLimLoader").show()
-	$("#preLimLoader").html("Event Successful...")
-	window.setTimeout(function(){
-		$("#preLimLoader").html("[Click on a Timeslot to View Bookings]")
-	},3000)
+	if(approveGoAhead[1]==false)
+	{
+		$("#preLimLoader").html("Event Successful...")
+		window.setTimeout(function(){
+			$("#preLimLoader").html("[Click on a Timeslot to View Bookings]")
+		},3000)
+	}
 }
 function exitpreLimLoaderErr()//used to exit the prelim loader in the event of an error
 {

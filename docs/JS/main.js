@@ -4754,15 +4754,16 @@ function Search() //search all resos list code
 		for(var i = 0; i<dataOfRoomsList.length; i++)
 		{
 			var ResosID = ""
+			var foundBookmark = false; 
 
 			for(var j = 0; j<bookmarkedResos.length; j++)
 			{
-				var foundBookmark = false; 
+				
 
 				//console.log(bookmarkedResos[i])
 				//console.log(dataOfRoomsList[i])
 
-				if(compareArray(bookmarkedResos[j],dataOfRoomsList[i]))
+				if(bookmarkedResos[j][0]==dataOfRoomsList[i][0] && bookmarkedResos[j][1]==dataOfRoomsList[i][1])
 				{
 					foundBookmark = true; 	
 				}

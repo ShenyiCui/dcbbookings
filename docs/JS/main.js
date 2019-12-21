@@ -2138,6 +2138,40 @@ function timetableDocFunctionsRoom()
 		$("#approveBtn").hide();
 		$("#rLockBtn").hide();
 		$("#preLimLoader").hide();
+		
+		//determining date and time to see if user is allowed to book this room
+		var cushionTime = parseInt(indiRoomData.Items[0].PlanAhead); //time that blocks a room 30 mins before time elapses
+		
+		var current = new Date();
+		var otherDateTime = currentWeekBegining;
+		var usersTime = moment(transformYYYYMMDDtoDate(transformCurrentWeek(getWeekBegining(otherDateTime)).toString()))
+		
+		usersTime = usersTime.add(calculateAddingTime(coordinates[0],coordinates[1],cushionTime),'minutes')._d;
+		
+		//console.log(coordinates)
+		
+		//console.log(current)
+		//console.log(usersTime)
+		
+		if(current>usersTime)
+		{
+			$("#deleteBtn").prop('disabled', true);
+			$("#bookBtn").prop('disabled', true);
+			$("#rbookBtn").prop('disabled', true);
+			$("#quickLockBtn").prop('disabled', true);
+			$("#rLockBtn").prop('disabled', true);
+		}
+		else
+		{
+			$("#deleteBtn").prop('disabled', false);
+			$("#bookBtn").prop('disabled', false);
+			$("#rbookBtn").prop('disabled', false);
+			$("#quickLockBtn").prop('disabled', false);
+			$("#rLockBtn").prop('disabled', false);
+		}
+		//console.log(indiRoomData)
+		
+		//elasped time check end. 
 
 		$("#bookingDetails").html("<strong>Week Beginning: </strong>" + getWeekBegining(new Date()) + "<br><strong>Time:</strong> "+day+" "+period);
 
@@ -2193,7 +2227,7 @@ function timetableDocFunctionsRoom()
 				}
 				else
 				{
-					$("#deleteBtn").removeAttr("disabled");
+					//$("#deleteBtn").removeAttr("disabled");
 				}
 			}
 			else
@@ -2216,7 +2250,7 @@ function timetableDocFunctionsRoom()
 			if(resosAdmin == true)
 			{
 				$("#deleteBtn").show();
-				$("#deleteBtn").removeAttr("disabled");
+				//$("#deleteBtn").removeAttr("disabled");
 			}
 			
 			if(bookingDetails[2] != "-1" || bookingDetails[5] != "N.A")
@@ -3909,6 +3943,27 @@ function timetableDocFunctionsRoom()
 	//Booking a Recurring booking end
 	
 }
+function calculateAddingTime(day,period,extramins)//will return a value to add to a week begining in the unit of minutes depending on what day it is (monday tuesday) but given in term of numbers, the period of the day it is at and any extra mins. 
+//num,num,num
+{
+	var periodArray = [
+						8*60+35,
+						9*60+35,
+						10*60+30,
+						10*60+50,
+						11*60+50,
+						12*60+45,
+						13*60+35,
+						14*60+35,
+						15*60+35,
+						16*60+50,
+						18*60
+					  ]
+	var dayInMins = day*24*60;
+	var periodInMins = periodArray[period]
+	return extramins+dayInMins+periodInMins
+}
+
 function updateRoomDetails(roomID, UpdateAttr, UpdateVal)//updates room detail, changes properties of anything. 
 {
 	//console.log(UpdateVal)

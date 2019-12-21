@@ -54,7 +54,7 @@ var currentWeekB //used to store the current weekbegining
 var resosAdmin = false; //boolean, used to store whether or not you are the true admin of a room.
 var clickBookedEmail = ""; //used to store the email of the person who booked the room.
 
-//All Resos Array [ResosID,ResosType]
+//All Resos Array [ResosID,ResosType,AccessRights,[roomAdmins]]
 var allResos = [];
 var allResosHTML = ""; //all Resos dynamic HTML
 

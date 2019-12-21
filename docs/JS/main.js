@@ -456,9 +456,14 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	var bookmarkClass = "fa fa-bookmark-o imgBtn bookmark"; //will change depending on whether or not your box is a bookmarkedBox
 	var bookMarkFunction = "";
 	var tempObject = [];
+	var buttonViewFunction = "";
 	var tempHTML = "";
 	var ResosID = "";//id of each box
 	allResos = [];
+	
+	//console.log(userData);
+	//console.log(dataRoom); AccessRights RoomAdmin
+	var userCred = userData.role//user creditials "Student or Teacher"
 	// !!IMPORTATNT design fallback in the generate allresos section if the array is empty
 	if(dataRoom.length!=0) // will sort room array if its not empty
 	{
@@ -470,6 +475,8 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 		tempObject = [];
 		tempObject.push(dataRoom[i]["RoomID"]);
 		tempObject.push("room");
+		tempObject.push(dataRoom[i]["AccessRights"])
+		tempObject.push(dataRoom[i]["RoomAdmin"])
 		allResos.push(tempObject);
 	}
 	//have to add the 2 other for loops for datadevice and datasub
@@ -486,7 +493,24 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 				bookMarkFunction = 'unBookmarkIt(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\');'//change the bookmark click function
 			}
 		}
-		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button></div>'
+		//checking if the user can view this room or not
+		if(allResos[i][2]!="TeacherStudent")
+		{
+			if(allResos[i][2] == userCred || allResos[i][3].includes(userEmail)) //if user can view room
+			{
+				buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button>'
+			}
+			else//if user cannot view room
+			{
+					buttonViewFunction = '<button disabled class="btnDisabled" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button>'
+			}
+		}
+		else
+		{
+				buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button>'
+		}
+		
+		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p>'+buttonViewFunction+'</div>'
 		allResosHTML += tempHTML;
 	}
 	if(allResosHTML == "")//fallback incase all 3 arrays are empty
@@ -4659,7 +4683,7 @@ function getAllAdmins()//gets all admins and puts them in the allMasterAdmins ar
 	});
 }
 
-function Search() //search My resos list code
+function Search() //search all resos list code
 {
 	if($("#searchForResos").val().trim().toLowerCase().length != 0)
 	{
@@ -4689,16 +4713,18 @@ function Search() //search My resos list code
 				dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
 				
 
-			)
+			) // if it matches the search by name
 			{
 				tempRoomsList = []
 				tempRoomsList.push(dataOfRooms[i].RoomID)
 				tempRoomsList.push("room")
-
+				tempRoomsList.push(dataOfRooms[i].AccessRights)
+				tempRoomsList.push(dataOfRooms[i].RoomAdmin)
+				
 				dataOfRoomsList.push(tempRoomsList)
 				//console.log(dataOfRoomsList)
 			}
-			else
+			else // else checking if it matches search by admin user 
 			{
 				for(var j = 0; j<dataOfRooms[i].RoomAdmin.length; j++)
 				{
@@ -4710,6 +4736,8 @@ function Search() //search My resos list code
 						tempRoomsList = []
 						tempRoomsList.push(dataOfRooms[i].RoomID)
 						tempRoomsList.push("room")
+						tempRoomsList.push(dataOfRooms[i].AccessRights)
+						tempRoomsList.push(dataOfRooms[i].RoomAdmin)
 
 						dataOfRoomsList.push(tempRoomsList)
 					}
@@ -4720,7 +4748,9 @@ function Search() //search My resos list code
 		//populating List
 		var tempHTML = "";
 		var searchResos = "";
-		bookmarkedResos
+		var bookMarkFunction = "";
+		var buttonViewFunction = "";
+		var userCred = individualData.Items[0].role//user creditials "Student or Teacher"
 		for(var i = 0; i<dataOfRoomsList.length; i++)
 		{
 			var ResosID = ""
@@ -4755,8 +4785,24 @@ function Search() //search My resos list code
 				bookMarkFunction = 'unBookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
 				bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
 			}
-
-			tempHTML = '<div id="'+ResosID+'" class="Box '+dataOfRoomsList[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+dataOfRoomsList[i][0]+'</strong><br><em>'+dataOfRoomsList[i][1]+'</em></p><button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button></div>'
+			
+			//checking if the user can view this room or not
+			if(dataOfRoomsList[i][2]!="TeacherStudent")
+			{
+				if(dataOfRoomsList[i][2] == userCred || dataOfRoomsList[i][3].includes(userEmail)) //if user can view room
+				{
+					buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button>'
+				}
+				else//if user cannot view room
+				{
+						buttonViewFunction = '<button disabled class="btnDisabled" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button>'
+				}
+			}
+			else
+			{
+					buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button>'
+			}
+			tempHTML = '<div id="'+ResosID+'" class="Box '+dataOfRoomsList[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+dataOfRoomsList[i][0]+'</strong><br><em>'+dataOfRoomsList[i][1]+'</em></p>'+buttonViewFunction+'</div>'
 
 			searchResos+=tempHTML;
 		}

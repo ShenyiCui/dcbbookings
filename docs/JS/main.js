@@ -3947,7 +3947,10 @@ function timetableDocFunctionsRoom()
 function calculateAddingTime(day,period,extramins)//will return a value to add to a week begining in the unit of minutes depending on what day it is (monday tuesday) but given in term of numbers, the period of the day it is at and any extra mins. 
 //num,num,num
 {
-	var periodArray = [
+	var periodArray
+	if(indiRoomData.Items[0].Min30Periods == "false")
+	{
+		periodArray = [
 						8*60+35,
 						9*60+35,
 						10*60+30,
@@ -3960,6 +3963,33 @@ function calculateAddingTime(day,period,extramins)//will return a value to add t
 						16*60+50,
 						18*60
 					  ]
+	}
+	else
+	{
+		periodArray = [
+						8*60+35,
+						9*60,
+						9*60+35,
+						10*60,
+						10*60+30,
+						10*60+50,
+						11*60+20,
+						11*60+50,
+						12*60+20,
+						12*60+45,
+						13*60+10,
+						13*60+35,
+						14*60,
+						14*60+35,
+						15*60,
+						15*60+35,
+						16*60+10,
+						16*60+50,
+						17*60+20,
+						18*60
+					  ]
+	}
+	
 	var dayInMins = day*24*60;
 	var periodInMins = periodArray[period]
 	return extramins+dayInMins+periodInMins

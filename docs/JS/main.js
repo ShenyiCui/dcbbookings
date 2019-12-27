@@ -1520,6 +1520,7 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 }
 function generatePreviewTable(data,min30)
 {
+	settingsUploadTable = data;
 	timetableHTML = "";
 	var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday"]
 	timetableHTML +="<strong><p>Week 1:</p></strong>"
@@ -4976,6 +4977,123 @@ function openResosSettings(resosID, resosType) // open resos settings
 function resosSaveChanges()
 {
     var roomItemFromData = indiRoomData["Items"][0];
+	
+	$("#saveResosChanges").hide();
+	$("#resosSettingsErrMsg").html("")
+	
+	var AccessRightsUserData = $("#accessRightSelect").val();
+	var PermaScheduleUserData = settingsUploadTable;
+		
+	var PlanAheadUserData = "";
+	
+	if($("#planAheadCB").prop("checked") == true)
+	{
+    	PlanAheadUserData = "30"
+	}
+	else if($("#planAheadCB").prop("checked") == false)
+	{
+		PlanAheadUserData = "0"
+	}
+	
+	var DepartmentUserData = $("#departmentVal").val();
+	var BookingRightsUserData = $("#bookingRightSelect").val();
+	
+	var RoomAdminUserData = $("#RoomAdmin2").val()
+	
+	var nicE = new nicEditors.findEditor('DescriptionVal');
+	var DescriptionUserData = nicE.getContent();
+	var timeS = roomItemFromData.Description.split(" ").pop(); 
+	DescriptionUserData = DescriptionUserData.trim() + " " + timeS.trim();
+	
+	RoomAdminUserData = RoomAdminUserData.trim();
+	RoomAdminUserData = RoomAdminUserData.split(";")
+	RoomAdminUserData = RoomAdminUserData.filter(function(el) { return el; }); // filters out empty string from array
+	RoomAdminUserData = RoomAdminUserData.map(Function.prototype.call, String.prototype.trim)//trims all string in array
+	RoomAdminUserData.push($("#RoomAdmin1").val())
+	
+	var changedVariables = []
+	var temp = []
+	if(AccessRightsUserData != roomItemFromData.AccessRights)
+	{
+		temp = ["AccessRights",AccessRightsUserData];
+		changedVariables.push(temp)
+	}
+	if(!compareArray(PermaScheduleUserData,roomItemFromData.PermaSchedule))
+	{
+		temp = ["PermaSchedule",PermaScheduleUserData];
+		changedVariables.push(temp)
+	}
+	if(PlanAheadUserData != roomItemFromData.PlanAhead)
+	{
+		temp = ["PlanAhead",PlanAheadUserData];
+		changedVariables.push(temp)
+	}
+	if(DepartmentUserData != roomItemFromData.Department)
+	{
+		temp = ["Department",DepartmentUserData];
+		changedVariables.push(temp)
+	}
+	if(BookingRightsUserData != roomItemFromData.BookingRights)
+	{
+		temp = ["BookingRights",BookingRightsUserData];
+		changedVariables.push(temp)
+	}
+	if(compareArray(RoomAdminUserData,roomItemFromData.RoomAdmin))
+	{
+		temp = ["RoomAdmin",RoomAdminUserData];
+		changedVariables.push(temp)
+	}
+	if(DescriptionUserData != roomItemFromData.Description)
+	{
+		temp = ["Description",DescriptionUserData];
+		changedVariables.push(temp)
+	}
+	
+	//console.log(roomItemFromData);
+	//console.log(AccessRightsUserData)
+	//console.log(PermaScheduleUserData)
+	//console.log(PlanAheadUserData)
+	//console.log(DepartmentUserData)
+	//console.log(BookingRightsUserData)
+	//console.log(RoomAdminUserData)
+	
+	var upperlimit = changedVariables.length
+	var i = 0;
+	console.log(changedVariables)
+	uploadNewResults();
+	function uploadNewResults()
+	{
+		$("#resosSettingsErrMsg").html("Updating Room Settings Please Hold...")
+		//console.log("updating " + i + " " + changedVariables[i][0])
+		updateRoomDetails(roomItemFromData.RoomID, changedVariables[i][0], changedVariables[i][1])
+			
+		roomInfoUpdateSuccess = false; 
+		validateRoomInfoUpdate()
+		function validateRoomInfoUpdate()
+		{
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			{
+				window.setTimeout(validateRoomInfoUpdate, 1000)
+			}
+			else
+			{
+				roomInfoUpdateSuccess = false; 
+				i += 1
+				if(i < upperlimit)
+				{
+					
+					uploadNewResults()
+					return;
+				}
+				else
+				{
+					closeResosSettingsModal();
+				}
+				return;
+			}
+		}
+		return;
+	}
 }
 
 function getAResosSettingFromModal(resosID, resosType)//called in the make booking page in the timetable modal to direct the user to the settings html page

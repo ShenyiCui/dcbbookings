@@ -74,6 +74,9 @@ var min30Periods; //boolean stores wheteher or not the current resos is using th
 
 //timetable vars
 var previewUploadTable = [];
+
+var settingsUploadTable = [];
+
 var timetableHTML = "";//preview table
 var tbl = "";//offical booking table
 //booking values for pushing values into the db

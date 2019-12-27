@@ -245,7 +245,7 @@
 				<input type="checkbox" id="planAheadCB">
 				<label>&nbsp;Plan Ahead [Close booking ability 30 minutes ahead of time]</label>
 				<br>
-				<input type="checkbox" id="30MinPeriodCB">
+				<input type="checkbox" disabled id="30MinPeriodCB">
 				<label>&nbsp;30 minute period [Split each period into 30 minute sections]</label>
 
 				<br><br><br>
@@ -258,7 +258,7 @@
 						<strong><label>Choose a upload method:</label></strong>
 						<br>
 
-						<select onChange="checkAvailableUpload()" id="uploadSource">
+						<select onChange="checkAvailableUpload(); settingsUploadTable=[];" id="uploadSource">
 							<option selected value="invalid">UPLOAD SOURCE...</option>
 							<option value="sims">SIMS</option>
 							<option value="custom">CUSTOM</option>
@@ -266,7 +266,7 @@
 
 						<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 
-						<select onChange="checkAvailableUpload()" id="uploadMethods">
+						<select onChange="checkAvailableUpload();settingsUploadTable = []" id="uploadMethods">
 							<option selected value="invalid">UPLOAD METHOD...</option>
 							<option disabled value="merge">MERGE</option>
 							<option value="override">OVERRIDE</option>
@@ -460,6 +460,7 @@
 	function openResosSettingsModal()
 	{
 		resosSettingsModal.style.display = "block";
+		$("#saveResosChanges").show();
 	}
 	function closeResosSettingsModal()
 	{

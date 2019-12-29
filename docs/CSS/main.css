@@ -1596,3 +1596,47 @@ viewPort_Content
 	top: 520px;
 	transform: translate(-50%, -50%);
 }
+
+.accDetails
+{
+	margin: 0 100px;
+	padding:10px;
+	background-color: rgb(255,255,255);
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.accDetails input
+{
+	width: 60%;
+	padding: 6px 10px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	border: 3px solid #ccc;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	outline: none;
+}
+
+.accDetails input:focus {
+  border: 3px solid #555;
+}
+
+.accDetails button
+{
+	margin-top: 8px;
+	border-radius: 25px; 
+	width: 60%
+}

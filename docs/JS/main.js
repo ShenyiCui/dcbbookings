@@ -4375,17 +4375,6 @@ var random_id = function() //generates a random ROW ID, for identifying cell dat
 }
 //View Room End
 
-function getWeekBegining(date) //generates the week begining date for a given date value.
-{
-  var day = date.getDay() || 7;
-    if( day !== 0 )
-        date.setHours(-24 * (day - 2));
-
-	date = date.toUTCString();
-	date = date.split(' ').slice(0, 4).join(' ');
-
-    return date;
-}
 function extractHiddenContent(s)//extracts the hidden content from within a span.
 {
   var span = document.createElement('span');
@@ -5546,11 +5535,28 @@ function errorModuleShow()//error module for lost of connection
     });
 }
 
+function getWeekBegining(date) //generates the week begining date for a given date value.
+{
+  var day = date.getDay() || 7;
+    if( day !== 0 )
+        date.setHours(-24 * (day - 2));
+
+	date = date.toUTCString();
+	date = date.split(' ').slice(0, 4).join(' ');
+
+    return date;
+}
+
 function WeekBeginMilestone()//used in the change week module to get the week begining of the chosen week
 {
-	var weekBegining = getWeekBegining($('.datepicker').datepicker('getDate'));
+	var weekBegining = getWeekBegining($('#pickADate').datepicker('getDate'));
 	$("#WBChosen").val(weekBegining);
 	calculateCurrentWeek(new Date());
+}
+function findWkBegin(id) //used in the my resos data module 
+{
+	var weekBegining = getWeekBegining($('#'+id).datepicker('getDate'));
+	$("#"+id).val(weekBegining);
 }
 function generateMilestoneTable()
 {
@@ -6110,6 +6116,7 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 			for(var i = sortedDates.length-1; i>-1; i--)
 			{
 				currentDate = new Date(DateGiven);
+				//console.log(currentDate)
 				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i].WeekBegining).toString()))
 				//console.log(sortedDates)
 				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i].WeekBegining).toString())))
@@ -6117,14 +6124,23 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 					foundIndex = i-1;
 				}
 			}
-			if(foundIndex == null)
+			if(sortedDates[foundIndex] == null)
 			{
 				foundIndex = sortedDates.length-1;
 			}
 
 			//console.log(foundIndex)
-			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex]["WeekBegining"]).toString()),DateGiven)-1;
-
+			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex].WeekBegining).toString()),DateGiven);
+			if(daysDiff < 0)
+			{
+				daysDiff = daysDiff*-1 -1
+			}
+			else
+			{
+				daysDiff = daysDiff-1
+			}
+			console.log(daysDiff);
+			
 			var numOfWeeksSince = Math.trunc(daysDiff/7);
 			var decimal = (daysDiff/7) - numOfWeeksSince;
 			decimal = decimal.toFixed(5)
@@ -6212,6 +6228,15 @@ function transformCurrentWeek(Week) //transfroms the current week into a week th
 
 	return parseInt(dateString)
 }
+function addMonths(date, months) //add n months to a date object and returns it. 
+{
+    var d = date.getDate();
+    date.setMonth(date.getMonth() + +months);
+    if (date.getDate() != d) {
+      date.setDate(0);
+    }
+    return date;
+}
 
 function preLimLoader(loadingText)//used in the timetable function to load text about the user used in the timetable modal
 {
@@ -6295,8 +6320,56 @@ function compareArray2(a, b)
 	return valuesEqual
 };
 
-function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of strings ["week begining 1", "week begining 2"]
+function myResosDataStart()
 {
+	$("#MyResosDateEnd").val(getWeekBegining(addMonths(new Date(),6)))
+	$("#MyResosDateStart").val(getWeekBegining(addMonths(new Date(),-12)))
+	individualData = null;
+	getUserInfo(userEmail);
+	validateIndiFetch();
+	function validateIndiFetch()
+	{
+		if(individualData!=null)
+		{
+			var myResos = individualData.Items[0].userControlledResources;
+			var selectCode='<select id="MyResosDataSelect" class="smallInput smallPadding"><option value = "null,null">Choose a resource</option>'
+			for(var i =0; i<myResos.length; i ++)
+			{
+				selectCode+="<option value='"+myResos[i][0]+","+myResos[i][1]+"'>"+myResos[i][0]+":"+myResos[i][1]+"</option>"
+			}
+			selectCode += "</select>"
+			$("#MyResosDataSelectDiv").html(selectCode);
+		}
+		else
+		{
+			window.setTimeout(validateIndiFetch,1000)
+		}
+	}
+}
+function startCalculationOfMyResos()
+{	
+	$("#canvasHere").html("")
+	if($("#MyResosDateStart").val.length != 0 && $("#MyResosDateEnd").val().length != 0)
+	{
+		console.log($("#MyResosDataSelect").val());
+		if($("#MyResosDataSelect").val() != "null,null")
+		{
+			var temp = $("#MyResosDataSelect").val().split(",")
+			
+			var startDateString = getWeekBegining($('#MyResosDateStart').datepicker('getDate'))
+			var endDateString = getWeekBegining($('#MyResosDateEnd').datepicker('getDate'))
+			
+			$('#MyResosDateStart').val(startDateString);
+			$('#MyResosDateEnd').val(endDateString);
+			
+			calculateDATA(temp[0],temp[1],[startDateString,endDateString])
+			$("#canvasHere").html('<br><br><br><br><em><p align="center">Loading....</p></em><br><br><br><br>')
+
+		}
+	}
+}
+function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of strings ["week begining 1", "week begining 2"]
+{	
     var PopularWeeklyResourceRoom = [] //stores the ID of the rooms
     var PopularAllTimeResourceRoom = [] // stores the ID of the rooms
 
@@ -6334,6 +6407,14 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 	var noOfBkd =0;
 	var noOfBkdWeek1 = 0;
 	var noOfBkdWeek2 = 0; 
+	
+	var noOfLck =0;
+	var noOfLckWeek1 = 0;
+	var noOfLckWeek2 = 0;
+	
+	var noOfPnd =0;
+	var noOfPndWeek1 = 0;
+	var noOfPndWeek2 = 0;
 
 	var noOfFree = 0;
 	var noOfFreeWeek1 = 0;
@@ -6342,6 +6423,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 	var totalNoOfPeriods = 0;
 	var totalNoOfPeriodsWeek1 = 0;
 	var totalNoOfPeriodsWeek2 = 0;
+	var periodss = [];
 	
 	var allUsersThatBooked = []//all users that used the room in between a certain range 
 	
@@ -6351,6 +6433,8 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 	rangeOfDateObjects.push(transformYYYYMMDDtoDate(transformCurrentWeek(dataRange[0]).toString()))
 	rangeOfDateObjects.push(transformYYYYMMDDtoDate(transformCurrentWeek(dataRange[1]).toString()))
 	
+	
+	var chosenResosJSON;
 	//console.log(rangeOfDateObjects)
 
     console.log("Calculating data...")
@@ -6371,7 +6455,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
     }
     function dataAnalysis()
     {
-        var chosenResosJSON;
+        
         if(resosType == "room")
         {
             var roomData = allRooms.Items;
@@ -6393,6 +6477,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			unbookedval = "unbooked";
 			pendingval = "pending";
 			min30Periods = false;
+			periodss = ["P1","P2","Br","P3","P4","Ln","P5","P6","ECA1","ECA2"]
 		}
 		else
 		{
@@ -6403,19 +6488,11 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			unbookedval = "unb";
 			pendingval = "pnd";
 			min30Periods = true;
+			periodss = ["P1 (1)","P1 (2)","P2 (1)","P2 (2)","Br","P3 (1)","P3 (2)","P4 (1)","P4 (2)","Ln","P5 (1)","P5 (2)","P6 (1)","P6 (2)","ECA1 (1)","ECA1 (2)","ECA2 (1)","ECA2 (2)"]
 		}
         //console.log(chosenResosJSON);
-        MostFreqUser = mostFUser(chosenResosJSON) //returns [mostFrequent User, Number of time visited] can have more than 1 user. will be top 10. 
-		//console.log(MostFreqUser)
-		
-        BusyPeriods = busyPeriodCalc(chosenResosJSON) //returns [totalBookingPerPeriod]
-		//console.log(BusyPeriods)
-		
-		BusyDays = busyDayCalc(chosenResosJSON) //returns [totalBookingPerDay]
-		//console.log(BusyDays)
-		
 		totalNumberCalc(chosenResosJSON) //Ultimate calculation of the total number of everything a reserve is anything that isnt a free. (includes lessons)
-		
+
 		//PopularWeeklyResourceRoom = popularWeekRoom(roomData);// returns top 5 resources [[resource, numberOfBookings],[]]
 		//console.log(PopularWeeklyResourceRoom)
 		
@@ -6424,7 +6501,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
     function mostFUser(resos)//returns array containing Most MostFreqUser and the number of times they visited.//top 10
     {
         //console.log(resos)
-        var result = [] //mostFrequent User, Number of time visited
+        var result = [ [], [ [],[] ] ] //mostFrequent User, Number of time visited
         var allUsersOneTime = [];
         var allUsersAllTime = [];
         var schedule = resos.BookingSchedule;
@@ -6467,8 +6544,9 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				}
 				if(allUsersOneTime[biggestIndex] != null)
 				{
-					result.push(allUsersOneTime[biggestIndex])
-					result.push(biggest)
+					result[0].push(allUsersOneTime[biggestIndex])
+					result[1][0].push(biggest)
+					result[1][1].push(biggest/(noOfWeek1s+noOfWeek2s))
 					allUsersOneTime.splice(biggestIndex,1)//getting rid of user who's already been accounted for. 
 				}
 			}
@@ -6476,12 +6554,13 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
         return result;
     }
 
-    function busyPeriodCalc(resos) //returns [totalBookingPerPeriod]
+    function busyPeriodCalc(resos) //returns [[totalBookingPerPeriod],[AvgTotalBookingPerPeriod]]
     {
-		var totalNumOfVisits = [] // total number of visits per period.
+		var totalNumOfVisits = [[],[]]// total number of visits per period.
 		for(var i =0; i <tableColLength; i++)//accounts for 30 min bookings
 		{
-			totalNumOfVisits.push(0)
+			totalNumOfVisits[0].push(0)
+			totalNumOfVisits[1].push(0)
 		}
 		var bookSched = resos.BookingSchedule;
 		//console.log(bookSched)
@@ -6492,16 +6571,25 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				var schedToDate = transformYYYYMMDDtoDate(transformCurrentWeek(bookSched[i][bookSched[i].length-1]).toString())
 				if(schedToDate >= rangeOfDateObjects[0] && schedToDate <= rangeOfDateObjects[1])
 				{
-					totalNumOfVisits[bookSched[i][bookSched[i].length-2][1]] = totalNumOfVisits[bookSched[i][bookSched[i].length-2][1]] + 1;
+					totalNumOfVisits[0][bookSched[i][bookSched[i].length-2][1]] = totalNumOfVisits[0][bookSched[i][bookSched[i].length-2][1]] + 1;
+					totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][1]] = totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][1]] + 1;
 				}
+			}
+		}
+		for(var i = 0; i <resos.BookingSchedule.length; i++)
+		{
+			if(bookSched[0]!="Empty List")
+			{
+				totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][1]] = totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][1]] / (noOfWeek1s+noOfWeek2s);
 			}
 		}
 		return totalNumOfVisits;
     }
 	
-	function busyDayCalc(resos) //returns [mondaytotalBookings,Tuesday]...
+	function busyDayCalc(resos) 
+	//returns [[mondayTotalBookings,tuesdayTotalBookings],[avgMondayTotalBookings,avgTuesdayTotalBookings]]
     {
-		var totalNumOfVisits = [0,0,0,0,0] // total number of visits per period.
+		var totalNumOfVisits = [[0,0,0,0,0],[0,0,0,0,0]] // total number of visits per period.
 		var bookSched = resos.BookingSchedule;
 		for(var i = 0; i <resos.BookingSchedule.length; i++)
 		{
@@ -6510,16 +6598,25 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				var schedToDate = transformYYYYMMDDtoDate(transformCurrentWeek(bookSched[i][bookSched[i].length-1]).toString())
 				if(schedToDate >= rangeOfDateObjects[0] && schedToDate <= rangeOfDateObjects[1])
 				{
-					totalNumOfVisits[bookSched[i][bookSched[i].length-2][0]] = totalNumOfVisits[bookSched[i][bookSched[i].length-2][0]] + 1;
+					totalNumOfVisits[0][bookSched[i][bookSched[i].length-2][0]] = totalNumOfVisits[0][bookSched[i][bookSched[i].length-2][0]] + 1;
+					totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][0]] = totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][0]] + 1;
 				}
 			}
 		}
+		for(var i = 0; i <resos.BookingSchedule.length; i++)
+		{
+			if(bookSched[0]!="Empty List")
+			{
+				totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][0]] = totalNumOfVisits[1][bookSched[i][bookSched[i].length-2][0]] / (noOfWeek1s+noOfWeek2s);
+			}
+		}
+		
 		return totalNumOfVisits;
     }
 	
 	function totalNumberCalc(resos)//returns a number for the total number of reserves you have. 
 	{
-		console.log(resos)
+		//console.log(resos)
 		var daysInBetween = DifferenceInDays(rangeOfDateObjects[0],rangeOfDateObjects[1])
 		var firstWeekIs = -1//the first week is either a week 1 or week 2, this variable will store that.
 		
@@ -6528,7 +6625,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 		var permaSchedule = resos.PermaSchedule; 
 		var bookingSched = resos.BookingSchedule;
 		
-		console.log(bookingSched)
+		//console.log(bookingSched)
 		
 		calculateCurrentWeek(rangeOfDateObjects[0])
 		waitOut()
@@ -6537,16 +6634,81 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			console.log("Wait Out...")
 			if(currentWeek == null)
 			{
-				window.setTimeout(waitOut,1000);
+				window.setTimeout(waitOut,2000);
 			}
 			else
 			{
+				$("#canvasHere").html("")
+				$("#canvasHere").html('<div id="listOfUsers"></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
 				firstWeekIs = currentWeek;
 				roger();
-				//console.log(firstWeekIs);
+				
+				MostFreqUser = mostFUser(chosenResosJSON) //returns [[mostFrequent User], [[Number of time visited],[Avg Number of time visited]] can have more than 1 user. will be top 10. 
+				//console.log(MostFreqUser)
+
+				BusyPeriods = busyPeriodCalc(chosenResosJSON) //returns [[totalBookingPerPeriod],[AvgTotalBookingPerPeriod]]
+				//console.log(BusyPeriods)
+
+				BusyDays = busyDayCalc(chosenResosJSON) 
+				//returns [[mondayTotalBookings,tuesdayTotalBookings],[avgMondayTotalBookings,avgTuesdayTotalBookings]]
+				//console.log(BusyDays)
+				
+				//creating charts start
+				
+				createBarChart
+				(
+					"mostFrequentUsersData",
+					MostFreqUser[0],
+					["Total Number Of Visits","Average Number Of Visits /Wk"],
+					MostFreqUser[1],
+					"Frequent Users"
+				);
+				
+				createBarChart
+				(
+					"BusyPeriodsData",
+					periodss,
+					["All Time Period Bookings","Average Period Bookings /Wk"],
+					BusyPeriods,
+					"No. Of Bookings Per Period"
+				);
+				
+				createBarChart
+				(
+					"BusyDaysData",
+					["Monday","Tuesday","Wednesday","Thursday","Friday"],
+					["All Time Day Bookings","Average Day Bookings /Wk"],
+					BusyDays,
+					"No. Of Bookings Per Day"
+				);
+				
+				//creating charts end
 			}
 		}
-		
+		function createPiesNow()
+		{
+			//console.log([noOfBkd,noOfPnd,noOfFree,noOfLsn,noOfLck])
+			//console.log([noOfBkdWeek1,noOfPndWeek1,noOfFreeWeek1,noOfLsnWeek1,noOfLckWeek1])
+			//console.log([noOfBkdWeek2,noOfPndWeek2,noOfFreeWeek2,noOfLsnWeek2,noOfLckWeek2])
+			createPieChart//order is (booked, pending, unbooked, lessons, locked)
+			(
+				"PieOverall",
+				[noOfBkd,noOfPnd,noOfFree,noOfLsn,noOfLck],
+				"Overall Breakdown Of Activity"
+			);
+			createPieChart//order is (booked, pending, unbooked, lessons, locked)
+			(
+				"PieWk1",
+				[noOfBkdWeek1,noOfPndWeek1,noOfFreeWeek1,noOfLsnWeek1,noOfLckWeek1],
+				"Breakdown Of Activity in Week 1s"
+			);
+			createPieChart//order is (booked, pending, unbooked, lessons, locked)
+			(
+				"PieWk2",
+				[noOfBkdWeek2,noOfPndWeek2,noOfFreeWeek2,noOfLsnWeek2,noOfLckWeek2],
+				"Breakdown Of Activity in Week 2s"
+			);
+		}
 		function roger()
 		{
 			if(totalNoOfWeeks % 2 == 0)
@@ -6567,60 +6729,82 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 					noOfWeek2s = Math.floor(totalNoOfWeeks/2) + 1;
 				}
 			}
-			
-			for(var i = 0; i < permaSchedule[0].length; i++)
+			if(permaSchedule[0] != null && permaSchedule[0] != "Empty List")
 			{
-				for(var j = 0; j < permaSchedule[0][0].length;j++)
+				for(var i = 0; i < permaSchedule[0].length; i++)
 				{
-					totalNoOfPeriodsWeek1 +=1;
-					totalNoOfPeriods +=1;
-					if(permaSchedule[0][i][j][0] != unbookedval)
+					for(var j = 0; j < permaSchedule[0][0].length;j++)
 					{
-						noOfRervWeek1 += 1;
-					}
-					else
-					{
-						noOfFree += 1;
-						noOfFreeWeek1 +=1;
-					}
-					if(permaSchedule[0][i][j][0] == lessonval)
-					{
-						noOfLsn += 1; 
-						noOfLsnWeek1 += 1;
-					}
-					if(permaSchedule[0][i][j][0] == bookval)
-					{
-						noOfBkd +=1;
-						noOfBkdWeek1 += 1;
-					}
-				}	
-			}
-			for(var i = 0; i < permaSchedule[1].length; i++)
-			{
-				for(var j = 0; j < permaSchedule[1][0].length;j++)
+						totalNoOfPeriodsWeek1 +=1;
+						totalNoOfPeriods +=1;
+						if(permaSchedule[0][i][j][0] != unbookedval)
+						{
+							noOfRervWeek1 += 1;
+						}
+						else
+						{
+							noOfFree += 1;
+							noOfFreeWeek1 +=1;
+						}
+						if(permaSchedule[0][i][j][0] == lessonval)
+						{
+							noOfLsn += 1; 
+							noOfLsnWeek1 += 1;
+						}
+						if(permaSchedule[0][i][j][0] == bookval)
+						{
+							noOfBkd +=1;
+							noOfBkdWeek1 += 1;
+						}
+						if(permaSchedule[0][i][j][0] == lockval)
+						{
+							noOfLck +=1;
+							noOfLckWeek1 += 1;
+						}
+						if(permaSchedule[0][i][j][0] == pendingval)
+						{
+							noOfPnd +=1;
+							noOfPndWeek1 += 1;
+						}
+					}	
+				}
+				for(var i = 0; i < permaSchedule[1].length; i++)
 				{
-					totalNoOfPeriodsWeek2 +=1;
-					totalNoOfPeriods +=1;
-					if(permaSchedule[1][i][j][0] != unbookedval)
+					for(var j = 0; j < permaSchedule[1][0].length;j++)
 					{
-						noOfRervWeek2 += 1;
-					}
-					else
-					{
-						noOfFree += 1;
-						noOfFreeWeek2 +=1;
-					}
-					if(permaSchedule[0][i][j][0] == lessonval)
-					{
-						noOfLsn += 1; 
-						noOfLsnWeek2 += 1;
-					}
-					if(permaSchedule[0][i][j][0] == bookval)
-					{
-						noOfBkd +=1;
-						noOfBkdWeek2 += 1;
-					}
-				}	
+						totalNoOfPeriodsWeek2 +=1;
+						totalNoOfPeriods +=1;
+						if(permaSchedule[1][i][j][0] != unbookedval)
+						{
+							noOfRervWeek2 += 1;
+						}
+						else
+						{
+							noOfFree += 1;
+							noOfFreeWeek2 +=1;
+						}
+						if(permaSchedule[1][i][j][0] == lessonval)
+						{
+							noOfLsn += 1; 
+							noOfLsnWeek2 += 1;
+						}
+						if(permaSchedule[1][i][j][0] == bookval)
+						{
+							noOfBkd +=1;
+							noOfBkdWeek2 += 1;
+						}
+						if(permaSchedule[1][i][j][0] == lockval)
+						{
+							noOfLck +=1;
+							noOfLckWeek2 += 1;
+						}
+						if(permaSchedule[1][i][j][0] == pendingval)
+						{
+							noOfPnd +=1;
+							noOfPndWeek2 += 1;
+						}
+					}	
+				}
 			}
 			
 			noOfFree = noOfFree * totalNoOfWeeks - bookingSched.length;
@@ -6638,6 +6822,14 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			noOfLsn = noOfLsn * totalNoOfWeeks;
 			noOfLsnWeek1 = noOfLsnWeek1 * noOfWeek1s
 			noOfLsnWeek2 = noOfLsnWeek2 * noOfWeek2s
+			
+			noOfPnd = noOfPnd * totalNoOfWeeks;
+			noOfPndWeek1 = noOfPndWeek1 * noOfWeek1s
+			noOfPndWeek2 = noOfPndWeek2 * noOfWeek2s
+			
+			noOfLck = noOfLck * totalNoOfWeeks;
+			noOfLckWeek1 = noOfLckWeek1 * noOfWeek1s
+			noOfLckWeek2 = noOfLckWeek2 * noOfWeek2s
 			
 			totalNoOfPeriods = totalNoOfPeriods * totalNoOfWeeks;
 			totalNoOfPeriodsWeek1 = totalNoOfPeriodsWeek1 * noOfWeek1s;
@@ -6659,6 +6851,16 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 						noOfBkd +=1;
 						noOfBkdWeek1 += 1;
 					}
+					if(bookingSched[i][0] == lockval)
+					{
+						noOfLck +=1;
+						noOfLckWeek1 += 1;
+					}
+					if(bookingSched[i][0] == pendingval)
+					{
+						noOfPnd +=1;
+						noOfPndWeek1 += 1;
+					}
 				}
 				else
 				{
@@ -6674,9 +6876,20 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 						noOfBkd +=1;
 						noOfBkdWeek2 += 1;
 					}
+					if(bookingSched[i][0] == lockval)
+					{
+						noOfLck +=1;
+						noOfLckWeek2 += 1;
+					}
+					if(bookingSched[i][0] == pendingval)
+					{
+						noOfPnd +=1;
+						noOfPndWeek2 += 1;
+					}
 				}
 			}
-			calculatePercentages();
+			//calculatePercentages();
+			createPiesNow();
 		}
 		
 		function calculatePercentages()
@@ -6697,7 +6910,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			Week1PofResrvToFreeAndLsn = 100*(noOfRervWeek1/totalNoOfPeriodsWeek1); //percentage of reserves to Frees
 			Week2PofResrvToFreeAndLsn = 100*(noOfRervWeek2/totalNoOfPeriodsWeek2); //percentage of reserves to Frees
 			
-			console.log(PofLsnToFree + PofFree + PofBkdToFree)
+			//console.log(PofLsnToFree + PofFree + PofBkdToFree)
 		}
 	}
 	
@@ -6731,6 +6944,137 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 		return result; 
 	}
 	
+}
+
+/*
+type: 'bar',
+data: {
+	labels: ['User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 6'],
+	datasets: 
+	[
+		{
+			label: 'Frequent Users',
+			data: [12, 19, 3, 5, 2, 3],
+			backgroundColor: [
+				'rgba(255, 99, 132, 0.2)',
+				'rgba(54, 162, 235, 0.2)',
+				'rgba(255, 206, 86, 0.2)',
+				'rgba(75, 192, 192, 0.2)',
+				'rgba(153, 102, 255, 0.2)',
+				'rgba(255, 159, 64, 0.2)'
+			],
+			borderColor: [
+				'rgba(255, 99, 132, 1)',
+				'rgba(54, 162, 235, 1)',
+				'rgba(255, 206, 86, 1)',
+				'rgba(75, 192, 192, 1)',
+				'rgba(153, 102, 255, 1)',
+				'rgba(255, 159, 64, 1)'
+			],
+			borderWidth: 1
+		},
+	]
+},
+*/
+function createBarChart(canvasID, xAxisLables, dataSetLabels, dataSets, title) 
+{
+	var datasetJSONText = [];
+	for(var i = 0; i<dataSets.length; i++)
+	{
+		var colors = [];
+		var temp = [];
+		for(var j =0; j<dataSets[i].length; j++)
+		{
+			if(i == 0)
+			{
+				temp.push('rgba(194,166,252,0.2)')
+			}
+			if( i == 1)
+			{
+				temp.push('rgba(75, 192, 192, 0.2)')
+			}
+		}
+		colors.push(temp)
+		temp = [];
+		for(var j =0; j<dataSets[i].length; j++)
+		{
+			if(i == 0)
+			{
+				temp.push('rgba(194,166,252,1)')
+			}
+			if( i == 1)
+			{
+				temp.push('rgba(75, 192, 192, 1)')
+			}
+		}
+		colors.push(temp)
+		//console.log(colors)
+		datasetJSONText.push
+		(
+			{
+				'label':dataSetLabels[i], 
+				'data':dataSets[i],				
+				'backgroundColor':colors[0],			
+				'borderColor':colors[1],
+				'borderWidth':1
+		    }
+		)
+	}
 	
-	
+	console.log(datasetJSONText);
+	var ctx = $('#'+ canvasID);
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: xAxisLables,
+			datasets: datasetJSONText
+		},
+		options: 
+		{
+			title: 
+			{
+				display: true,
+				text: title
+        	},
+			scales: 
+			{
+				yAxes: 
+				[{
+					ticks: 
+					{
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	});
+}
+function createPieChart(canvasID, datasetz, title)//order is (booked, pending, unbooked, lessons, locked)
+{
+	var ctx = document.getElementById(canvasID);
+	var myChart = new Chart(ctx, {
+		type: 'doughnut',
+		data: {
+			labels: ['Booked', 'Pending', 'Unbooked', 'Lessons', 'Locked'],
+			datasets: [{
+				data: datasetz,
+				backgroundColor: 
+				[
+					'red',
+					'rgba(0,0,0,0.1)',
+					'#08DD00',
+					'orange',
+					'gray'
+				]
+			}]
+		},
+		options: 
+		{
+			title: 
+			{
+				display: true,
+				text: title
+        	}
+		}
+	});
 }

@@ -20,6 +20,7 @@
 	<link rel="stylesheet" href="../CSS/nprogress.css">
 	<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </head>
 
 <body>
@@ -58,7 +59,7 @@
 			<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Data</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
-		<div onClick="currentSettingsSlide(5);changeSettingTitle('My Resource Data');" class="settingsPageBtn imgBtn edit_hover_class">
+		<div onClick="currentSettingsSlide(5);changeSettingTitle('My Resource Data');myResosDataStart();" class="settingsPageBtn imgBtn edit_hover_class">
 			<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Resource Data</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
@@ -170,11 +171,11 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</label><br>
-						<select class="smallInput smallPadding">
-							<option>Hello</option>
-							<option>Hello</option>
-							<option>Hello</option>
-						</select>
+						<div id="MyResosDataSelectDiv" class="sameLine">
+							<select id="MyResosDataSelect" class="smallInput smallPadding">
+								<option>Loading...</option>
+							</select>
+						</div>
 						&nbsp;&nbsp;&nbsp;
 					</div>
 
@@ -186,7 +187,7 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</label><br>
-						<input class="smallInput datepicker smallPadding">
+						<input onChange="findWkBegin('MyResosDateStart');" id="MyResosDateStart" class="smallInput datepicker smallPadding">
 						&nbsp;&nbsp;&nbsp;
 					</div>
 
@@ -199,13 +200,16 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</label><br>
-						<input class = "smallInput datepicker smallPadding">
+						<input onChange="findWkBegin('MyResosDateEnd');" id="MyResosDateEnd" class = "smallInput datepicker smallPadding">
 						&nbsp;&nbsp;&nbsp;
 					</div>
 					<br>
-					<button class="btnSuccessOutline largerWidthButton">Calculate Data</button>
+					<button class="btnSuccessOutline largerWidthButton" onClick="startCalculationOfMyResos();">Calculate Data</button>
 					<br><br>
 				</center>
+			</div>
+			<br><br>
+			<div id="canvasHere" class="sectionedSettingsDiv">
 			</div>
 		</div>
 
@@ -233,7 +237,7 @@
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						</label><br>
-						<input id="WBChosen" class="smallInput" disabled>
+						<input id="WBChosen" class="smallInput">
 						&nbsp;&nbsp;&nbsp;
 					</div>
 
@@ -588,5 +592,8 @@
 			"<br><br>Alternatively you can also simply click the button to change the current week you are on now, also resetting the alternation cycle.</p>",
 		});
 	}
+</script>
+<script>
+	
 </script>
 </html>

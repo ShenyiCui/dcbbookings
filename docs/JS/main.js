@@ -11,7 +11,7 @@
 //!! IMPORTANT write code that'll check whether or not the file the user uploaded is valid or not, check format to make sure SIMS doenst get custom and to make sure that the length and width of the files are correct.
 //write and figure out the 30 min upload code and table
 
-//you need to change how you store your data in each hidden span. 
+//you need to change how you store your data in each hidden span.
 
 
 //YOU NEED TO WORK OUT THE VIEWPORT FOR RECURRING BOOKINGS, THE STRUCTURe IS FUCKED
@@ -410,7 +410,7 @@ function dynamicGenerateYourResos(data)//dynamically generate the list for your 
 	else
 	{
 		var sortedList = bubble_Sort2DArray(data["userControlledResources"],0);
-		
+
 		allResosHTML = "" //HTML for appending to the main page for All Resos
 		//allResos [roomid, resostype]
 		var bookmarkClass = "fa fa-bookmark-o imgBtn bookmark"; //will change depending on whether or not your box is a bookmarkedBox
@@ -447,7 +447,7 @@ function dynamicGenerateYourResos(data)//dynamically generate the list for your 
 		}
 		$("#EmptyMsg").html("");
 		$("#SearchResultsAndRV").html(allResosHTML);
-	}	
+	}
 }
 function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //requires dataRoom, DataDevice data sub and user data in array from, not raw JSON Form.
 {
@@ -460,7 +460,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	var tempHTML = "";
 	var ResosID = "";//id of each box
 	allResos = [];
-	
+
 	//console.log(userData);
 	//console.log(dataRoom); AccessRights RoomAdmin
 	var userCred = userData.role//user creditials "Student or Teacher"
@@ -509,7 +509,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 		{
 				buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button>'
 		}
-		
+
 		tempHTML = '<div id="'+ResosID+'" class="Box '+allResos[i][1]+'"><i onClick="'+bookMarkFunction+'" class="'+bookmarkClass+'" aria-hidden="true"></i><p><strong>'+allResos[i][0]+'</strong><br><em>'+allResos[i][1]+'</em></p>'+buttonViewFunction+'</div>'
 		allResosHTML += tempHTML;
 	}
@@ -560,15 +560,15 @@ function populateYourResos()
 	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
 	$("#viewTextMainPage").html("[My Resources]")
 	$("#searchBarAndTitle").hide();
-	
+
 	$("#MainPageModule").removeClass("MainPageSearch")
 	$("#MainPageModule").addClass("moveUpSearch")
-	
+
 	$("#SearchResultsAndRV").removeClass("withSearchBarWidth")
 	$("#SearchResultsAndRV").addClass("withoutSearchBarWidth")
-	
+
 	roomDataFetchSuccess = false;
-	userInfoFetchSuccess = false; 
+	userInfoFetchSuccess = false;
 	validateUserInfoFetched();
 	getUserInfo(userEmail);
 	function validateUserInfoFetched()
@@ -599,13 +599,13 @@ function populateAllResos() // populates the all Resos HTML in main page
 	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
 	$("#viewTextMainPage").html("[All Resources]")
 	$("#searchBarAndTitle").hide();
-	
+
 	$("#MainPageModule").removeClass("MainPageSearch")
 	$("#MainPageModule").addClass("moveUpSearch")
-	
+
 	$("#SearchResultsAndRV").removeClass("withSearchBarWidth")
 	$("#SearchResultsAndRV").addClass("withoutSearchBarWidth")
-	
+
 	roomDataFetchSuccess = false;
 	validateFetchRoom();
 	getAllRooms();
@@ -653,15 +653,15 @@ function populateBookmarkedResos()
 	$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
 	$("#viewTextMainPage").html("[Bookmarks]")
 	$("#searchBarAndTitle").hide();
-	
+
 	$("#MainPageModule").removeClass("MainPageSearch")
 	$("#MainPageModule").addClass("moveUpSearch")
-	
+
 	$("#SearchResultsAndRV").removeClass("withSearchBarWidth")
 	$("#SearchResultsAndRV").addClass("withoutSearchBarWidth")
-	
+
 	roomDataFetchSuccess = false;
-	userInfoFetchSuccess = false; 
+	userInfoFetchSuccess = false;
 	validateFetchRoom();
 	getAllRooms();
 	function validateFetchRoom() // will not continue until it knows that room has been fetched
@@ -1665,7 +1665,7 @@ function generatePreviewTable(data,min30)
 
 //bookmark and unbookmark function. Will populate the online DB with the new booking.
 function bookmarkIt(resosID, resosType)// function to bookmark a certain room
-{	
+{
 	$("#SearchResultsAndRV").html('<p id="EmptyMsg" style="color: white; margin: 0;"></p>');
 	$("#EmptyMsg").html("<em><p>Processing Request...</p></em>");
 
@@ -1914,21 +1914,21 @@ function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited l
 			else
 			{
 				recentlyVisitedTemp = currentData;
-				
-				
+
+
 				emptyList.push(resosID)
 				emptyList.push(resosType)
-				
-				var doesntExist = true; 
-				
+
+				var doesntExist = true;
+
 				for(var i =0; i<recentlyVisitedTemp.length; i++)
 				{
 					if(compareArray(emptyList,recentlyVisitedTemp[i]))
 					{
-						doesntExist = false; 
+						doesntExist = false;
 					}
 				}
-				
+
 				if(doesntExist == true)
 				{
 					if(recentlyVisitedTemp.length >= 4)
@@ -1937,11 +1937,11 @@ function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited l
 					}
 					recentlyVisitedTemp.push(emptyList)
 				}
-				
+
 			}
-			
+
 			updateUserInfo("recentlyBookedResources",recentlyVisitedTemp)
-			
+
 			userInfoUpdateSuccess = false;
 			validateUpdate()
 			function validateUpdate()
@@ -1952,10 +1952,10 @@ function addToRecentlyVisted(resosID, resosType) //adds to the recenly visited l
 				}
 				else
 				{
-					userInfoUpdateSuccess = false; 
+					userInfoUpdateSuccess = false;
 				}
 			}
-			
+
 		}
 	}
 }
@@ -2052,16 +2052,16 @@ function timetableDocFunctionsRoom()
 	var fullCurrentStatus = "" // stores the current HTML of the cell that was clicked
 	var currentBookingState = "" // stores the current booking state of the cell you are on
 	var bookingDetails; // stores the current booking detailed information in an array
-	
-	var timeStamp;//stores the timestamp the booking was made at. 
-	var RoombookingSchedule; // booking scheudle for the room. 
+
+	var timeStamp;//stores the timestamp the booking was made at.
+	var RoombookingSchedule; // booking scheudle for the room.
 	var intendedCoors; // stores the current coor the user is on
 	var formattedCurrentDate; // stores the formatted current date in DD, month thingy week Begining
-	var permaSchd; //stores the permanent scheudle of a room. 
+	var permaSchd; //stores the permanent scheudle of a room.
 	var weekNow; //stores the current week now. If its variable currentWeek == 0 then weekNow will be Week1, else it'll be Week2
-	
-	
-	
+
+
+
 	//--->Editing Viewport > start
 	$(document).on('click', '.row_data', function(event)
 	{
@@ -2088,7 +2088,7 @@ function timetableDocFunctionsRoom()
 		[6] - coordinate of booking [row][col] on the table
 		[7] - week begining
 		*/
-		
+
 		//Structure of lesson / Recurring Lock
 		/*
 		[0] - booking value, unbooked, etc
@@ -2096,7 +2096,7 @@ function timetableDocFunctionsRoom()
 		[2] - perpectual, nonperpectual booking etc.
 		[3] - week 1, week 2 or both
 		*/
-		
+
 		//putting the coordinates into the variable
 		coordinates = [];
 		coordinates.push(parseInt($(this).closest('tr').attr('row_name')));
@@ -2139,21 +2139,21 @@ function timetableDocFunctionsRoom()
 		$("#approveBtn").hide();
 		$("#rLockBtn").hide();
 		$("#preLimLoader").hide();
-		
+
 		//determining date and time to see if user is allowed to book this room
 		var cushionTime = parseInt(indiRoomData.Items[0].PlanAhead); //time that blocks a room 30 mins before time elapses
-		
+
 		var current = new Date();
 		var otherDateTime = currentWeekBegining;
 		var usersTime = moment(transformYYYYMMDDtoDate(transformCurrentWeek(getWeekBegining(otherDateTime)).toString()))
-		
+
 		usersTime = usersTime.add(calculateAddingTime(coordinates[0],coordinates[1],cushionTime),'minutes')._d;
-		
+
 		//console.log(coordinates)
-		
+
 		//console.log(current)
 		//console.log(usersTime)
-		
+
 		if(current>usersTime)
 		{
 			$("#deleteBtn").prop('disabled', true);
@@ -2171,8 +2171,8 @@ function timetableDocFunctionsRoom()
 			$("#rLockBtn").prop('disabled', false);
 		}
 		//console.log(indiRoomData)
-		
-		//elasped time check end. 
+
+		//elasped time check end.
 
 		$("#bookingDetails").html("<strong>Week Beginning: </strong>" + getWeekBegining(new Date()) + "<br><strong>Time:</strong> "+day+" "+period);
 
@@ -2203,7 +2203,7 @@ function timetableDocFunctionsRoom()
 			[6] - coordinate of booking [row][col] on the table
 			[7] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -2211,7 +2211,7 @@ function timetableDocFunctionsRoom()
 			[2] - perpectual, nonperpectual booking etc.
 			[3] - week 1, week 2 or both
 			*/
-			
+
 			clickBookedEmail = bookingDetails[0];
 			//console.log(bookingDetails)
 			if(userEmail == clickBookedEmail)//if user is the one who made the booking
@@ -2253,10 +2253,10 @@ function timetableDocFunctionsRoom()
 				$("#deleteBtn").show();
 				//$("#deleteBtn").removeAttr("disabled");
 			}
-			
+
 			if(bookingDetails[2] != "-1" || bookingDetails[5] != "N.A")
 			{
-				var onWhatWeek = bookingDetails[3]; 
+				var onWhatWeek = bookingDetails[3];
 				if(bookingDetails[3] == "Week1Week2")
 				{
 					onWhatWeek = "Week 1 & Week 2"
@@ -2269,38 +2269,38 @@ function timetableDocFunctionsRoom()
 				{
 					onWhatWeek = "Week 2"
 				}
-				
-				var weekStart; 
-				var weekEnd; 
-				
-				var weekStartNum; 
+
+				var weekStart;
+				var weekEnd;
+
+				var weekStartNum;
 				var weekEndNum;
-				
-				var weeksLeft; 
+
+				var weeksLeft;
 				if(bookingDetails[1] == "NP")
 				{
 					weekStart = getWeekBegining(new Date(currentWeekBegining));
 					weekEnd = bookingDetails[2].split(",")[2]+","+bookingDetails[2].split(",")[3]
-					
+
 					weekStartNum = transformCurrentWeek(weekStart)
 					weekEndNum = transformCurrentWeek(weekEnd)
-					
+
 					//console.log(weekStart)
 					//console.log(weekEnd)
 					//console.log(weekStartNum)
 					//console.log(weekEndNum)
 					weeksLeft = DifferenceInDays(transformYYYYMMDDtoDate(weekStartNum.toString()),transformYYYYMMDDtoDate(weekEndNum.toString()))
 					weeksLeft = Math.trunc(weeksLeft / 7) + 1
-					
+
 				}
 				else if(bookingDetails[1] == "P")
 				{
 					weeksLeft = "Perpetual"
 				}
 				$("#Description").html(
-					"<strong>ECA:</strong> " + bookingDetails[5].split(",")[0] + "<br>" + 
-					"<strong>Description:</strong> " + bookingDetails[5].split(",")[1] + "<br>" + 
-					"<strong>On Week:</strong> " + onWhatWeek + "<br>" + 
+					"<strong>ECA:</strong> " + bookingDetails[5].split(",")[0] + "<br>" +
+					"<strong>Description:</strong> " + bookingDetails[5].split(",")[1] + "<br>" +
+					"<strong>On Week:</strong> " + onWhatWeek + "<br>" +
 					"<strong>Weeks Left:</strong> " + weeksLeft + "<br>"
 				)
 			}
@@ -2352,7 +2352,7 @@ function timetableDocFunctionsRoom()
 			[6] - coordinate of booking [row][col] on the table
 			[7] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -2360,7 +2360,7 @@ function timetableDocFunctionsRoom()
 			[2] - perpectual, nonperpectual booking etc.
 			[3] - week 1, week 2 or both
 			*/
-			
+
 			clickBookedEmail = bookingDetails[0];
 			//console.log(bookingDetails)
 			if(userEmail == clickBookedEmail)//if user is the one who made the booking
@@ -2403,10 +2403,10 @@ function timetableDocFunctionsRoom()
 				$("#deleteBtn").removeAttr("disabled");
 				$("#approveBtn").show();
 			}
-			
+
 			if(bookingDetails[2] != "-1" || bookingDetails[5] != "N.A")
 			{
-				var onWhatWeek = bookingDetails[3]; 
+				var onWhatWeek = bookingDetails[3];
 				if(bookingDetails[3] == "Week1Week2")
 				{
 					onWhatWeek = "Week 1 & Week 2"
@@ -2419,38 +2419,38 @@ function timetableDocFunctionsRoom()
 				{
 					onWhatWeek = "Week 2"
 				}
-				
-				var weekStart; 
-				var weekEnd; 
-				
-				var weekStartNum; 
+
+				var weekStart;
+				var weekEnd;
+
+				var weekStartNum;
 				var weekEndNum;
-				
-				var weeksLeft; 
+
+				var weeksLeft;
 				if(bookingDetails[1] == "NP")
 				{
 					weekStart = getWeekBegining(new Date(currentWeekBegining));
 					weekEnd = bookingDetails[2].split(",")[2]+","+bookingDetails[2].split(",")[3]
-					
+
 					weekStartNum = transformCurrentWeek(weekStart)
 					weekEndNum = transformCurrentWeek(weekEnd)
-					
+
 					//console.log(weekStart)
 					//console.log(weekEnd)
 					//console.log(weekStartNum)
 					//console.log(weekEndNum)
 					weeksLeft = DifferenceInDays(transformYYYYMMDDtoDate(weekStartNum.toString()),transformYYYYMMDDtoDate(weekEndNum.toString()))
 					weeksLeft = Math.trunc(weeksLeft / 7) + 1
-					
+
 				}
 				else if(bookingDetails[1] == "P")
 				{
 					weeksLeft = "Perpetual"
 				}
 				$("#Description").html(
-					"<strong>ECA:</strong> " + bookingDetails[5].split(",")[0] + "<br>" + 
-					"<strong>Description:</strong> " + bookingDetails[5].split(",")[1] + "<br>" + 
-					"<strong>On Week:</strong> " + onWhatWeek + "<br>" + 
+					"<strong>ECA:</strong> " + bookingDetails[5].split(",")[0] + "<br>" +
+					"<strong>Description:</strong> " + bookingDetails[5].split(",")[1] + "<br>" +
+					"<strong>On Week:</strong> " + onWhatWeek + "<br>" +
 					"<strong>Weeks Left:</strong> " + weeksLeft + "<br>"
 				)
 			}
@@ -2468,7 +2468,7 @@ function timetableDocFunctionsRoom()
 		var bookRModal = $("#BookRecurring")
 		var EModal = $("#emailModal")
 		var datePicking = $(".ui-datepicker")
-		
+
 		// if the target of the click isn't the container nor a descendant of the container
 		if (!container.is(e.target) && container.has(e.target).length === 0 && !table.is(e.target) && table.has(e.target).length === 0 && !bookRModal.is(e.target) && bookRModal.has(e.target).length === 0 && !EModal.is(e.target) && EModal.has(e.target).length === 0 && !datePicking.is(e.target) && datePicking.has(e.target).length === 0)
 		{
@@ -2481,12 +2481,12 @@ function timetableDocFunctionsRoom()
 		}
 	});
 	//--->MakingviewPort Dissapear  when user clicks away > end
-	
+
 	//-->Quickbooking a period Start
-	$(document).on('click', '#bookBtn', function(event) 
+	$(document).on('click', '#bookBtn', function(event)
 	{
 		//need to first see if the slot's been taken aready
-		//then if its not then it will excecute the Booking Function 
+		//then if its not then it will excecute the Booking Function
 
 		//structure of each period in the fetched userbookings
 		/*
@@ -2508,31 +2508,31 @@ function timetableDocFunctionsRoom()
 		[2] - perpectual, nonperpectual booking etc.
 		[3] - week 1, week 2 or both
 		*/
-		
-		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
-		
-		//getSpecificResos(resosID, resosType) 
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items.
+
+		//getSpecificResos(resosID, resosType)
 		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
-		
+
 		preLimLoader("Booking...") //output showing user the room is currently being booked
-		
+
 		event.preventDefault(); //prevent's default function from excecuting
-		
+
 		//console.log(coordinates) //in a [x,y] format row, col
-		//console.log(day) 
+		//console.log(day)
 		//console.log(period)
 		//console.log(fullCurrentStatus), Useless in this context
 		//console.log(currentBookingState), Useless in this context
 		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
-		//need to retrieve Week Begining. 
-		
+		//need to retrieve Week Begining.
+
 		getSpecificResos(currentResosID, currentResosType)
 		indiResosDataFetchSuccess = false;
 		validateResosFetch()
-		
+
 		intendedCoors = coordinates
 		formattedCurrentDate = getWeekBegining(currentWeekBegining);
-		
+
 		function validateResosFetch()
 		{
 			if(indiResosDataFetchSuccess == false)
@@ -2549,8 +2549,8 @@ function timetableDocFunctionsRoom()
 		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
 		{
 			//console.log(indiRoomData)
-			
-			
+
+
 			if(RoombookingSchedule[0]=="Empty List")
 			{
 				RoombookingSchedule = [];
@@ -2558,12 +2558,12 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				var freeForBooking = true; 
+				var freeForBooking = true;
 				for(var i = 0; i < RoombookingSchedule.length; i++)
 				{
-					if(RoombookingSchedule[i][RoombookingSchedule[0].length-1] == formattedCurrentDate && RoombookingSchedule[i][RoombookingSchedule[0].length-2] == intendedCoors) // will only allow book to occur if the room hasnt been taken. 
+					if(RoombookingSchedule[i][RoombookingSchedule[0].length-1] == formattedCurrentDate && RoombookingSchedule[i][RoombookingSchedule[0].length-2] == intendedCoors) // will only allow book to occur if the room hasnt been taken.
 					{
-						freeForBooking = false; 
+						freeForBooking = false;
 					}
 				}
 				if(freeForBooking == false)
@@ -2578,7 +2578,7 @@ function timetableDocFunctionsRoom()
 				}
 			}
 		}
-		
+
 		//booking start
 		function validatedAndBook()
 		{
@@ -2595,7 +2595,7 @@ function timetableDocFunctionsRoom()
 			[7] - coordinate of booking [row][col] on the table
 			[8] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -2634,7 +2634,7 @@ function timetableDocFunctionsRoom()
 			//console.log(indiRoomData.Items[0].BookingRights)
 			//console.log(indiRoomData)
 			//console.log(individualData)
-			
+
 			newPeriodObject.push(userEmail)
 			newPeriodObject.push("NP")
 			newPeriodObject.push(-1)
@@ -2652,38 +2652,38 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push("N.A")
 			newPeriodObject.push(intendedCoors)
 			newPeriodObject.push(formattedCurrentDate)
-			
+
 			//console.log(newPeriodObject);
-			
+
 			RoombookingSchedule.push(newPeriodObject)
-			
+
 			updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
-			
-			roomInfoUpdateSuccess = false; 
-			validateRoomInfoUpdate()	
-			
+
+			roomInfoUpdateSuccess = false;
+			validateRoomInfoUpdate()
+
 		}
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
 				viewResos(currentResosID, "room", currentWeekBegining)
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 			}
 		}
-		
+
 	});
 	//-->Quickbooking a period End
-	
+
 	//-->quicklocking a period Start
-	$(document).on('click', '#quickLockBtn', function(event) 
+	$(document).on('click', '#quickLockBtn', function(event)
 	{
 		//need to first see if the slot's been taken aready
-		//then if its not then it will excecute the Booking Function 
+		//then if its not then it will excecute the Booking Function
 
 		//structure of each period in the fetched userbookings
 		/*
@@ -2705,31 +2705,31 @@ function timetableDocFunctionsRoom()
 		[2] - perpectual, nonperpectual booking etc.
 		[3] - week 1, week 2 or both
 		*/
-		
-		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
-		
-		//getSpecificResos(resosID, resosType) 
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items.
+
+		//getSpecificResos(resosID, resosType)
 		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
-		
+
 		preLimLoader("Locking Period...") //output showing user the room is currently being booked
-		
+
 		event.preventDefault(); //prevent's default function from excecuting
-		
+
 		//console.log(coordinates) //in a [x,y] format row, col
-		//console.log(day) 
+		//console.log(day)
 		//console.log(period)
 		//console.log(fullCurrentStatus), Useless in this context
 		//console.log(currentBookingState), Useless in this context
 		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
-		//need to retrieve Week Begining. 
-		
+		//need to retrieve Week Begining.
+
 		getSpecificResos(currentResosID, currentResosType)
 		indiResosDataFetchSuccess = false;
 		validateResosFetch()
-		
+
 		intendedCoors = coordinates
 		formattedCurrentDate = getWeekBegining(currentWeekBegining);
-		
+
 		function validateResosFetch()
 		{
 			if(indiResosDataFetchSuccess == false)
@@ -2746,8 +2746,8 @@ function timetableDocFunctionsRoom()
 		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
 		{
 			//console.log(indiRoomData)
-			
-			
+
+
 			if(RoombookingSchedule[0]=="Empty List")
 			{
 				RoombookingSchedule = [];
@@ -2755,12 +2755,12 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				var freeForBooking = true; 
+				var freeForBooking = true;
 				for(var i = 0; i < RoombookingSchedule.length; i++)
 				{
-					if(RoombookingSchedule[i][RoombookingSchedule[0].length-1] == formattedCurrentDate && RoombookingSchedule[i][RoombookingSchedule[0].length-2] == intendedCoors) // will only allow book to occur if the room hasnt been taken. 
+					if(RoombookingSchedule[i][RoombookingSchedule[0].length-1] == formattedCurrentDate && RoombookingSchedule[i][RoombookingSchedule[0].length-2] == intendedCoors) // will only allow book to occur if the room hasnt been taken.
 					{
-						freeForBooking = false; 
+						freeForBooking = false;
 					}
 				}
 				if(freeForBooking == false)
@@ -2775,7 +2775,7 @@ function timetableDocFunctionsRoom()
 				}
 			}
 		}
-		
+
 		//booking start
 		function validatedAndBook()
 		{
@@ -2792,7 +2792,7 @@ function timetableDocFunctionsRoom()
 			[7] - coordinate of booking [row][col] on the table
 			[8] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -2818,41 +2818,41 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push("N.A")
 			newPeriodObject.push(intendedCoors)
 			newPeriodObject.push(formattedCurrentDate)
-			
+
 			//console.log(newPeriodObject);
-			
+
 			RoombookingSchedule.push(newPeriodObject)
-			
+
 			updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
-			
-			roomInfoUpdateSuccess = false; 
-			validateRoomInfoUpdate()	
-			
+
+			roomInfoUpdateSuccess = false;
+			validateRoomInfoUpdate()
+
 		}
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
 				viewResos(currentResosID, "room", currentWeekBegining)
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 			}
 		}
-		
-	
+
+
 	});
 	//-->quicklocking a period End
-	
+
 	//-->locking a period in perma schedule recurring Booking Start
-	$(document).on('click', '#rLockBtn', function(event) 
+	$(document).on('click', '#rLockBtn', function(event)
 	{
-		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson. 
-		
+		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson.
+
 		//need to first see if the slot's been taken aready
-		//then if its not then it will excecute the Booking Function 
+		//then if its not then it will excecute the Booking Function
 
 		//structure of each period in the fetched userbookings
 		/*
@@ -2866,7 +2866,7 @@ function timetableDocFunctionsRoom()
 		[7] - coordinate of booking [row][col] on the table
 		[8] - week begining
 		*/
-		
+
 		//Structure of lesson / Recurring Lock
 		/*
 		[0] - booking value, unbooked, etc
@@ -2875,30 +2875,30 @@ function timetableDocFunctionsRoom()
 		[3] - week 1, week 2 or both
 		*/
 
-		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
-		
-		//getSpecificResos(resosID, resosType) 
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items.
+
+		//getSpecificResos(resosID, resosType)
 		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
-		
+
 		preLimLoader("Locking Period in Perma Shchd...") //output showing user the room is currently being booked
 		event.preventDefault(); //prevent's default function from excecuting
-		
+
 		//console.log(coordinates) //in a [x,y] format row, col
-		//console.log(day) 
+		//console.log(day)
 		//console.log(period)
 		//console.log(fullCurrentStatus), Useless in this context
 		//console.log(currentBookingState), Useless in this context
 		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
-		//need to retrieve Week Begining. 
-		
+		//need to retrieve Week Begining.
+
 		getSpecificResos(currentResosID, currentResosType)
 		indiResosDataFetchSuccess = false;
 		validateResosFetch()
-		
+
 		intendedCoors = coordinates
 		formattedCurrentDate = getWeekBegining(currentWeekBegining);
 		//console.log(formattedCurrentDate)
-		
+
 		function validateResosFetch()
 		{
 			if(indiResosDataFetchSuccess == false)
@@ -2908,18 +2908,18 @@ function timetableDocFunctionsRoom()
 			else
 			{
 				indiResosDataFetchSuccess = false;
-				
+
 				RoombookingSchedule = indiRoomData.Items[0].BookingSchedule;
 				permaSchd = indiRoomData.Items[0].PermaSchedule;
-				
+
 				validatePeriodAvailbility()
 			}
 		}
 		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
 		{
 			//console.log(indiRoomData)
-			
-			
+
+
 			if(RoombookingSchedule[0]=="Empty List")
 			{
 				RoombookingSchedule = [];
@@ -2927,13 +2927,13 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				var freeForBooking = true; 
-				
-				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah... 
-				
-				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array. 
+				var freeForBooking = true;
+
+				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah...
+
+				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array.
 				//console.log(currentWeek)
-				if(currentWeek == 1)  
+				if(currentWeek == 1)
 				{
 					weekNow = "Week1"
 				}
@@ -2942,21 +2942,21 @@ function timetableDocFunctionsRoom()
 					weekNow = "Week2"
 				}
 				//console.log(permaSchd);
-				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere. 
+				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere.
 				for(var i = 0; i < RoombookingSchedule.length; i++)
 				{
 					/*console.log(RoombookingSchedule[i][4] + " : "+ weekNow)
 					console.log(RoombookingSchedule[i][RoombookingSchedule[0].length-2] + " : "+ intendedCoors)
-					
+
 					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2"))
 					console.log(compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))
-					
+
 					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))*/
-					
-					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken. 
+
+					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken.
 					{
-						
-						freeForBooking = false; 
+
+						freeForBooking = false;
 						indexOfBookingThatsInterrupting = i;
 					}
 				}
@@ -2970,7 +2970,7 @@ function timetableDocFunctionsRoom()
 				}
 			}
 		}
-		
+
 		//booking start
 		function validatedAndBook()
 		{
@@ -2987,7 +2987,7 @@ function timetableDocFunctionsRoom()
 			[7] - coordinate of booking [row][col] on the table
 			[8] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -3008,28 +3008,28 @@ function timetableDocFunctionsRoom()
 				CurrentWeekString = "Week2"
 			}
 			newPeriodObject.push(CurrentWeekString)
-			
+
 			permaSchd[currentWeek-1][intendedCoors[0]][intendedCoors[1]] = newPeriodObject
-						
+
 			updateRoomDetails(currentResosID, "PermaSchedule", permaSchd)
-			
-			roomInfoUpdateSuccess = false; 
-			validateRoomInfoUpdate()	
-			
+
+			roomInfoUpdateSuccess = false;
+			validateRoomInfoUpdate()
+
 		}
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
 				viewResos(currentResosID, "room", currentWeekBegining)
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 			}
 		}
-		
+
 		function confirmLock()
 		{
 			var PoNP;
@@ -3074,17 +3074,17 @@ function timetableDocFunctionsRoom()
 				}
 			});
 		}
-		
+
 	});
 	//-->locking a period in perma schedule recurring Booking End
-	
+
 	//-->locking a lesson period Start
-	$(document).on('click', '#lessonLockBtn', function(event) 
+	$(document).on('click', '#lessonLockBtn', function(event)
 	{
-		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson. 
-		
+		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson.
+
 		//need to first see if the slot's been taken aready
-		//then if its not then it will excecute the Booking Function 
+		//then if its not then it will excecute the Booking Function
 
 		//structure of each period in the fetched userbookings
 		/*
@@ -3098,7 +3098,7 @@ function timetableDocFunctionsRoom()
 		[7] - coordinate of booking [row][col] on the table
 		[8] - week begining
 		*/
-		
+
 		//Structure of lesson / Recurring Lock
 		/*
 		[0] - booking value, unbooked, etc
@@ -3106,31 +3106,31 @@ function timetableDocFunctionsRoom()
 		[2] - perpectual, nonperpectual booking etc.
 		[3] - week 1, week 2 or both
 		*/
-		
-		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
-		
-		//getSpecificResos(resosID, resosType) 
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items.
+
+		//getSpecificResos(resosID, resosType)
 		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
-		
+
 		preLimLoader("Creating Lesson...") //output showing user the room is currently being booked
 		event.preventDefault(); //prevent's default function from excecuting
-		
+
 		//console.log(coordinates) //in a [x,y] format row, col
-		//console.log(day) 
+		//console.log(day)
 		//console.log(period)
 		//console.log(fullCurrentStatus), Useless in this context
 		//console.log(currentBookingState), Useless in this context
 		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
-		//need to retrieve Week Begining. 
-		
+		//need to retrieve Week Begining.
+
 		getSpecificResos(currentResosID, currentResosType)
 		indiResosDataFetchSuccess = false;
 		validateResosFetch()
-		
+
 		intendedCoors = coordinates
 		formattedCurrentDate = getWeekBegining(currentWeekBegining);
 		//console.log(formattedCurrentDate)
-		
+
 		function validateResosFetch()
 		{
 			if(indiResosDataFetchSuccess == false)
@@ -3140,18 +3140,18 @@ function timetableDocFunctionsRoom()
 			else
 			{
 				indiResosDataFetchSuccess = false;
-				
+
 				RoombookingSchedule = indiRoomData.Items[0].BookingSchedule;
 				permaSchd = indiRoomData.Items[0].PermaSchedule;
-				
+
 				validatePeriodAvailbility()
 			}
 		}
 		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
 		{
 			//console.log(indiRoomData)
-			
-			
+
+
 			if(RoombookingSchedule[0]=="Empty List")
 			{
 				RoombookingSchedule = [];
@@ -3159,13 +3159,13 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				var freeForBooking = true; 
-				
-				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah... 
-				
-				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array. 
+				var freeForBooking = true;
+
+				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah...
+
+				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array.
 				//console.log(currentWeek)
-				if(currentWeek == 1)  
+				if(currentWeek == 1)
 				{
 					weekNow = "Week1"
 				}
@@ -3174,21 +3174,21 @@ function timetableDocFunctionsRoom()
 					weekNow = "Week2"
 				}
 				//console.log(permaSchd);
-				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere. 
+				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere.
 				for(var i = 0; i < RoombookingSchedule.length; i++)
 				{
 					/*console.log(RoombookingSchedule[i][4] + " : "+ weekNow)
 					console.log(RoombookingSchedule[i][RoombookingSchedule[0].length-2] + " : "+ intendedCoors)
-					
+
 					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2"))
 					console.log(compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))
-					
+
 					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))*/
-					
-					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken. 
+
+					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken.
 					{
-						
-						freeForBooking = false; 
+
+						freeForBooking = false;
 						indexOfBookingThatsInterrupting = i;
 					}
 				}
@@ -3202,7 +3202,7 @@ function timetableDocFunctionsRoom()
 				}
 			}
 		}
-		
+
 		//booking start
 		function validatedAndBook()
 		{
@@ -3219,7 +3219,7 @@ function timetableDocFunctionsRoom()
 			[7] - coordinate of booking [row][col] on the table
 			[8] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -3227,33 +3227,33 @@ function timetableDocFunctionsRoom()
 			[2] - perpectual, nonperpectual booking etc.
 			[3] - week 1, week 2 or both
 			*/
-			
+
 			newPeriodObject.push(lessonval)
 			newPeriodObject.push(userEmail)
 			newPeriodObject.push("P")
 			newPeriodObject.push(weekNow)
-			
+
 			permaSchd[currentWeek-1][intendedCoors[0]][intendedCoors[1]] = newPeriodObject
-						
+
 			updateRoomDetails(currentResosID, "PermaSchedule", permaSchd)
-			
-			roomInfoUpdateSuccess = false; 
-			validateRoomInfoUpdate()	
-			
+
+			roomInfoUpdateSuccess = false;
+			validateRoomInfoUpdate()
+
 		}
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
 				viewResos(currentResosID, "room", currentWeekBegining)
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 			}
 		}
-		
+
 		function confirmLesson()
 		{
 			var PoNP;
@@ -3298,12 +3298,12 @@ function timetableDocFunctionsRoom()
 				}
 			});
 		}
-		
+
 	});
 	//-->locking a lesson period End
-	
+
 	//deleting a period start
-	$(document).on('click', '#deleteBtn', function(event) 
+	$(document).on('click', '#deleteBtn', function(event)
 	{
 		if(approveGoAhead[1]==true)
 		{
@@ -3313,18 +3313,18 @@ function timetableDocFunctionsRoom()
 		{
 			preLimLoader("Deleting Event...")
 		}
-		
+
 		event.preventDefault();
-		
+
 		intendedCoors = coordinates
 		formattedCurrentDate = getWeekBegining(currentWeekBegining);
 		RoombookingSchedule = indiRoomData.Items[0].BookingSchedule;
 		permaSchd = indiRoomData.Items[0].PermaSchedule;
 		//console.log(bookingDetails)
 		//console.log(RoombookingSchedule)
-		// we have to search for the booking in the room booking schedule, remove it, then plug it back into the equation. 
-		//if the booking doesnt exist in the scheulde it must exist in the permanent schedule. Find out if theyre in week 1 or week 2, then just pluck out the coordinate 
-		
+		// we have to search for the booking in the room booking schedule, remove it, then plug it back into the equation.
+		//if the booking doesnt exist in the scheulde it must exist in the permanent schedule. Find out if theyre in week 1 or week 2, then just pluck out the coordinate
+
 		//converts the booking schedule within the hiddenspan back into it's original state in the initaltable period 3 dimentional array. START
 		var bookingDetailsArrayConverted = [];
 		bookingDetailsArrayConverted.push(currentBookingState)
@@ -3344,16 +3344,16 @@ function timetableDocFunctionsRoom()
 			}
 		}
 		//converts the booking schedule within the hiddenspan back into it's original state in the initaltable period 3 dimentional array. END
-		
+
 		//console.log(bookingDetailsArrayConverted);
 		//Deleting away from the userBookingSchedule. Array Start
-		var deletedFromUserBookingSchd = false; 
+		var deletedFromUserBookingSchd = false;
 		//console.log(RoombookingSchedule);
 		for(var i = RoombookingSchedule.length-1; i>-1; i--)
 		{
 			if(compareArray(RoombookingSchedule[i],bookingDetailsArrayConverted))
 			{
-				deletedFromUserBookingSchd = true; 
+				deletedFromUserBookingSchd = true;
 				RoombookingSchedule.splice(i, 1);
 				if(RoombookingSchedule.length == 0)
 				{
@@ -3365,14 +3365,14 @@ function timetableDocFunctionsRoom()
 		//Deleting away from the roombookingSchedule. Array End
 
 		//Deleting away from the permanment schedule Array start
-		
-		//needs to figure out the week, and the coordinates, then purge from the permsched array. 
-		
+
+		//needs to figure out the week, and the coordinates, then purge from the permsched array.
+
 		if(deletedFromUserBookingSchd == false)
 		{
 			var newEmptyPeriod = [];
 			//console.log(bookingDetails)
-			var weekYoureDeletingFrom; 
+			var weekYoureDeletingFrom;
 			if(bookingDetails[2] == "Week1")//if its a lesson in permaschd
 			{
 				weekYoureDeletingFrom = 0;
@@ -3383,7 +3383,7 @@ function timetableDocFunctionsRoom()
 			}
 			else if(bookingDetails[2] == "Week2")
 			{
-				weekYoureDeletingFrom = 1; 
+				weekYoureDeletingFrom = 1;
 				newEmptyPeriod.push("unbooked")
 				newEmptyPeriod.push(userEmail)
 				newEmptyPeriod.push("P")
@@ -3399,7 +3399,7 @@ function timetableDocFunctionsRoom()
 			}
 			else if(bookingDetails[3] == "Week2")
 			{
-				weekYoureDeletingFrom = 1; 
+				weekYoureDeletingFrom = 1;
 				newEmptyPeriod.push("unbooked")
 				newEmptyPeriod.push(userEmail)
 				newEmptyPeriod.push("P")
@@ -3414,12 +3414,12 @@ function timetableDocFunctionsRoom()
 			*/
 			//console.log(intendedCoors)
 			//console.log(weekYoureDeletingFrom)
-			permaSchd[weekYoureDeletingFrom][intendedCoors[0]][intendedCoors[1]] = newEmptyPeriod; 
+			permaSchd[weekYoureDeletingFrom][intendedCoors[0]][intendedCoors[1]] = newEmptyPeriod;
 		}
 		//Deleting away from the permanment schedule Array end
-		
+
 		//Starting the Update of the new room schedule
-		roomInfoUpdateSuccess = false; 
+		roomInfoUpdateSuccess = false;
 		approveGoAhead[0] = false;
 		if(deletedFromUserBookingSchd == false)
 		{
@@ -3431,7 +3431,7 @@ function timetableDocFunctionsRoom()
 			updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
 			validateUpdate();
 		}
-		
+
 		function validateUpdate()
 		{
 			if(roomInfoUpdateSuccess == false)
@@ -3440,28 +3440,28 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				viewResos(currentResosID, "room", currentWeekBegining) 
-				roomInfoUpdateSuccess = false; 
+				viewResos(currentResosID, "room", currentWeekBegining)
+				roomInfoUpdateSuccess = false;
 			}
 		}
 	});
 	// deleting a period end
-	
+
 	//Booking a Recurring booking start from the timetable modal
 	$(document).on('click', '#rbookBtn', function(event) {
 		openRecurringModal()
 	});
 	//Booking a Recurring booking end
-	
+
 	//Approve Booking for users
 	//approveBtn
-	$(document).on('click', '#approveBtn', function(event) 
+	$(document).on('click', '#approveBtn', function(event)
 	{
 		var newPeriodObject=[];
-		
+
 		approveGoAhead[0]=false
 		approveGoAhead[1] = true;
-		
+
 		preLimLoader("Validating...")
 		validate();
 		function validate()
@@ -3475,8 +3475,8 @@ function timetableDocFunctionsRoom()
 				waitingforDetails();
 			}
 		}
-		
-		
+
+
 		function waitingforDetails()
 		{
 			//console.log(bookDetsPerma)
@@ -3490,10 +3490,10 @@ function timetableDocFunctionsRoom()
 			{
 				DateToDate = [];
 				var temp = bookDetsPerma[2].split(",");
-				
+
 				DateToDate.push(temp[0] + "," +temp[1])
 				DateToDate.push(temp[2] + "," +temp[3])
-				
+
 			}
 			var Coors = bookDetsPerma[6].split(',').map(Number);
 			//console.log(DateToDate)
@@ -3508,11 +3508,11 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push(bookDetsPerma[7])
 
 			//deleting pending
-			
-			
+
+
 			validateDeleted()
-			document.getElementById("deleteBtn").click(); 
-			
+			document.getElementById("deleteBtn").click();
+
 			function validateDeleted()
 			{
 				if(approveGoAhead[0]==false)
@@ -3535,20 +3535,20 @@ function timetableDocFunctionsRoom()
 				event.preventDefault(); //prevent's default function from excecuting
 
 				//console.log(coordinates) //in a [x,y] format row, col
-				//console.log(day) 
+				//console.log(day)
 				//console.log(period)
 				//console.log(fullCurrentStatus), Useless in this context
 				//console.log(currentBookingState), Useless in this context
 				//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
-				//need to retrieve Week Begining. 
-				
-				
+				//need to retrieve Week Begining.
+
+
 				indiResosDataFetchSuccess = false;
-				
+
 				var RoombookingSchedule;
 				validateResosFetch()
 				getSpecificResos(currentResosID, currentResosType)
-				
+
 				function validateResosFetch()
 				{
 					if(indiResosDataFetchSuccess == false)
@@ -3562,7 +3562,7 @@ function timetableDocFunctionsRoom()
 						addArrayNBook()
 					}
 				}
-				
+
 				function addArrayNBook()
 				{
 					if(RoombookingSchedule[0]=="Empty List")
@@ -3576,32 +3576,32 @@ function timetableDocFunctionsRoom()
 
 				function validateRoomInfoUpdate()
 				{
-					if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+					if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 					{
 						window.setTimeout(validateRoomInfoUpdate, 1000)
 					}
 					else
 					{
 						viewResos(currentResosID, "room", currentWeekBegining)
-						roomInfoUpdateSuccess = false; 
+						roomInfoUpdateSuccess = false;
 						//document.getElementById("deleteBtn").click();
 					}
 				}
 
 			}
 		}
-		
-		
+
+
 	});
 	//Approve booking for users end
-	
+
 	//Booking a Recurring booking start from the rbookModal
-	$(document).on('click', '#BookRecrBtn', function(event) 
+	$(document).on('click', '#BookRecrBtn', function(event)
 	{
-		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson. 
-		
+		var indexOfBookingThatsInterrupting; //index of the booking that called the confirm lesson alert. Index of the userbooking that's basically blocking ur lesson.
+
 		//need to first see if the slot's been taken aready
-		//then if its not then it will excecute the Booking Function 
+		//then if its not then it will excecute the Booking Function
 
 		//structure of each period in the fetched userbookings
 		/*
@@ -3615,7 +3615,7 @@ function timetableDocFunctionsRoom()
 		[7] - coordinate of booking [row][col] on the table
 		[8] - week begining
 		*/
-		
+
 		//Structure of lesson / Recurring Lock
 		/*
 		[0] - booking value, unbooked, etc
@@ -3623,39 +3623,39 @@ function timetableDocFunctionsRoom()
 		[2] - perpectual, nonperpectual booking etc.
 		[3] - week 1, week 2 or both
 		*/
-		
-		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items. 
-		
-		//getSpecificResos(resosID, resosType) 
+
+		// in order to compare to see if smth like this already exists, you have to compare Week Begining and Coordinate. With a quick sequential search. Ineffcient but who cares its easy to code. Aint no body gonna do a binary ass search. You can figure it out if you first pull room data and isolate the BookingSchedule field, in Items.
+
+		//getSpecificResos(resosID, resosType)
 		// gets the information of a very specific resosID, stores it in indiRoomData when indiResosDataFetchSuccess is true
-		
-		
+
+
 		event.preventDefault(); //prevent's default function from excecuting
-		
+
 		//console.log(coordinates) //in a [x,y] format row, col
-		//console.log(day) 
+		//console.log(day)
 		//console.log(period)
 		//console.log(fullCurrentStatus), Useless in this context
 		//console.log(currentBookingState), Useless in this context
 		//console.log(bookingDetails) //["email@temp.com", "perpetual", "Week1"]
-		//need to retrieve Week Begining. 
-		
+		//need to retrieve Week Begining.
+
 		getSpecificResos(currentResosID, currentResosType)
 		indiResosDataFetchSuccess = false;
 		validateUserInformation()
-		
-		
+
+
 		intendedCoors = coordinates
 		formattedCurrentDate = getWeekBegining(currentWeekBegining);
 		//console.log(formattedCurrentDate)
-		
+
 		var ECA; // ECA name
 		var DESCRIP; // ECA description
 		var PoNP; //Perpetual or Non Perpectual
 		var Week1OWeek2; // week 1 or week 2 booking
 		var StartWeek; // start week begining
 		var EndWeek;  // end week begining
-		
+
 		function validateResosFetch()
 		{
 			if(indiResosDataFetchSuccess == false)
@@ -3665,16 +3665,16 @@ function timetableDocFunctionsRoom()
 			else
 			{
 				indiResosDataFetchSuccess = false;
-				
+
 				RoombookingSchedule = indiRoomData.Items[0].BookingSchedule;
 				permaSchd = indiRoomData.Items[0].PermaSchedule;
-				
+
 				validatePeriodAvailbility()
 			}
 		}
 		function validatePeriodAvailbility()//makes sure that the period isnt booked b4
 		{
-			//console.log(indiRoomData)	
+			//console.log(indiRoomData)
 			if(RoombookingSchedule[0]=="Empty List")
 			{
 				RoombookingSchedule = [];
@@ -3682,13 +3682,13 @@ function timetableDocFunctionsRoom()
 			}
 			else
 			{
-				var freeForBooking = true; 
-				
-				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah... 
-				
-				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array. 
+				var freeForBooking = true;
+
+				// bascially what this block of code validates is that booking your lesson won't fuck with someone's scheule the next week. Ofc you can still still book if u want. But yeah...
+
+				//seeing if its week 1 or week 2, putting it in word form in order to compare in the array.
 				//console.log(currentWeek)
-				if(currentWeek == 1)  
+				if(currentWeek == 1)
 				{
 					weekNow = "Week1"
 				}
@@ -3697,21 +3697,21 @@ function timetableDocFunctionsRoom()
 					weekNow = "Week2"
 				}
 				//console.log(permaSchd);
-				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere. 
+				// looping through all the scheudle's booked by users to see if anything is being over ridden. Will check whether a schedule is in the same week and if its the same coordinates. If it is, then the lesson will interfere.
 				for(var i = 0; i < RoombookingSchedule.length; i++)
 				{
 					/*console.log(RoombookingSchedule[i][4] + " : "+ weekNow)
 					console.log(RoombookingSchedule[i][RoombookingSchedule[0].length-2] + " : "+ intendedCoors)
-					
+
 					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2"))
 					console.log(compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))
-					
+
 					console.log((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors))*/
-					
-					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken. 
+
+					if((RoombookingSchedule[i][4] == weekNow || RoombookingSchedule[i][4] == "Week1Week2") && compareArray(RoombookingSchedule[i][RoombookingSchedule[0].length-2],intendedCoors)) // will only allow book to occur if the room hasnt been taken.
 					{
-						
-						freeForBooking = false; 
+
+						freeForBooking = false;
 						indexOfBookingThatsInterrupting = i;
 					}
 				}
@@ -3725,11 +3725,11 @@ function timetableDocFunctionsRoom()
 				}
 			}
 		}
-		
+
 		function validateUserInformation()
 		{
 			if($("#eca").val().indexOf(",")==-1 && $("#ecaDes").val().indexOf(",")==-1)
-			{	
+			{
 				if($("#eca").val().length >0 && $("#ecaDes").val().length >0)
 				{
 					validateResosFetch()
@@ -3744,10 +3744,10 @@ function timetableDocFunctionsRoom()
 			{
 				$("#RBookErrMsg").html("Error: Character ',' is forbidden. It breaks the code and that'll make me cry );")
 			}
-			
-			
+
+
 		}
-		
+
 		//booking start
 		function validatedAndBook()
 		{
@@ -3755,20 +3755,20 @@ function timetableDocFunctionsRoom()
 			var newPeriodObject = [];
 			var newECAObject = [];
 			var newStartEndWeekObject = [];
-			
+
 			ECA = $("#eca").val()
 			DESCRIP = $("#ecaDes").val()
 			newECAObject.push(ECA);
 			newECAObject.push(DESCRIP);
-			
+
 			PoNP = $("#Recurrence").val()
 			Week1OWeek2 = $("#AlternatingWeeks").val()
-			
+
 			StartWeek = $("#startDate").val()
 			EndWeek = $("#endDate").val()
 			newStartEndWeekObject.push(StartWeek)
 			newStartEndWeekObject.push(EndWeek)
-			
+
 			//structure of each period in the fetched userbookings
 			/*
 			[0] - booking value, unbooked, etc
@@ -3781,7 +3781,7 @@ function timetableDocFunctionsRoom()
 			[7] - coordinate of booking [row][col] on the table
 			[8] - week begining
 			*/
-			
+
 			//Structure of lesson / Recurring Lock
 			/*
 			[0] - booking value, unbooked, etc
@@ -3789,7 +3789,7 @@ function timetableDocFunctionsRoom()
 			[2] - perpectual, nonperpectual booking etc.
 			[3] - week 1, week 2 or both
 			*/
-			
+
 			if(!indiRoomData.Items[0].RoomAdmin.includes(userEmail))
 			{
 				if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
@@ -3826,20 +3826,20 @@ function timetableDocFunctionsRoom()
 			newPeriodObject.push(newECAObject)
 			newPeriodObject.push(intendedCoors)
 			newPeriodObject.push(getWeekBegining(new Date(currentWeekBegining)))
-			
+
 			if(PoNP == "P")
 			{
 				newStartEndWeekObject = []
-				
+
 				newStartEndWeekObject.push(getWeekBegining(new Date(currentWeekBegining)))
 				var newDateObj = moment(new Date(currentWeekBegining)).add(30, 'y').toDate()
 				var newDateBegin = getWeekBegining(newDateObj);
 				newStartEndWeekObject.push(newDateBegin)
-				
+
 				console.log(newDateBegin)
-				
+
 				newPeriodObject = []
-				
+
 				if(!indiRoomData.Items[0].RoomAdmin.includes(userEmail))
 				{
 					if(indiRoomData.Items[0].BookingRights=="NoValidation")//booking requires no validation
@@ -3867,7 +3867,7 @@ function timetableDocFunctionsRoom()
 				{
 					newPeriodObject.push(bookval)
 				}
-				
+
 				newPeriodObject.push(userEmail)
 				newPeriodObject.push(PoNP)
 				newPeriodObject.push(newStartEndWeekObject)
@@ -3876,34 +3876,34 @@ function timetableDocFunctionsRoom()
 				newPeriodObject.push(newECAObject)
 				newPeriodObject.push(intendedCoors)
 				newPeriodObject.push(getWeekBegining(new Date(currentWeekBegining)))
-				
-				
+
+
 				RoombookingSchedule.push(newPeriodObject)
 				updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
-				roomInfoUpdateSuccess = false; 
-				validateRoomInfoUpdate()	
+				roomInfoUpdateSuccess = false;
+				validateRoomInfoUpdate()
 			}
 			else if(PoNP == "NP")
 			{
 				RoombookingSchedule.push(newPeriodObject)
 				updateRoomDetails(currentResosID, "BookingSchedule", RoombookingSchedule)
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 				validateRoomInfoUpdate()
 			}
 		}
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
 				viewResos(currentResosID, "room", currentWeekBegining)
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 			}
 		}
-		
+
 		function RBookConfliction()
 		{
 			var PoNP;
@@ -3942,9 +3942,9 @@ function timetableDocFunctionsRoom()
 		}
 	});
 	//Booking a Recurring booking end
-	
+
 }
-function calculateAddingTime(day,period,extramins)//will return a value to add to a week begining in the unit of minutes depending on what day it is (monday tuesday) but given in term of numbers, the period of the day it is at and any extra mins. 
+function calculateAddingTime(day,period,extramins)//will return a value to add to a week begining in the unit of minutes depending on what day it is (monday tuesday) but given in term of numbers, the period of the day it is at and any extra mins.
 //num,num,num
 {
 	var periodArray
@@ -3989,17 +3989,17 @@ function calculateAddingTime(day,period,extramins)//will return a value to add t
 						18*60
 					  ]
 	}
-	
+
 	var dayInMins = day*24*60;
 	var periodInMins = periodArray[period]
 	return extramins+dayInMins+periodInMins
 }
 
-function updateRoomDetails(roomID, UpdateAttr, UpdateVal)//updates room detail, changes properties of anything. 
+function updateRoomDetails(roomID, UpdateAttr, UpdateVal)//updates room detail, changes properties of anything.
 {
 	//console.log(UpdateVal)
 	//console.log(UpdatedBookingSchedule)
-	roomInfoUpdateSuccess = false; 
+	roomInfoUpdateSuccess = false;
 	$.ajax
    ({
 		type:'PUT',
@@ -4016,7 +4016,7 @@ function updateRoomDetails(roomID, UpdateAttr, UpdateVal)//updates room detail, 
 
 		success: function(data){
 			exitpreLimLoader()
-			roomInfoUpdateSuccess = true; 
+			roomInfoUpdateSuccess = true;
 		},
 
 		error: function(data)
@@ -4106,7 +4106,7 @@ function viewResos(resosID,resosType,weekBegining)
 			//console.log(indiRoomData);
 			calculateCurrentWeek(new Date(weekBegining));
 			validateWeekChange()
-			
+
 		}
 	}
 	function validateWeekChange()
@@ -4182,7 +4182,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	[7] - coordinate of booking [row][col] on the table
 	[8] - week begining
 	*/
-	
+
 	//Structure of lesson / Recurring Lock
 	/*
 	[0] - booking value, unbooked, etc
@@ -4190,11 +4190,11 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	[2] - perpectual, nonperpectual booking etc.
 	[3] - week 1, week 2 or both
 	*/
-	
+
 	var userBookings = []//array containing the userbookings for that week.
 	var fetchedUserBookings = data["BookingSchedule"] //array containing the fetched user bookings
 	//console.log(fetchedUserBookings)
-	
+
 	if(fetchedUserBookings[0]!="Empty List") // populating the userBookings array;
 	{
 		for(var i =0; i<fetchedUserBookings.length;i++)
@@ -4222,7 +4222,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 					userBookings.push(fetchedUserBookings[i]);
 				}
 			}
-			
+
 		}
 		//console.log(userBookings);
 	}
@@ -4335,7 +4335,7 @@ function generateBookingTable(data,resosType,weekNum,weekBegin) //generates tabl
 	$("#timeTable").html(tbl);
 	populateTimetableModal("Room Timetable: <em>"+resosName+"</em><br>Week Begining: "+getWeekBegining(new Date(weekBegin))+" Week "+currentWeek, resosName, resosType, getWeekBegining(new Date(weekBegin)));
 	timetableDocFunctionsRoom()//activating document functions for room
-	
+
 	if(approveGoAhead[1] == true)
 	{
 		approveGoAhead[0] = true;
@@ -4383,7 +4383,7 @@ function getWeekBegining(date) //generates the week begining date for a given da
 
 	date = date.toUTCString();
 	date = date.split(' ').slice(0, 4).join(' ');
-		
+
     return date;
 }
 function extractHiddenContent(s)//extracts the hidden content from within a span.
@@ -4400,10 +4400,10 @@ function goBackToRV()
 	$("#whatResultsText").html('Recently Visted:')
 	$("#viewTextMainPage").html("")
 	$("#searchBarAndTitle").show();
-	
+
 	$("#MainPageModule").addClass("MainPageSearch")
 	$("#MainPageModule").removeClass("moveUpSearch")
-	
+
 	$("#SearchResultsAndRV").addClass("withSearchBarWidth")
 	$("#SearchResultsAndRV").removeClass("withoutSearchBarWidth")
 	populateRecentlyVisted();
@@ -4785,7 +4785,7 @@ function Search() //search all resos list code
 		$("#whatResultsText").html('<i onClick="goBackToRV();" class="imgBtn fa fa-arrow-left" aria-hidden="true"></i> Back')
 
 		//console.log(dataOfRooms[0]);
-		
+
 		for(var i = 0; i<dataOfRooms.length; i++)
 		{
 			//console.log(dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()))
@@ -4794,10 +4794,10 @@ function Search() //search all resos list code
 
 			if
 			(
-				dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase()) 
+				dataOfRooms[i].RoomID.trim().toLowerCase().includes($("#searchForResos").val().trim().toLowerCase())
 			   ||
 				dataOfRooms[i].Department.trim().toLowerCase().includes( $("#searchForResos").val().trim().toLowerCase())
-				
+
 
 			) // if it matches the search by name
 			{
@@ -4806,11 +4806,11 @@ function Search() //search all resos list code
 				tempRoomsList.push("room")
 				tempRoomsList.push(dataOfRooms[i].AccessRights)
 				tempRoomsList.push(dataOfRooms[i].RoomAdmin)
-				
+
 				dataOfRoomsList.push(tempRoomsList)
 				//console.log(dataOfRoomsList)
 			}
-			else // else checking if it matches search by admin user 
+			else // else checking if it matches search by admin user
 			{
 				for(var j = 0; j<dataOfRooms[i].RoomAdmin.length; j++)
 				{
@@ -4840,18 +4840,18 @@ function Search() //search all resos list code
 		for(var i = 0; i<dataOfRoomsList.length; i++)
 		{
 			var ResosID = ""
-			var foundBookmark = false; 
+			var foundBookmark = false;
 
 			for(var j = 0; j<bookmarkedResos.length; j++)
 			{
-				
+
 
 				//console.log(bookmarkedResos[i])
 				//console.log(dataOfRoomsList[i])
 
 				if(bookmarkedResos[j][0]==dataOfRoomsList[i][0] && bookmarkedResos[j][1]==dataOfRoomsList[i][1])
 				{
-					foundBookmark = true; 	
+					foundBookmark = true;
 				}
 
 			}
@@ -4872,7 +4872,7 @@ function Search() //search all resos list code
 				bookMarkFunction = 'unBookmarkIt(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\');'//change the bookmark click function
 				bookmarkClass = "fa fa-bookmark-o imgBtn bookmark";
 			}
-			
+
 			//checking if the user can view this room or not
 			if(dataOfRoomsList[i][2]!="TeacherStudent")
 			{
@@ -4902,7 +4902,7 @@ function Search() //search all resos list code
 			$("#EmptyMsg").html("<em>No Search Results Found...</em>");
 		}
 	}
-	
+
 }
 function getMyResos()//gets user resos and populates it on the search feature in settings in slide 2, Open Slide
 {
@@ -5007,15 +5007,15 @@ function openResosSettings(resosID, resosType) // open resos settings
 function resosSaveChanges()
 {
     var roomItemFromData = indiRoomData["Items"][0];
-	
+
 	$("#saveResosChanges").hide();
 	$("#resosSettingsErrMsg").html("")
-	
+
 	var AccessRightsUserData = $("#accessRightSelect").val();
 	var PermaScheduleUserData = settingsUploadTable;
-		
+
 	var PlanAheadUserData = "";
-	
+
 	if($("#planAheadCB").prop("checked") == true)
 	{
     	PlanAheadUserData = "30"
@@ -5024,23 +5024,23 @@ function resosSaveChanges()
 	{
 		PlanAheadUserData = "0"
 	}
-	
+
 	var DepartmentUserData = $("#departmentVal").val();
 	var BookingRightsUserData = $("#bookingRightSelect").val();
-	
+
 	var RoomAdminUserData = $("#RoomAdmin2").val()
-	
+
 	var nicE = new nicEditors.findEditor('DescriptionVal');
 	var DescriptionUserData = nicE.getContent();
-	var timeS = roomItemFromData.Description.split(" ").pop(); 
+	var timeS = roomItemFromData.Description.split(" ").pop();
 	DescriptionUserData = DescriptionUserData.trim() + " " + timeS.trim();
-	
+
 	RoomAdminUserData = RoomAdminUserData.trim();
 	RoomAdminUserData = RoomAdminUserData.split(";")
 	RoomAdminUserData = RoomAdminUserData.filter(function(el) { return el; }); // filters out empty string from array
 	RoomAdminUserData = RoomAdminUserData.map(Function.prototype.call, String.prototype.trim)//trims all string in array
 	RoomAdminUserData.push($("#RoomAdmin1").val())
-	
+
 	var changedVariables = []
 	var temp = []
 	if(AccessRightsUserData != roomItemFromData.AccessRights)
@@ -5078,7 +5078,7 @@ function resosSaveChanges()
 		temp = ["Description",DescriptionUserData];
 		changedVariables.push(temp)
 	}
-	
+
 	//console.log(roomItemFromData);
 	//console.log(AccessRightsUserData)
 	//console.log(PermaScheduleUserData)
@@ -5086,7 +5086,7 @@ function resosSaveChanges()
 	//console.log(DepartmentUserData)
 	//console.log(BookingRightsUserData)
 	//console.log(RoomAdminUserData)
-	
+
 	var upperlimit = changedVariables.length
 	var i = 0;
 	console.log(changedVariables)
@@ -5096,22 +5096,22 @@ function resosSaveChanges()
 		$("#resosSettingsErrMsg").html("Updating Room Settings Please Hold...")
 		//console.log("updating " + i + " " + changedVariables[i][0])
 		updateRoomDetails(roomItemFromData.RoomID, changedVariables[i][0], changedVariables[i][1])
-			
-		roomInfoUpdateSuccess = false; 
+
+		roomInfoUpdateSuccess = false;
 		validateRoomInfoUpdate()
 		function validateRoomInfoUpdate()
 		{
-			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room. 
+			if(roomInfoUpdateSuccess == false)//makes sure that the room update is suscessful b4 reloading the room.
 			{
 				window.setTimeout(validateRoomInfoUpdate, 1000)
 			}
 			else
 			{
-				roomInfoUpdateSuccess = false; 
+				roomInfoUpdateSuccess = false;
 				i += 1
 				if(i < upperlimit)
 				{
-					
+
 					uploadNewResults()
 					return;
 				}
@@ -5663,7 +5663,7 @@ function generateMilestoneTable()
 	//--->save single field data > start
 	$(document).on('focusout', '.row_data', function(event)
 	{
-		
+
 		event.preventDefault();
 		if($(this).attr('edit_type') == 'button')
 		{
@@ -5678,11 +5678,11 @@ function generateMilestoneTable()
 
 		var col_name = row_div.attr('col_name');
 		var col_val = row_div.html();
-		
+
 		var Row = document.getElementById(row_id);
 		var Cells = Row.getElementsByTagName("td");
 		var WeekBeginingPK = Cells[1].textContent;
-		
+
 		if((col_val == "1" || col_val == "2") && col_val.length != 0)
 		{
 			showUserOutputMsgMilestone
@@ -5730,7 +5730,7 @@ function generateMilestoneTable()
 			);
 			generateMilestoneTable()
 		}
-		
+
 		var arr = {};
 		arr[col_name] = col_val;
 		//use the "arr"	object for your ajax call
@@ -5796,7 +5796,7 @@ function generateMilestoneTable()
 			$("#WBWeekNum").val("");
 			$("#pickADate").val("");
 		}
-		
+
 	});
 	//--->button > edit > end
 
@@ -5941,7 +5941,7 @@ function generateMilestoneTable()
 				);
 				generateMilestoneTable()
 			}
-			
+
 			arr[col_name] = col_val;
 		});
 		//--->get row data > end
@@ -5987,9 +5987,9 @@ function generateMilestoneTable()
 }
 function AlternateWeekNow()
 {
-	var sortedDates; 
-	var PrimaryKey; 
-	var weekThatWillBeChanged; 
+	var sortedDates;
+	var PrimaryKey;
+	var weekThatWillBeChanged;
 	$.ajax({
 		type: 'GET',
 		url: DCBBookingsSettingsWeekMilestone,
@@ -5997,25 +5997,25 @@ function AlternateWeekNow()
 		{
 			sortedDates = bubble_SortJSONMilestoneArray(data.Items,"WeekBegining")
 			//console.log(sortedDates);
-			
+
 			//compare dates and then find the index of the date that is cloesest to ur milestone
-			
+
 			for(var i = sortedDates.length-1; i>-1; i--)
 			{
 				var currentDate = new Date();
-				
+
 				//console.log(currentDate)
 				//console.log(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString()))
-				
+
 				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i]["WeekBegining"]).toString())))
 				{
-					foundIndex = i-1; 
+					foundIndex = i-1;
 				}
 			}
 			PrimaryKey = sortedDates[foundIndex].WeekBegining;
 			weekThatWillBeChanged = sortedDates[foundIndex].Week;
-			
-			
+
+
 			//console.log(PrimaryKey + " "+ weekThatWillBeChanged);
 			ExcecuteChangeWeek(PrimaryKey, weekThatWillBeChanged)
 		},
@@ -6024,7 +6024,7 @@ function AlternateWeekNow()
 			errorModuleShow()
 		}
 	});
-	
+
 	function ExcecuteChangeWeek(PK, CurrentWeekNum)
 	{
 		var updateVal = "0";
@@ -6042,7 +6042,7 @@ function AlternateWeekNow()
 			"Saving Data...",
 			3000
 		);
-		
+
 		$.ajax({
 			type:'PATCH',
 			url:DCBBookingsSettingsWeekMilestone,
@@ -6093,9 +6093,9 @@ function showUserOutputMsgMilestone(status, message, delay)
 }
 function calculateCurrentWeek(DateGiven)// calcualtes the current week for the timetable so they know what to use. returns the value 1 or 2
 {
-	currentWeek = null; 
+	currentWeek = null;
 	var sortedDates;
-	var foundIndex; //index of the date that is needed. 
+	var foundIndex; //index of the date that is needed.
 	var currentDate
 	$.ajax({
 		type: 'GET',
@@ -6104,9 +6104,9 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 		{
 			sortedDates = bubble_SortJSONMilestoneArray(data.Items,"WeekBegining")
 			//console.log(sortedDates);
-			
+
 			//compare dates and then find the index of the date that is cloesest to ur milestone
-			
+
 			for(var i = sortedDates.length-1; i>-1; i--)
 			{
 				currentDate = new Date(DateGiven);
@@ -6114,17 +6114,17 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 				//console.log(sortedDates)
 				if(Date.parse(currentDate) < Date.parse(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[i].WeekBegining).toString())))
 				{
-					foundIndex = i-1; 
+					foundIndex = i-1;
 				}
 			}
 			if(foundIndex == null)
 			{
 				foundIndex = sortedDates.length-1;
 			}
-			
+
 			//console.log(foundIndex)
 			var daysDiff = DifferenceInDays(transformYYYYMMDDtoDate(transformCurrentWeek(sortedDates[foundIndex]["WeekBegining"]).toString()),DateGiven)-1;
-			
+
 			var numOfWeeksSince = Math.trunc(daysDiff/7);
 			var decimal = (daysDiff/7) - numOfWeeksSince;
 			decimal = decimal.toFixed(5)
@@ -6133,7 +6133,7 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 				numOfWeeksSince+=1;
 			}
 			var OddOrEvenWeeksSince = numOfWeeksSince % 2;
-			
+
 			if(OddOrEvenWeeksSince == 0) // if odd or even since is 0 it means an even number of weeks have passed so the num of weeks is the same else if its odd the current week will be alternate to the one on the milestone table
 			{
 				currentWeek = parseInt(sortedDates[foundIndex]["Week"])
@@ -6147,7 +6147,7 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 				}
 			}
 			else if(OddOrEvenWeeksSince == 1)
-			{ 
+			{
 				currentWeek = parseInt(sortedDates[foundIndex]["Week"])
 				if(currentWeek == 1)
 				{
@@ -6158,16 +6158,16 @@ function calculateCurrentWeek(DateGiven)// calcualtes the current week for the t
 					currentWeek = 1
 				}
 			}
-			
-			//console.log(sortedDates[foundIndex]['WeekBegining']); 
-			//console.log(daysDiff);	
+
+			//console.log(sortedDates[foundIndex]['WeekBegining']);
+			//console.log(daysDiff);
 			//console.log(daysDiff/7)
 			//console.log(numOfWeeksSince)
 			//console.log(OddOrEvenWeeksSince)
 			//console.log(currentWeek)
-						
-			return currentWeek; 
-			
+
+			return currentWeek;
+
 		},
 		error: function (data)
 		{
@@ -6190,7 +6190,7 @@ function transformYYYYMMDDtoDate(YYYYMMDDS)//transfrom a string in the form of Y
 }
 function transformCurrentWeek(Week) //transfroms the current week into a week that can be compared using bubblesort.
 {
-	var monthConversion = 
+	var monthConversion =
 		'{"Jan":'+'"01"'+
 		',"Feb":'+'"02"'+
 		',"Mar":'+'"03"'+
@@ -6205,21 +6205,21 @@ function transformCurrentWeek(Week) //transfroms the current week into a week th
 		',"Dec":'+'"12"'+'}';
 	var monthObj = JSON.parse(monthConversion);
 	var newDate = Week.substr(Week.indexOf(" ") + 1); //format Day Month Year
-	
+
 	var dateArray = newDate.split(" ");
-	
+
 	var dateString = dateArray[2] + monthObj[dateArray[1]] + dateArray[0]
-	
+
 	return parseInt(dateString)
 }
 
-function preLimLoader(loadingText)//used in the timetable function to load text about the user used in the timetable modal 
+function preLimLoader(loadingText)//used in the timetable function to load text about the user used in the timetable modal
 {
 	$("#viewPort_Content").hide()
 	$("#preLimLoader").show()
 	$("#preLimLoader").html(loadingText)
 }
-function exitpreLimLoader()//used to exit the prelim loader 
+function exitpreLimLoader()//used to exit the prelim loader
 {
 	$("#viewPort_Content").hide()
 	$("#preLimLoader").show()
@@ -6238,19 +6238,19 @@ function exitpreLimLoaderErr()//used to exit the prelim loader in the event of a
 	},3000)
 }
 
-// compares 2 arrays to see if they are the same. If they are it'll return true, if not true it'll return false. 
-function compareArray(a, b) 
+// compares 2 arrays to see if they are the same. If they are it'll return true, if not true it'll return false.
+function compareArray(a, b)
 {
-	var valuesEqual = true; 
-	// if length is not equal 
-	if(a.length!=b.length) 
+	var valuesEqual = true;
+	// if length is not equal
+	if(a.length!=b.length)
 	{
-		valuesEqual = false; 
+		valuesEqual = false;
 	}
 	else
-	{ 
-		// comapring each element of array 
-		for(var i=0;i<a.length;i++) 
+	{
+		// comapring each element of array
+		for(var i=0;i<a.length;i++)
 		{
 			if(Array.isArray(a[i]) && Array.isArray(b[i]))
 			{
@@ -6258,27 +6258,27 @@ function compareArray(a, b)
 			}
 			//console.log("value 1: "+a[i] + "\nvalue 2: "+b[i])
 			//console.log("current value comparison: " + (a[i]===b[i]))
-			else if(a[i]!=b[i]) 
+			else if(a[i]!=b[i])
 			{
-				valuesEqual = false; 
+				valuesEqual = false;
 			}
-		}	
+		}
 	}
 	return valuesEqual
 }
-// compares 2 arrays to see if they are the same. If they are it'll return true, if not true it'll return false. 
-function compareArray2(a, b) 
+// compares 2 arrays to see if they are the same. If they are it'll return true, if not true it'll return false.
+function compareArray2(a, b)
 {
-	var valuesEqual = true; 
-	// if length is not equal 
-	if(a.length!=b.length) 
+	var valuesEqual = true;
+	// if length is not equal
+	if(a.length!=b.length)
 	{
-		valuesEqual = false; 
+		valuesEqual = false;
 	}
 	else
-	{ 
-		// comapring each element of array 
-		for(var i=0;i<a.length;i++) 
+	{
+		// comapring each element of array
+		for(var i=0;i<a.length;i++)
 		{
 			if(Array.isArray(a[i]) && Array.isArray(b[i]))
 			{
@@ -6286,12 +6286,451 @@ function compareArray2(a, b)
 			}
 			//console.log("value 1: "+a[i] + "\nvalue 2: "+b[i])
 			//console.log("current value comparison: " + (a[i]===b[i]))
-			else if(a[i]!=b[i]) 
+			else if(a[i]!=b[i])
 			{
-				valuesEqual = false; 
+				valuesEqual = false;
 			}
-		}	
+		}
 	}
 	return valuesEqual
 };
 
+function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of strings ["week begining 1", "week begining 2"]
+{
+    var PopularWeeklyResourceRoom = [] //stores the ID of the rooms
+    var PopularAllTimeResourceRoom = [] // stores the ID of the rooms
+
+    var BusyPeriods = [] // 0 is period 1, 1 is period 2 … and so on will store the information of how many bookings do you get per period
+    var BusyDays  = [] // 0 is Monday, 1 is Tuesday … and so on will store the information of how many average bookings do you get per day
+    var MostFreqUser = []
+	
+	var PofLsnToFree = 0;
+    var Week1PofLsnToFree = 0 //percentage of lsns to free
+	var Week2PofLsnToFree = 0 //percentage of lsns to free
+	
+    var PofFree = 0 //percentage of overall Free
+	var Week1PofFree = 0 //percentage of overall Free
+	var Week2PofFree = 0 //percentage of overall Free
+	
+	var PofBkdToFree = 0 
+	var Week1PofResrvToFreeAndLsn = 0 //percentage of reserves to Frees
+	var Week2PofResrvToFreeAndLsn = 0 //percentage of reserves to Frees
+	
+    var PofResrvToFreeAndLsn = 0 
+	var Week1PofResrvToFreeAndLsn = 0 //percentage of reserves to Frees
+	var Week2PofResrvToFreeAndLsn = 0 //percentage of reserves to Frees
+	
+	var noOfWeek1s = 0;
+	var noOfWeek2s = 0; 
+
+	var noOfRerv = 0; //total Activity
+	var noOfRervWeek1 = 0;
+	var noOfRervWeek2 = 0; 
+
+	var noOfLsn = 0; 
+	var noOfLsnWeek1 = 0;
+	var noOfLsnWeek2 = 0; 
+
+	var noOfBkd =0;
+	var noOfBkdWeek1 = 0;
+	var noOfBkdWeek2 = 0; 
+
+	var noOfFree = 0;
+	var noOfFreeWeek1 = 0;
+	var noOfFreeWeek2 = 0;
+
+	var totalNoOfPeriods = 0;
+	var totalNoOfPeriodsWeek1 = 0;
+	var totalNoOfPeriodsWeek2 = 0;
+	
+	var allUsersThatBooked = []//all users that used the room in between a certain range 
+	
+	var tableColLength = 0; //how many colums a table will have 
+	
+	var rangeOfDateObjects = []
+	rangeOfDateObjects.push(transformYYYYMMDDtoDate(transformCurrentWeek(dataRange[0]).toString()))
+	rangeOfDateObjects.push(transformYYYYMMDDtoDate(transformCurrentWeek(dataRange[1]).toString()))
+	
+	//console.log(rangeOfDateObjects)
+
+    console.log("Calculating data...")
+    roomDataFetchSuccess = false
+	getAllRooms();
+    waitOutFetching();
+    function waitOutFetching()
+    {
+        console.log("Wait Out...")
+        if(roomDataFetchSuccess == false) {
+            window.setTimeout(waitOutFetching, 1000);
+        }
+        else {
+            //console.log(allRooms);
+            roomDataFetchSuccess = false
+            dataAnalysis();
+        }
+    }
+    function dataAnalysis()
+    {
+        var chosenResosJSON;
+        if(resosType == "room")
+        {
+            var roomData = allRooms.Items;
+            for(var i = 0; i < roomData.length; i ++)
+            {
+                if(roomData[i].RoomID == resosID)
+                {
+                    chosenResosJSON = roomData[i];
+                }
+            }
+		}
+		
+		if(chosenResosJSON["Min30Periods"]=="false")//normal headers
+		{
+			tableColLength = 10;
+			bookval = "booked";
+			lockval = "locked";
+			lessonval = "lesson";
+			unbookedval = "unbooked";
+			pendingval = "pending";
+			min30Periods = false;
+		}
+		else
+		{
+			tableColLength = 19;
+			bookval = "bkd";
+			lockval = "lck";
+			lessonval = "lsn";
+			unbookedval = "unb";
+			pendingval = "pnd";
+			min30Periods = true;
+		}
+        //console.log(chosenResosJSON);
+        MostFreqUser = mostFUser(chosenResosJSON) //returns [mostFrequent User, Number of time visited] can have more than 1 user. will be top 10. 
+		//console.log(MostFreqUser)
+		
+        BusyPeriods = busyPeriodCalc(chosenResosJSON) //returns [totalBookingPerPeriod]
+		//console.log(BusyPeriods)
+		
+		BusyDays = busyDayCalc(chosenResosJSON) //returns [totalBookingPerDay]
+		//console.log(BusyDays)
+		
+		totalNumberCalc(chosenResosJSON) //Ultimate calculation of the total number of everything a reserve is anything that isnt a free. (includes lessons)
+		
+		//PopularWeeklyResourceRoom = popularWeekRoom(roomData);// returns top 5 resources [[resource, numberOfBookings],[]]
+		//console.log(PopularWeeklyResourceRoom)
+		
+    }
+
+    function mostFUser(resos)//returns array containing Most MostFreqUser and the number of times they visited.//top 10
+    {
+        //console.log(resos)
+        var result = [] //mostFrequent User, Number of time visited
+        var allUsersOneTime = [];
+        var allUsersAllTime = [];
+        var schedule = resos.BookingSchedule;
+        if(schedule[0]!="Empty List")
+        {
+			
+			//console.log(schedule)
+            for(var i =0; i<schedule.length; i++)//creating an array with users only appearing once and all users appearing. 
+            {
+				var schedToDate = transformYYYYMMDDtoDate(transformCurrentWeek(schedule[i][schedule[i].length-1]).toString())
+				if(schedToDate >= rangeOfDateObjects[0] && schedToDate <= rangeOfDateObjects[1])
+				{
+					if(!allUsersOneTime.includes(schedule[i][1]))
+					{
+						allUsersOneTime.push(schedule[i][1]);
+					}
+					allUsersAllTime.push(schedule[i][1])
+				}
+            }
+			for(var k =0; k < 10; k++)
+			{
+				var biggest = -1;
+				var biggestIndex = -1; 
+				var counter = 0;
+				for(var i =0; i<allUsersOneTime.length; i++)
+				{
+					counter = 0;
+					for(var j =0; j<allUsersAllTime.length; j++)
+					{
+						if(allUsersOneTime[i]==allUsersAllTime[j]) //seeing how many times they appear in the all time list compared to the one time list. 
+						{
+							counter +=1;
+						}
+					}
+					if(counter>biggest)
+					{
+						biggestIndex = i;
+						biggest = counter;
+					}
+				}
+				if(allUsersOneTime[biggestIndex] != null)
+				{
+					result.push(allUsersOneTime[biggestIndex])
+					result.push(biggest)
+					allUsersOneTime.splice(biggestIndex,1)//getting rid of user who's already been accounted for. 
+				}
+			}
+        }
+        return result;
+    }
+
+    function busyPeriodCalc(resos) //returns [totalBookingPerPeriod]
+    {
+		var totalNumOfVisits = [] // total number of visits per period.
+		for(var i =0; i <tableColLength; i++)//accounts for 30 min bookings
+		{
+			totalNumOfVisits.push(0)
+		}
+		var bookSched = resos.BookingSchedule;
+		//console.log(bookSched)
+		for(var i = 0; i <resos.BookingSchedule.length; i++)
+		{
+			if(bookSched[0]!="Empty List")
+			{
+				var schedToDate = transformYYYYMMDDtoDate(transformCurrentWeek(bookSched[i][bookSched[i].length-1]).toString())
+				if(schedToDate >= rangeOfDateObjects[0] && schedToDate <= rangeOfDateObjects[1])
+				{
+					totalNumOfVisits[bookSched[i][bookSched[i].length-2][1]] = totalNumOfVisits[bookSched[i][bookSched[i].length-2][1]] + 1;
+				}
+			}
+		}
+		return totalNumOfVisits;
+    }
+	
+	function busyDayCalc(resos) //returns [mondaytotalBookings,Tuesday]...
+    {
+		var totalNumOfVisits = [0,0,0,0,0] // total number of visits per period.
+		var bookSched = resos.BookingSchedule;
+		for(var i = 0; i <resos.BookingSchedule.length; i++)
+		{
+			if(bookSched[0]!="Empty List")
+			{
+				var schedToDate = transformYYYYMMDDtoDate(transformCurrentWeek(bookSched[i][bookSched[i].length-1]).toString())
+				if(schedToDate >= rangeOfDateObjects[0] && schedToDate <= rangeOfDateObjects[1])
+				{
+					totalNumOfVisits[bookSched[i][bookSched[i].length-2][0]] = totalNumOfVisits[bookSched[i][bookSched[i].length-2][0]] + 1;
+				}
+			}
+		}
+		return totalNumOfVisits;
+    }
+	
+	function totalNumberCalc(resos)//returns a number for the total number of reserves you have. 
+	{
+		console.log(resos)
+		var daysInBetween = DifferenceInDays(rangeOfDateObjects[0],rangeOfDateObjects[1])
+		var firstWeekIs = -1//the first week is either a week 1 or week 2, this variable will store that.
+		
+		var totalNoOfWeeks = daysInBetween/7
+		
+		var permaSchedule = resos.PermaSchedule; 
+		var bookingSched = resos.BookingSchedule;
+		
+		console.log(bookingSched)
+		
+		calculateCurrentWeek(rangeOfDateObjects[0])
+		waitOut()
+		function waitOut()
+		{
+			console.log("Wait Out...")
+			if(currentWeek == null)
+			{
+				window.setTimeout(waitOut,1000);
+			}
+			else
+			{
+				firstWeekIs = currentWeek;
+				roger();
+				//console.log(firstWeekIs);
+			}
+		}
+		
+		function roger()
+		{
+			if(totalNoOfWeeks % 2 == 0)
+			{
+				noOfWeek1s = totalNoOfWeeks/2
+				noOfWeek2s = totalNoOfWeeks/2
+			}
+			else
+			{
+				if(firstWeekIs == 1)
+				{
+					noOfWeek1s = Math.floor(totalNoOfWeeks/2) + 1;
+					noOfWeek2s = Math.floor(totalNoOfWeeks/2);
+				}
+				else
+				{
+					noOfWeek1s = Math.floor(totalNoOfWeeks/2);
+					noOfWeek2s = Math.floor(totalNoOfWeeks/2) + 1;
+				}
+			}
+			
+			for(var i = 0; i < permaSchedule[0].length; i++)
+			{
+				for(var j = 0; j < permaSchedule[0][0].length;j++)
+				{
+					totalNoOfPeriodsWeek1 +=1;
+					totalNoOfPeriods +=1;
+					if(permaSchedule[0][i][j][0] != unbookedval)
+					{
+						noOfRervWeek1 += 1;
+					}
+					else
+					{
+						noOfFree += 1;
+						noOfFreeWeek1 +=1;
+					}
+					if(permaSchedule[0][i][j][0] == lessonval)
+					{
+						noOfLsn += 1; 
+						noOfLsnWeek1 += 1;
+					}
+					if(permaSchedule[0][i][j][0] == bookval)
+					{
+						noOfBkd +=1;
+						noOfBkdWeek1 += 1;
+					}
+				}	
+			}
+			for(var i = 0; i < permaSchedule[1].length; i++)
+			{
+				for(var j = 0; j < permaSchedule[1][0].length;j++)
+				{
+					totalNoOfPeriodsWeek2 +=1;
+					totalNoOfPeriods +=1;
+					if(permaSchedule[1][i][j][0] != unbookedval)
+					{
+						noOfRervWeek2 += 1;
+					}
+					else
+					{
+						noOfFree += 1;
+						noOfFreeWeek2 +=1;
+					}
+					if(permaSchedule[0][i][j][0] == lessonval)
+					{
+						noOfLsn += 1; 
+						noOfLsnWeek2 += 1;
+					}
+					if(permaSchedule[0][i][j][0] == bookval)
+					{
+						noOfBkd +=1;
+						noOfBkdWeek2 += 1;
+					}
+				}	
+			}
+			
+			noOfFree = noOfFree * totalNoOfWeeks - bookingSched.length;
+			noOfFreeWeek1 = noOfFreeWeek1 * noOfWeek1s
+			noOfFreeWeek2 = noOfFreeWeek2 * noOfWeek2s
+			
+			noOfRervWeek1 = noOfRervWeek1 * noOfWeek1s
+			noOfRervWeek2 = noOfRervWeek1 * noOfWeek2s
+			noOfRerv = noOfRervWeek1 + noOfRervWeek2;
+			
+			noOfBkd = noOfBkd * totalNoOfWeeks;
+			noOfBkdWeek1 = noOfBkdWeek1 * noOfWeek1s
+			noOfBkdWeek2 = noOfBkdWeek2 * noOfWeek2s
+			
+			noOfLsn = noOfLsn * totalNoOfWeeks;
+			noOfLsnWeek1 = noOfLsnWeek1 * noOfWeek1s
+			noOfLsnWeek2 = noOfLsnWeek2 * noOfWeek2s
+			
+			totalNoOfPeriods = totalNoOfPeriods * totalNoOfWeeks;
+			totalNoOfPeriodsWeek1 = totalNoOfPeriodsWeek1 * noOfWeek1s;
+			totalNoOfPeriodsWeek2 = totalNoOfPeriodsWeek2 * noOfWeek2s;
+			
+			for(var i = 0; i<bookingSched.length; i++)
+			{
+				if(bookingSched[i][4] == "Week1")
+				{
+					noOfFreeWeek1 = noOfFreeWeek1 -1
+					noOfRervWeek1 +=1;
+					if(bookingSched[i][0] == lessonval)
+					{
+						noOfLsn += 1; 
+						noOfLsnWeek1 += 1;
+					}
+					if(bookingSched[i][0] == bookval)
+					{
+						noOfBkd +=1;
+						noOfBkdWeek1 += 1;
+					}
+				}
+				else
+				{
+					noOfFreeWeek2 = noOfFreeWeek2 -1
+					noOfRervWeek2 +=1;
+					if(bookingSched[i][0] == lessonval)
+					{
+						noOfLsn += 1; 
+						noOfLsnWeek2 += 1;
+					}
+					if(bookingSched[i][0] == bookval)
+					{
+						noOfBkd +=1;
+						noOfBkdWeek2 += 1;
+					}
+				}
+			}
+			calculatePercentages();
+		}
+		
+		function calculatePercentages()
+		{
+			PofLsnToFree = 100*(noOfLsn/totalNoOfPeriods);
+			Week1PofLsnToFree = 100*(noOfLsnWeek1/totalNoOfPeriodsWeek1); //percentage of lsns to free
+			Week2PofLsnToFree = (100*noOfLsnWeek2/totalNoOfPeriodsWeek2); //percentage of lsns to free
+
+			PofFree = 100*(noOfFree/totalNoOfPeriods); //percentage of overall Free
+			Week1PofFree = 100*(noOfFreeWeek1/totalNoOfPeriodsWeek1);//percentage of overall Free
+			Week2PofFree = 100*(noOfFreeWeek2/totalNoOfPeriodsWeek2);//percentage of overall Free
+
+			PofBkdToFree = 100*(noOfBkd/totalNoOfPeriods); 
+			Week1PofResrvToFreeAndLsn = 100*(noOfBkdWeek1/totalNoOfPeriodsWeek1);  //percentage of reserves to Frees
+			Week2PofResrvToFreeAndLsn = 100*(noOfBkdWeek2/totalNoOfPeriodsWeek2);  //percentage of reserves to Frees
+
+			PofResrvToFreeAndLsn = 100*(noOfRerv/totalNoOfPeriods);
+			Week1PofResrvToFreeAndLsn = 100*(noOfRervWeek1/totalNoOfPeriodsWeek1); //percentage of reserves to Frees
+			Week2PofResrvToFreeAndLsn = 100*(noOfRervWeek2/totalNoOfPeriodsWeek2); //percentage of reserves to Frees
+			
+			console.log(PofLsnToFree + PofFree + PofBkdToFree)
+		}
+	}
+	
+	function popularWeekRoom(givenResos) // returns top 5 resources [[resource, numberOfBookings],[]] //global masteradmin
+	{
+		console.log(givenResos)
+		var result = [];
+		
+		for(var i =0; i<5; i++)
+		{
+			var biggestIndex = -1;
+			var biggestVal = -1;
+			var temp = [];
+			for(var j =0; j < givenResos.length; j ++)
+			{
+				if(givenResos[j].BookingSchedule[0] != "Empty List")
+				{
+					if(givenResos[j].BookingSchedule.length > biggestVal)
+					{
+						biggestIndex = j;
+						biggestVal = givenResos[j].BookingSchedule.length
+					}
+				}
+			}
+			temp.push(givenResos[biggestIndex])
+			temp.push(biggestVal)
+			result.push(temp)
+			givenResos.splice(biggestIndex,1);
+		}
+		
+		return result; 
+	}
+	
+	
+	
+}

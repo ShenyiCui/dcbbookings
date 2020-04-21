@@ -86,12 +86,16 @@
 				<p><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users Pending Approval</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
+			<div onClick="currentSettingsSlide(11);changeSettingTitle('All Resources');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resources</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(11);changeSettingTitle('User Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(12);changeSettingTitle('User Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User Data Analysis</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(12);changeSettingTitle('Resource Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(13);changeSettingTitle('Resource Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Resource Data Analysis</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
@@ -133,6 +137,8 @@
 				  	</div>
 				  	<div class="column">
 						<h3>Change User Credentials</h3>
+						<br><br><br><br>
+						<h3>Delete My Account</h3>
 				  	</div>
 				</div>
 			</div>
@@ -150,16 +156,67 @@
 		<!--My Data 4-->
 		<div class="SettingsSlide"></div>
 		<!--My Resource Data 5-->
-		<div class="SettingsSlide"></div>
+		<div class="SettingsSlide">
+			<div class="sectionedSettingsDiv">
+				<br>
+				<p style="font-size:18px;" align="center">Pick a resource and indicate the data range:</p>
+				<br>
+				<center>
+					<p></p>
+					<div class="sameLine">
+						<label>Pick a resource:
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<select class="smallInput smallPadding">
+							<option>Hello</option>
+							<option>Hello</option>
+							<option>Hello</option>
+						</select>
+						&nbsp;&nbsp;&nbsp;
+					</div>
+
+					<div class="sameLine">
+						<label>Start From:
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input class="smallInput datepicker smallPadding">
+						&nbsp;&nbsp;&nbsp;
+					</div>
+
+					<div class="sameLine">
+						<label>End At:
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input class = "smallInput datepicker smallPadding">
+						&nbsp;&nbsp;&nbsp;
+					</div>
+					<br>
+					<button class="btnSuccessOutline largerWidthButton">Calculate Data</button>
+					<br><br>
+				</center>
+			</div>
+		</div>
 
 		<!--Change Current Week 6-->
 		<div class="SettingsSlide">
-			<div id="addAMilestone">
+			<div id="addAMilestone" class="sectionedSettingsDiv">
 				<br>
 				<p style="font-size:18px;" align="center">Add a Milestone</p>
 				<br>
 				<center>
-					<p id="milestoneErrMsg"></p>
+					<p id="milestoneErrMsg" ></p>
 					<div class="sameLine">
 						<label>Pick a Date:
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -190,7 +247,7 @@
 						&nbsp;&nbsp;&nbsp;
 					</div>
 					<br>
-					<button class="btnSuccessOutline" id="createMilestoneBtn">Create Milestone</button>
+					<button class="btnSuccessOutline largerWidthButton" id="createMilestoneBtn">Create Milestone</button>
 					<br><br>
 				</center>
 			</div>
@@ -226,10 +283,12 @@
 		<div class="SettingsSlide"></div>
 		<!--Users Pending Approval 10-->
 		<div class="SettingsSlide"></div>
-
-		<!--User Data Analysis 11-->
+		<!--All Resources 11-->
 		<div class="SettingsSlide"></div>
-		<!--Resource Data Analysis 12-->
+
+		<!--User Data Analysis 12-->
+		<div class="SettingsSlide"></div>
+		<!--Resource Data Analysis 13-->
 		<div class="SettingsSlide"></div>
 
 	</div>
@@ -358,7 +417,7 @@
 			dateFormat: 'D, dd M yy'
 		});
   	});
-	
+
 	//autoscalers to make sure that the panel widths match
 	if ($(window).width() < 1280 && $(window).width() >= 1150)
 	{
@@ -392,6 +451,7 @@
 	NProgress.start();
 	getUserEmail();
 	validateEmail();
+	//calculateDATA("Technology 1","room",["Mon, 28 Oct 2019","Mon, 27 Apr 2020"]);
 	function validateEmail()//get the email of the user
 	{
 		if(userEmail!=null)

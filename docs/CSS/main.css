@@ -1401,14 +1401,14 @@ viewPort_Content
 }
 
 /*CSS Search feture in the Settings Page*/
-#myResosList
+.listOfItemsButtons
 {
   list-style-type: none;
   padding: 0;
   margin: 0;
   width: 90%;
 }
-#myResosList li a
+.listOfItemsButtons li a
 {
   border: 1px solid #ddd;
   margin-top: -1px; /* Prevent double borders */
@@ -1419,7 +1419,7 @@ viewPort_Content
   color: black;
   display: block
 }
-#myResosList li a:hover:not(.header)
+.listOfItemsButtons li a:hover:not(.header)
 {
   background-color: #eee;
 }

@@ -21,6 +21,12 @@
 		<link rel="stylesheet" href="../CSS/nprogress.css">
 		<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
 		<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
+		<script type="text/javascript">
+		   (function(){
+			  emailjs.init("user_CBiuqLZ6Ri8hfxrHaEVYG");
+		   })();
+		</script>
 	</head>
 	
 	<style>
@@ -356,6 +362,17 @@
 				<br>
 				<center><button id="BookRecrBtn" class="LandingModalBtns">Book</button></center>
 				<p id="RBookErrMsg"><br></p>
+			</div>
+		</div>
+		
+		<div id="emailModal" class="HigherModal"> <!--email module, its at a higher z-index than everyone-->
+			<div class="emailModal-content">
+				<span class="close1">&times;</span>
+				<input disabled type="email" id="toEmail"><br>
+				<input placeHolder="Subject" type="text" id="subject">
+				<textarea id="emailText"></textarea>
+				<button id="sendBtn">Send</button>
+				<p id="emailErrMsg"></p>
 			</div>
 		</div>
 	</body>

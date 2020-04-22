@@ -1,7 +1,7 @@
 //AWS COGNITO USERPOOL IDS
-var AdmimUserpoolID = "ap-southeast-1_5uiXeZzFB"; //USERPOOL ID
-var AdminAppClientID = "2qis1u4uur3e17ua9a28r7b6ol"; //APPCLIENT ID
-
+var AdmimUserpoolID = "ap-southeast-1_TnSkdHtJE"; //USERPOOL ID
+var AdminAppClientID = "257dvkcpvtfl46740qjrmq3ap6"; //APPCLIENT ID
+//
 //AWS API GATEWAY URLS
 var DCBBookingsCreateUserDBAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/UserSignupDCBBookings/user-signup"; //API for writing to the main USER DB of dcbbookings in dynamo DB
 var DCBBookingsResourceRoomAPI = "https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Resos/resource/room";

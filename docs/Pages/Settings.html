@@ -21,6 +21,12 @@
 	<script src="../JS/Jquery UI/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="../JS/Jquery UI/jquery-ui.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
+	<script type="text/javascript">
+	   (function(){
+		  emailjs.init("user_CBiuqLZ6Ri8hfxrHaEVYG");
+	   })();
+	</script>
 </head>
 
 <body>
@@ -55,48 +61,44 @@
 			<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;History</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
-		<div onClick="currentSettingsSlide(4);changeSettingTitle('My Data');" class="settingsPageBtn imgBtn edit_hover_class">
-			<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Data</p>
-			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
-		</div>
-		<div onClick="currentSettingsSlide(5);changeSettingTitle('My Resource Data');myResosDataStart();" class="settingsPageBtn imgBtn edit_hover_class">
+		<div onClick="currentSettingsSlide(4);changeSettingTitle('My Resource Data');myResosDataStart();" class="settingsPageBtn imgBtn edit_hover_class">
 			<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Resource Data</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
 		<br><br>
 
 		<div id="adminSettings">
-			<div onClick="generateMilestoneTable(); currentSettingsSlide(6); changeSettingTitle('Change Current Week &nbsp;<i onClick=\'showHelpMessageCW()\' class=\'fa fa-question-circle imgBtn\' aria-hidden=\'true\'></i>');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="generateMilestoneTable(); currentSettingsSlide(5); changeSettingTitle('Change Current Week &nbsp;<i onClick=\'showHelpMessageCW()\' class=\'fa fa-question-circle imgBtn\' aria-hidden=\'true\'></i>');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-sliders" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Change Current Week</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(7);generateAdminTable();changeSettingTitle('Admin Users');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(6);generateAdminTable();changeSettingTitle('Admin Users');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-user-md" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Admin Users</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(8);changeSettingTitle('Teachers');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(7);changeSettingTitle('Teachers');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Teachers</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(9);changeSettingTitle('Students');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(8);changeSettingTitle('Students');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Students</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(10);changeSettingTitle('Users Pending Approval');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(9);changeSettingTitle('Users Pending Approval');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users Pending Approval</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(11);changeSettingTitle('All Resources');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(10);changeSettingTitle('All Resources');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resources</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(12);changeSettingTitle('User Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User Data Analysis</p>
+			<div onClick="currentSettingsSlide(11);changeSettingTitle('User Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users History</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(13);changeSettingTitle('Resource Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(12);changeSettingTitle('Resource Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Resource Data Analysis</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
@@ -154,9 +156,7 @@
 
 		<!--History 3-->
 		<div class="SettingsSlide"></div>
-		<!--My Data 4-->
-		<div class="SettingsSlide"></div>
-		<!--My Resource Data 5-->
+		<!--My Resource Data 4-->
 		<div class="SettingsSlide">
 			<div class="sectionedSettingsDiv">
 				<br>
@@ -210,10 +210,11 @@
 			</div>
 			<br><br>
 			<div id="canvasHere" class="sectionedSettingsDiv">
+				
 			</div>
 		</div>
 
-		<!--Change Current Week 6-->
+		<!--Change Current Week 5-->
 		<div class="SettingsSlide">
 			<div id="addAMilestone" class="sectionedSettingsDiv">
 				<br>
@@ -271,7 +272,7 @@
 				<br><br>
 			</div>
 		</div>
-		<!--Admin Users 7-->
+		<!--Admin Users 6-->
 		<div class="SettingsSlide">
 			<center>
 				<input type="text" placeholder="Email" id="emailInput">
@@ -281,18 +282,18 @@
 				<div id="AdminUserTable"></div>
 			</center>
 		</div>
-		<!--Teachers 8-->
+		<!--Teachers 7-->
 		<div class="SettingsSlide"></div>
-		<!--Students 9-->
+		<!--Students 8-->
 		<div class="SettingsSlide"></div>
-		<!--Users Pending Approval 10-->
+		<!--Users Pending Approval 9-->
 		<div class="SettingsSlide"></div>
-		<!--All Resources 11-->
+		<!--All Resources 10-->
 		<div class="SettingsSlide"></div>
 
-		<!--User Data Analysis 12-->
+		<!--User Data Analysis 11-->
 		<div class="SettingsSlide"></div>
-		<!--Resource Data Analysis 13-->
+		<!--Resource Data Analysis 12-->
 		<div class="SettingsSlide"></div>
 
 	</div>
@@ -410,6 +411,18 @@
 			</div>
 		</div>
 	</div>
+	
+	<div id="emailModalz" class="HigherModal"> <!--email module, its at a higher z-index than everyone-->
+		<div class="emailModal-content">
+			<span id="emailModalCloseBtn" class="close1">&times;</span>
+			<input disabled type="email" id="toEmail"><br>
+			<input placeHolder="Subject" type="text" id="subject">
+			<textarea id="emailText"></textarea>
+			<button id="sendBtn" class="buttonSmallLong" onclick="sendMailMyResosData()">Send</button>
+			<p id="emailErrMsg">&nbsp;</p>
+		</div>
+	</div>
+		
 
 </body>
 
@@ -573,6 +586,10 @@
 		{
 			resosSettingsModal.style.display = "none";
 		}
+		else if (event.target == emailModal)
+		{
+			emailModal.style.display = "none";
+		}
 	}
 </script>
 <script>
@@ -593,7 +610,29 @@
 		});
 	}
 </script>
-<script>
+<script>//email modal code
 	
+	var emailModal = document.getElementById("emailModalz");
+
+	// Get the <span> element that closes the modal
+	var closeEmailModalBtn = document.getElementById("emailModalCloseBtn");
+
+	// When the user clicks the button, open the modal
+	function openEmailModal()
+	{
+		emailModal.style.display = "block";
+	}
+	function closeEmailModal()
+	{
+		emailModal.style.display = "none";
+	}
+
+	// When the user clicks on <span> (x), close the modal
+	closeEmailModalBtn.onclick = function()
+	{
+		emailModal.style.display = "none";
+	}
+	
+	//openEmailModal();
 </script>
 </html>

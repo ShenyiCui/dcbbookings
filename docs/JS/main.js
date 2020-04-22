@@ -109,7 +109,7 @@ function Login(usernames, passwords) //used to log a user into the main page
         },
         onFailure: function(err) {
 			document.getElementById("LoginErrMsg").style.color="red"
-            document.getElementById("LoginErrMsg").innerHTML=(err.message || JSON.stringify(err)) + "<br> All Fields Including Email are Case Sensitive";
+            document.getElementById("LoginErrMsg").innerHTML=(err.message || JSON.stringify(err)) + "<br> Ensure that you've typed in your details correctly.";
         }
     });
 }
@@ -354,7 +354,7 @@ function getCognitoUser() // gets the current user, makes sure that the user is 
     };
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
     var cognitoUser = userPool.getCurrentUser();
-
+	//console.log(userPool);
     if (cognitoUser != null)
 	{
         cognitoUser.getSession(function(err, session)
@@ -374,7 +374,6 @@ function getCognitoUser() // gets the current user, makes sure that the user is 
 		self.location="../index.html"
 	}
 }
-
 function getUserEmail() // get email of current user
 {
 	cognitoUser = getCognitoUser()
@@ -385,6 +384,29 @@ function getUserEmail() // get email of current user
             return;
         }
 		userEmail = result[2]["Value"];
+	});
+}
+function deleteCognitoUser()
+{
+	cognitoUser = getCognitoUser()
+	cognitoUser.deleteUser(function(err, result) 
+	{
+		if (err) {
+			alert(err.message || JSON.stringify(err));
+			return;
+		}
+		console.log('call result: ' + result);
+	});
+}
+function changeUserPassword(oldPass, newPass)
+{
+	cognitoUser = getCognitoUser()
+	cognitoUser.changePassword('oldPassword', 'newPassword', function(err, result) {
+		if (err) {
+			alert(err.message || JSON.stringify(err));
+			return;
+		}
+		console.log('call result: ' + result);
 	});
 }
 
@@ -403,8 +425,7 @@ function dynamicGenerateYourResos(data)//dynamically generate the list for your 
 	var listOfItems;
 	if(data["userControlledResources"]=="Empty List")
 	{
-		$("#whatResultsText").html("Your Resources:")
-		listOfItems = "<em>[You do not manage any resources]<br>You may create one with the options dropdown on the top right corner</em>"
+		listOfItems = "<em>You do not manage any resources<br>You may create one with the options dropdown on the top right corner</em>"
 		$("#EmptyMsg").html(listOfItems);
 	}
 	else
@@ -515,7 +536,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	}
 	if(allResosHTML == "")//fallback incase all 3 arrays are empty
 	{
-		allResosHTML = "Empty List..."
+		allResosHTML = "<p style='color:white;'>All Resources are currently empty<br>you may create one in the drop down menu on the top right</p>"
 	}
 	$("#SearchResultsAndRV").html(allResosHTML);
 }
@@ -548,7 +569,7 @@ function dynamicGenerateBookmarkedResos(userData)//requires user data in array f
 	}
 	if(BookmarkedResosHTML == "")
 	{
-		BookmarkedResosHTML = "<em><p>Empty List...</p></em>"
+		BookmarkedResosHTML = "<em><p style='color:white;'>You don't have any bookmarks<br>You may create them by clicking on the bookmark icon on top of a resource</p></em>"
 	}
 	$("#SearchResultsAndRV").html(BookmarkedResosHTML);
 }
@@ -1978,6 +1999,10 @@ function populateRecentlyVisted()
 			if(individualData.Items[0].recentlyBookedResources[0]!="Empty List")
 			{
 				generateRecentlyVisitedHTML(individualData.Items[0].recentlyBookedResources);
+			}
+			else
+			{
+				$("#EmptyMsg").html("<em>Please visit a resource...</em>");
 			}
 			userInfoFetchSuccess = false;
 		}
@@ -4914,6 +4939,11 @@ function getMyResos()//gets user resos and populates it on the search feature in
 				}
 				$("#myResosList").html(listOfMyResos);
 			}
+			else
+			{
+				$("#myResosList").html("<em>You don't manage any resources</em>")
+			}
+			
 		}
 		else
 		{
@@ -5256,7 +5286,14 @@ function checkIfResosExists() //Checks if Resos still exists, if it doens't Dele
             {
                 allResos.push([allRoomsData[i].RoomID,"room"])
             }
-            checkMyData();
+			if(allResos.length != 0)
+			{
+				checkMyData();
+			}
+			else
+			{
+				 resosExistCheckAndDeleteComplete = true;
+			}
         }
     }
 
@@ -6424,7 +6461,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 	var totalNoOfPeriodsWeek1 = 0;
 	var totalNoOfPeriodsWeek2 = 0;
 	var periodss = [];
-	
+		
 	var allUsersThatBooked = []//all users that used the room in between a certain range 
 	
 	var tableColLength = 0; //how many colums a table will have 
@@ -6443,7 +6480,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
     waitOutFetching();
     function waitOutFetching()
     {
-        console.log("Wait Out...")
+        //console.log("Wait Out...")
         if(roomDataFetchSuccess == false) {
             window.setTimeout(waitOutFetching, 1000);
         }
@@ -6517,6 +6554,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 					if(!allUsersOneTime.includes(schedule[i][1]))
 					{
 						allUsersOneTime.push(schedule[i][1]);
+						allUsersThatBooked.push(schedule[i][1])
 					}
 					allUsersAllTime.push(schedule[i][1])
 				}
@@ -6544,7 +6582,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				}
 				if(allUsersOneTime[biggestIndex] != null)
 				{
-					result[0].push(allUsersOneTime[biggestIndex])
+					result[0].push(allUsersOneTime[biggestIndex].substr(0,allUsersOneTime[biggestIndex].indexOf("@")))
 					result[1][0].push(biggest)
 					result[1][1].push(biggest/(noOfWeek1s+noOfWeek2s))
 					allUsersOneTime.splice(biggestIndex,1)//getting rid of user who's already been accounted for. 
@@ -6631,7 +6669,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 		waitOut()
 		function waitOut()
 		{
-			console.log("Wait Out...")
+			//console.log("Wait Out...")
 			if(currentWeek == null)
 			{
 				window.setTimeout(waitOut,2000);
@@ -6639,7 +6677,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			else
 			{
 				$("#canvasHere").html("")
-				$("#canvasHere").html('<div id="listOfUsers"></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
+				$("#canvasHere").html('<div id="listOfUsers"><center><h3>Users that booked the room</h3><select class="SelectMultipleInput" multiple><option>Loading...</option></select></center></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
 				firstWeekIs = currentWeek;
 				roger();
 				
@@ -6729,40 +6767,48 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 					noOfWeek2s = Math.floor(totalNoOfWeeks/2) + 1;
 				}
 			}
+			
+			noOfFree = (tableColLength * 5) * totalNoOfWeeks - bookingSched.length;
+			noOfFreeWeek1 = (tableColLength * 5) * noOfWeek1s
+			noOfFreeWeek2 = (tableColLength * 5) * noOfWeek2s
+			
 			if(permaSchedule[0] != null && permaSchedule[0] != "Empty List")
 			{
 				for(var i = 0; i < permaSchedule[0].length; i++)
 				{
 					for(var j = 0; j < permaSchedule[0][0].length;j++)
 					{
-						totalNoOfPeriodsWeek1 +=1;
-						totalNoOfPeriods +=1;
 						if(permaSchedule[0][i][j][0] != unbookedval)
 						{
 							noOfRervWeek1 += 1;
-						}
-						else
-						{
-							noOfFree += 1;
-							noOfFreeWeek1 +=1;
+							noOfFreeWeek1 +=-1
+							noOfFree +=-1
 						}
 						if(permaSchedule[0][i][j][0] == lessonval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek1 +=-1
 							noOfLsn += 1; 
 							noOfLsnWeek1 += 1;
 						}
 						if(permaSchedule[0][i][j][0] == bookval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek1 +=-1
 							noOfBkd +=1;
 							noOfBkdWeek1 += 1;
 						}
 						if(permaSchedule[0][i][j][0] == lockval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek1 +=-1
 							noOfLck +=1;
 							noOfLckWeek1 += 1;
 						}
 						if(permaSchedule[0][i][j][0] == pendingval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek1 +=-1
 							noOfPnd +=1;
 							noOfPndWeek1 += 1;
 						}
@@ -6772,34 +6818,37 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				{
 					for(var j = 0; j < permaSchedule[1][0].length;j++)
 					{
-						totalNoOfPeriodsWeek2 +=1;
-						totalNoOfPeriods +=1;
 						if(permaSchedule[1][i][j][0] != unbookedval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek2 +=-1
 							noOfRervWeek2 += 1;
-						}
-						else
-						{
-							noOfFree += 1;
-							noOfFreeWeek2 +=1;
 						}
 						if(permaSchedule[1][i][j][0] == lessonval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek2 +=-1
 							noOfLsn += 1; 
 							noOfLsnWeek2 += 1;
 						}
 						if(permaSchedule[1][i][j][0] == bookval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek2 +=-1
 							noOfBkd +=1;
 							noOfBkdWeek2 += 1;
 						}
 						if(permaSchedule[1][i][j][0] == lockval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek2 +=-1
 							noOfLck +=1;
 							noOfLckWeek2 += 1;
 						}
 						if(permaSchedule[1][i][j][0] == pendingval)
 						{
+							noOfFree +=-1
+							noOfFreeWeek2 +=-1
 							noOfPnd +=1;
 							noOfPndWeek2 += 1;
 						}
@@ -6807,39 +6856,43 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				}
 			}
 			
-			noOfFree = noOfFree * totalNoOfWeeks - bookingSched.length;
-			noOfFreeWeek1 = noOfFreeWeek1 * noOfWeek1s
-			noOfFreeWeek2 = noOfFreeWeek2 * noOfWeek2s
+			totalNoOfPeriodsWeek1 = (tableColLength * 5)*noOfWeek1s;
+			totalNoOfPeriodsWeek2 = (tableColLength * 5)*noOfWeek2s;
+			totalNoOfPeriods  = (tableColLength * 5) * totalNoOfWeeks;
+			
+			//console.log("totalNoOfWeeks:" + totalNoOfWeeks)
+			//console.log("Week 1 + Week 2:" + (noOfWeek1s+noOfWeek2s))
 			
 			noOfRervWeek1 = noOfRervWeek1 * noOfWeek1s
 			noOfRervWeek2 = noOfRervWeek1 * noOfWeek2s
 			noOfRerv = noOfRervWeek1 + noOfRervWeek2;
 			
-			noOfBkd = noOfBkd * totalNoOfWeeks;
 			noOfBkdWeek1 = noOfBkdWeek1 * noOfWeek1s
 			noOfBkdWeek2 = noOfBkdWeek2 * noOfWeek2s
-			
-			noOfLsn = noOfLsn * totalNoOfWeeks;
+			noOfBkd = noOfBkdWeek1 + noOfBkdWeek2;
+						
 			noOfLsnWeek1 = noOfLsnWeek1 * noOfWeek1s
 			noOfLsnWeek2 = noOfLsnWeek2 * noOfWeek2s
+			noOfLsn = noOfLsnWeek1 + noOfLsnWeek2;
 			
-			noOfPnd = noOfPnd * totalNoOfWeeks;
 			noOfPndWeek1 = noOfPndWeek1 * noOfWeek1s
 			noOfPndWeek2 = noOfPndWeek2 * noOfWeek2s
-			
-			noOfLck = noOfLck * totalNoOfWeeks;
+			noOfPnd = noOfPndWeek2 + noOfPndWeek2;
+
 			noOfLckWeek1 = noOfLckWeek1 * noOfWeek1s
 			noOfLckWeek2 = noOfLckWeek2 * noOfWeek2s
+			noOfLck = noOfLckWeek1 + noOfLckWeek2;
 			
-			totalNoOfPeriods = totalNoOfPeriods * totalNoOfWeeks;
 			totalNoOfPeriodsWeek1 = totalNoOfPeriodsWeek1 * noOfWeek1s;
 			totalNoOfPeriodsWeek2 = totalNoOfPeriodsWeek2 * noOfWeek2s;
+			totalNoOfPeriods = totalNoOfPeriodsWeek1 + totalNoOfPeriodsWeek2;
+
 			
 			for(var i = 0; i<bookingSched.length; i++)
 			{
 				if(bookingSched[i][4] == "Week1")
 				{
-					noOfFreeWeek1 = noOfFreeWeek1 -1
+					noOfFreeWeek1 +=-1
 					noOfRervWeek1 +=1;
 					if(bookingSched[i][0] == lessonval)
 					{
@@ -6864,7 +6917,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 				}
 				else
 				{
-					noOfFreeWeek2 = noOfFreeWeek2 -1
+					noOfFreeWeek2 +=-1
 					noOfRervWeek2 +=1;
 					if(bookingSched[i][0] == lessonval)
 					{
@@ -6890,6 +6943,17 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			}
 			//calculatePercentages();
 			createPiesNow();
+			window.setTimeout(function(){
+				var options = '<center><h3>Users that booked the room:</h3><select class="SelectMultipleInput" id="usersThatBkd" multiple>'
+				for(var i =0; i < allUsersThatBooked.length; i++)
+				{
+					options += '<option value="'+allUsersThatBooked[i]+'">'+allUsersThatBooked[i]+'</option>'
+				}
+
+				options += '</select><button onClick="openAndPopulateEmailMyResosData();" class="buttonSmallLong2">Contact Selected Members</button></center>'
+				$("#listOfUsers").html(options)
+			},2000)
+			
 		}
 		
 		function calculatePercentages()
@@ -7021,7 +7085,7 @@ function createBarChart(canvasID, xAxisLables, dataSetLabels, dataSets, title)
 		)
 	}
 	
-	console.log(datasetJSONText);
+	//console.log(datasetJSONText);
 	var ctx = $('#'+ canvasID);
 	var myChart = new Chart(ctx, {
 		type: 'bar',
@@ -7077,4 +7141,59 @@ function createPieChart(canvasID, datasetz, title)//order is (booked, pending, u
         	}
 		}
 	});
+}
+
+function openAndPopulateEmailMyResosData()
+{
+	var contactThese = $("#usersThatBkd").val();
+	if(contactThese.length != 0)
+	{
+		openEmailModal()
+		nicEditors.findEditor( "emailText" ).setContent( '' );//set empty
+		$("#toEmail").val("")
+		$("#subject").val("")
+		
+		$("#toEmail").val(contactThese)
+	}
+}
+function sendMailMyResosData()
+{
+	$("#emailErrMsg").html("Sending...")
+	var nicE = new nicEditors.findEditor('emailText');
+	var emailTxt = nicE.getContent();
+	
+	var template_params = 
+	{
+	   "toEmail": $("#toEmail").val(),
+	   "fromEmail": userEmail,
+	   "subject": $("#subject").val(),
+	   "text": emailTxt
+	}
+
+	var service_id = "default_service";
+	var template_id = "dcbbookingssendemail";
+	emailjs.send(service_id, template_id, template_params)
+	.then(function(response) {
+       $("#emailErrMsg").html('Email Sent Sucessfully, please check your mailbox.')
+	   window.setTimeout(closeEmailModal,2500)
+    }, function(error) {
+       $("#emailErrMsg").html('Error: ' +  JSON.stringify(error));
+    });
+}
+
+function generateHistory(userID, divID)
+{
+	/*myResosArray = bubble_Sort2DArray(individualData["Items"][0]["userControlledResources"],0);
+	if(myResosArray!="Empty List")
+	{
+		for(var i = 0; i<myResosArray.length;i++)
+		{
+			listOfMyResos += '<li><a class="imgBtn" onClick="openResosSettings(\''+myResosArray[i][0]+'\',\''+myResosArray[i][1]+'\'); checkAvailableUpload(); $(\'#customUploadDocs\').hide(); $(\'#SimUploadDocs\').hide();">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
+		}
+		$("#myResosList").html(listOfMyResos);
+	}
+	else
+	{
+		$("#myResosList").html("<em>You don't manage any resources</em>")
+	}*/
 }

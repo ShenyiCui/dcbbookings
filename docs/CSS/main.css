@@ -1645,3 +1645,96 @@ viewPort_Content
 	width:65%;
 	border-radius: 25px;
 }
+
+.SelectMultipleInput
+{
+	padding:5px;
+	width: 95%;
+    margin: 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+	text-align: center;
+	font-size: 16px;
+}
+.SelectMultipleInput:focus
+{
+    border: 3px solid #555;
+}
+
+.emailModal-content 
+{
+    background-color: white;/*rgba(245,245,245,1.00);*/
+    margin: 10% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+	border-radius: 25px;
+    width: 640px; /* Could be more or less, depending on screen size */
+}
+.emailModal-content input[type=text],[type=email]
+{
+    width: 600px;
+    padding: 7px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+.emailModal-content input[type=text]:focus, input[type=email]:focus
+{
+    border: 3px solid #555;
+}
+.emailModal-content textarea
+{
+	width:600px;
+	height: 200px;
+}
+.emailModal-content label
+{
+	top:178px;
+	position: absolute;
+}
+.buttonSmallLong
+{
+	margin-top: 5px;
+	width: 600px;
+	height: 30px;
+	color: white;
+	background-color: #8E8E8E;
+}
+.buttonSmallLong:hover
+{
+	background-color: #CFCFCF;
+	color: black;
+}
+.buttonSmallLong2
+{
+	margin-top: 5px;
+	width: 95%;
+	height: 30px;
+	color: white;
+	background-color: #8E8E8E;
+}
+.buttonSmallLong2:hover
+{
+	background-color: #CFCFCF;
+	color: black;
+}
+.close1 
+{
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close1:hover,
+.close1:focus 
+{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

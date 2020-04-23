@@ -415,6 +415,7 @@
 				//parameters: populateBookmarks? truefalse, populate RecentlyVisited?, truefalse, populate YourResos? truefalse
 				populateRecentlyVisted();
 				$("#Loader").fadeOut();
+				checkIfHistoryOpen();
 				NProgress.inc();
 				NProgress.done();
 			}

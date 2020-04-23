@@ -57,7 +57,7 @@
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
 		<br><br>
-		<div onClick="currentSettingsSlide(3);changeSettingTitle('History');" class="settingsPageBtn imgBtn edit_hover_class">
+		<div onClick="currentSettingsSlide(3);changeSettingTitle('History');generateHistory(userEmail,'settingsHere')" class="settingsPageBtn imgBtn edit_hover_class">
 			<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;History</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
@@ -156,38 +156,7 @@
 
 		<!--History 3-->
 		<div class="SettingsSlide">
-			<div>
-				<center>
-					<strong><h4>Date Begining</h4></strong>
-					<ul class="listOfItemsButtons">
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked</em></a></li>
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
-					</ul>
-				</center>
-			</div>
-			<br><br>
-			<div>
-				<center>
-					<strong><h4>Date Begining</h4></strong>
-					<ul class="listOfItemsButtons">
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked</em></a></li>
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
-					</ul>
-				</center>
-			</div>
-			<br><br>
-			<div>	
-				<center>
-					<strong><h4>Date Begining</h4></strong>
-					<ul class="listOfItemsButtons">
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked</em></a></li>
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
-						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
-					</ul>
-				</center>
-			</div>
+			<div id="settingsHere"></div>
 		</div>
 		<!--My Resource Data 4-->
 		<div class="SettingsSlide">
@@ -644,7 +613,6 @@
 	}
 </script>
 <script>//email modal code
-	
 	var emailModal = document.getElementById("emailModalz");
 
 	// Get the <span> element that closes the modal

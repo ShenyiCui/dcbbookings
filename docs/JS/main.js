@@ -7183,12 +7183,137 @@ function sendMailMyResosData()
 
 function generateHistory(userID, divID)
 {
+	getAllRooms();
+    waitOutFetching();
+    function waitOutFetching()
+    {
+        //console.log("Wait Out...")
+        if(roomDataFetchSuccess == false) {
+            window.setTimeout(waitOutFetching, 1000);
+			$("#"+divID).html("<br><br><br><br><center><em>Loading...</em></center>")
+        }
+        else {
+            //console.log(allRooms);
+            roomDataFetchSuccess = false
+            getMyHistory();
+        }
+    }
+	
+	function getMyHistory()
+	{
+		//getPeriod
+		//getDayFromNum2
+		var roomData = allRooms.Items;
+		var tempString = "";
+		var listOfBookings = "";
+		var roomData = allRooms.Items;
+		var allBookingsUserMade = []
+		var tempArr = [] //[date in terms of a number, date in terms of week begining, RoomName, Day, Period, Day+Period,resosType]
+		var tempArr2 = [] //[date in terms of a number, date in terms of week begining]
+		var diffentDivs = [];
+		var alltheWeekBeginings = [];
+		var tempAllWeekBeginings = [];
+		
+		//console.log(roomData)
+		
+		for(var i = 0; i < roomData.length; i ++)
+		{
+			for(var j = 0; j<roomData[i].BookingSchedule.length; j++)
+			{
+				if(roomData[i].BookingSchedule[j][1] == userID)
+				{
+					if(!tempAllWeekBeginings.includes(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1]))
+					{
+						tempArr2 = [];
+						
+						tempArr2.push(transformCurrentWeek(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1]))
+						tempArr2.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1])
+						tempAllWeekBeginings.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1])
+						
+						alltheWeekBeginings.push(tempArr2)
+					}
+					
+					tempArr = [];
+					tempArr.push(transformCurrentWeek(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1]))
+					tempArr.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1])
+					tempArr.push(roomData[i].RoomID)
+					tempArr.push(getDayFromNum2(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-2][0]))
+					tempArr.push(getPeriod(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-2][1], JSON.parse(roomData[i].Min30Periods)))
+					if(JSON.parse(roomData[i].Min30Periods))
+					{
+						tempArr.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-2][0]+((roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-2][1])/2))
+					}
+					else
+					{
+						tempArr.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-2][0]+roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-2][1])
+					}
+					tempArr.push("room")
+					allBookingsUserMade.push(tempArr)
+				}
+			}
+		}
+		allBookingsUserMade = bubble_Sort2DArray(allBookingsUserMade, 5)
+		allBookingsUserMade = bubble_Sort2DArray(allBookingsUserMade, 0)
+		alltheWeekBeginings = bubble_Sort2DArray(alltheWeekBeginings, 0)
+		//console.log(alltheWeekBeginings)
+		
+		
+		for(var i =0; i<alltheWeekBeginings.length; i++)
+		{
+			listOfBookings += '<div><center><strong><h4>'+alltheWeekBeginings[i][1]+'</h4></strong><ul class="listOfItemsButtons">'
+			for(var j =0; j<allBookingsUserMade.length; j++)
+			{
+				if(alltheWeekBeginings[i][1]==allBookingsUserMade[j][1])
+				{
+					//viewResos
+					listOfBookings += '<li><a class="imgBtn" onClick="self.location=\'Make_Booking.html\';localStorage.setItem(\'historyResosAvailable\',\'true\');localStorage.setItem(\'openHistoryReos\',\''+allBookingsUserMade[j][2]+','+allBookingsUserMade[j][6]+','+allBookingsUserMade[j][0]+'\');"><em>'+allBookingsUserMade[j][6]+' / '+allBookingsUserMade[j][2]+' / '+allBookingsUserMade[j][3]+' / '+allBookingsUserMade[j][4]+'</em></a></li>'
+				}
+			}
+			listOfBookings += '</ul></center></div><br><br>'
+		}
+		$("#"+divID).html(listOfBookings)
+		
+		/*<div>
+				<center>
+					<strong><h4>Date Begining</h4></strong>
+					<ul class="listOfItemsButtons">
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked</em></a></li>
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
+					</ul>
+				</center>
+			</div>
+			<br><br>
+			<div>
+				<center>
+					<strong><h4>Date Begining</h4></strong>
+					<ul class="listOfItemsButtons">
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked</em></a></li>
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
+					</ul>
+				</center>
+			</div>
+			<br><br>
+			<div>	
+				<center>
+					<strong><h4>Date Begining</h4></strong>
+					<ul class="listOfItemsButtons">
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked</em></a></li>
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
+						<li><a class="imgBtn"><em>Room/Technology 1/Monday/Period 1/Booked </em></a></li>
+					</ul>
+				</center>
+			</div>*/
+		
+		
+	}
 	/*myResosArray = bubble_Sort2DArray(individualData["Items"][0]["userControlledResources"],0);
 	if(myResosArray!="Empty List")
 	{
 		for(var i = 0; i<myResosArray.length;i++)
 		{
-			listOfMyResos += '<li><a class="imgBtn" onClick="openResosSettings(\''+myResosArray[i][0]+'\',\''+myResosArray[i][1]+'\'); checkAvailableUpload(); $(\'#customUploadDocs\').hide(); $(\'#SimUploadDocs\').hide();">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
+			listOfMyResos += '<li><a class="imgBtn">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
 		}
 		$("#myResosList").html(listOfMyResos);
 	}
@@ -7196,4 +7321,13 @@ function generateHistory(userID, divID)
 	{
 		$("#myResosList").html("<em>You don't manage any resources</em>")
 	}*/
+}
+function checkIfHistoryOpen()
+{
+	if(JSON.parse(localStorage.getItem("historyResosAvailable")))
+	{
+		localStorage.setItem("historyResosAvailable","false")
+		var resosParas = localStorage.getItem("openHistoryReos").split(',');
+		viewResos(resosParas[0],resosParas[1],transformYYYYMMDDtoDate(resosParas[2]))
+	}
 }

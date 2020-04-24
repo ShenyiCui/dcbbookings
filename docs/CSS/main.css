@@ -1498,7 +1498,6 @@ viewPort_Content
 .sectionedSettingsDiv
 {
 	background-color:white;
-	width:"100%";
 	margin-left: 50px;
 	margin-top:0;
 	margin-right:50px;
@@ -1737,4 +1736,12 @@ viewPort_Content
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+.searchActivityDiv
+{
+	position: fixed;
+	background-color: rgba(240,239,245,1.00);
+	width: 68.75%;
+	top: 40px;
+	height: 60px;
 }

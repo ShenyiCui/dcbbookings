@@ -103,3 +103,6 @@ var approveGoAhead = [false,false]; //allows the approval to go ahead
 	//[0]- deletion completed
 	//[1]- approval button activated 
 var bookDetsPerma;
+
+var activityBubbleSortDates = []//contains YYYYMMDD numbers ready to be sorted by bubble sorted, used in the activity module in order to conduct searches. 
+var settingsSlideIndex; //settings slide index numbers

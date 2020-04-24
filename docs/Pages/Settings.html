@@ -57,12 +57,12 @@
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
 		<br><br>
-		<div onClick="currentSettingsSlide(3);changeSettingTitle('History');generateHistory(userEmail,'settingsHere')" class="settingsPageBtn imgBtn edit_hover_class">
-			<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;History</p>
+		<div onClick="currentSettingsSlide(3);changeSettingTitle('Activity');generateHistory(userEmail,'activityHere')" class="settingsPageBtn imgBtn edit_hover_class">
+			<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Activity</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
-		<div onClick="currentSettingsSlide(4);changeSettingTitle('My Resource Data');myResosDataStart();" class="settingsPageBtn imgBtn edit_hover_class">
-			<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Resource Data</p>
+		<div onClick="currentSettingsSlide(4);changeSettingTitle('My Resource Data Analysis');myResosDataStart();" class="settingsPageBtn imgBtn edit_hover_class">
+			<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;My Resource Analysis</p>
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
 		<br><br>
@@ -85,21 +85,17 @@
 				<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Students</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(9);changeSettingTitle('Users Pending Approval');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users Pending Approval</p>
-				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
-			</div>
-			<div onClick="currentSettingsSlide(10);changeSettingTitle('All Resources');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resources</p>
-				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
-			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(11);changeSettingTitle('User Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users History</p>
+			<div onClick="currentSettingsSlide(9);changeSettingTitle('All Resources Settings');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resources Settings</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(12);changeSettingTitle('Resource Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Resource Data Analysis</p>
+			<div onClick="currentSettingsSlide(10);changeSettingTitle('User\'s Activity');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User's Activity</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<div onClick="currentSettingsSlide(11);changeSettingTitle('All Resource\'s Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resource's Analysis</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
 		</div>
@@ -117,14 +113,14 @@
 			<div id="AccDetailsDiv" class="accDetails">
 				<div class="row">
 					<div class="column">
-						<p>User Email: ...</p>
-						<p>Account Status: </p>
-						<p>Account Credentials: </p>
-						<p>Super User: </p>
+						<p id="emailOfUserP">User Email: ...</p>
+						<p id="accountStatusP">Account Status: </p>
+						<p id="accountCredentialsP">Account Credentials: </p>
+						<p id="superUserP">Super User: </p>
 				  	</div>
 				  	<div class="column">
-						<p>No. Of Bookmarked Resources: </p>
-						<p>No. Of Created Resources: </p>
+						<p id="noOfBMResosP">No. Of Bookmarked Resources: </p>
+						<p id="noOfCreatedResosP">No. Of Created Resources: </p>
 				  	</div>
 				</div>
 			</div>
@@ -133,15 +129,17 @@
 				<div class="row">
 					<div class="column">
 						<h3>Change Account Password</h3>
-						<input type="password" placeholder="Old Password"><br>
-						<input type="password" placeholder="New Password"><br>
-						<input type="password" placeholder="Confirm New Password"><br>
-						<button class="btnSuccessOutline">Change Password</button>
+						<input id="oldPass" type="password" placeholder="Old Password"><br>
+						<input id="newPass" type="password" placeholder="New Password"><br>
+						<input id="confirmNewPass" type="password" placeholder="Confirm New Password"><br>
+						<button class="btnSuccessOutline" onClick="confirmAndChangePass();">Change Password</button>
+						<p id="passChangeMsg" style="margin:0;">&nbsp;</p>
 				  	</div>
 				  	<div class="column">
 						<h3>Change User Credentials</h3>
-						<br><br><br><br>
-						<h3>Delete My Account</h3>
+						<br><br><br><br><br><br><br>
+						<h3 style="margin:0;">Delete My Account</h3>
+						<button class="btnDangerOutline">Delete Account</button>
 				  	</div>
 				</div>
 			</div>
@@ -156,7 +154,13 @@
 
 		<!--History 3-->
 		<div class="SettingsSlide">
-			<div id="settingsHere"></div>
+			<div id="activityslideDivID" class="searchActivityDiv">
+				<center>
+					<input type="text" id="searchActivityInput" onChange="searchMyActivity()" placeholder="Search Activity..." class="datepicker">
+				</center>
+			</div>
+			<br><br>
+			<div id="activityHere"></div>
 		</div>
 		<!--My Resource Data 4-->
 		<div class="SettingsSlide">
@@ -288,14 +292,13 @@
 		<div class="SettingsSlide"></div>
 		<!--Students 8-->
 		<div class="SettingsSlide"></div>
-		<!--Users Pending Approval 9-->
-		<div class="SettingsSlide"></div>
-		<!--All Resources 10-->
-		<div class="SettingsSlide"></div>
 
-		<!--User Data Analysis 11-->
+		
+		<!--All Resources 9-->
 		<div class="SettingsSlide"></div>
-		<!--Resource Data Analysis 12-->
+		<!--User Data Analysis 10-->
+		<div class="SettingsSlide"></div>
+		<!--Resource Data Analysis 11-->
 		<div class="SettingsSlide"></div>
 
 	</div>
@@ -514,6 +517,7 @@
 	{
 		NProgress.done();
 		openedSettingsCheckPrelim();
+		loadInAccDetails();
 		for(var i = 0; i<allMasterAdmins.length; i++)
 		{
 			if(userEmail.trim().toLowerCase()==allMasterAdmins[i].trim().toLowerCase())
@@ -529,10 +533,11 @@
 		{
 			$("#adminSettings").hide();
 		}
+		$("#superUserP").html("Super User: "+ masterAdmin)
 	}
 </script>
 <script>//Resos Settings SLide Code
-	var settingsSlideIndex = 1;
+	settingsSlideIndex = 1;
 	showSettingsSlides(settingsSlideIndex);
 	// Next/previous controls
 	function plusSettingsSlides(n)

@@ -80,6 +80,25 @@ function bubble_SortJSONMilestoneArray(a,sortValue)//bubble sort algorithm, used
     } while (swapp);
  return x;
 }
+function bubble_Sort(arr)//normal bubble sort for only just 1D arrays
+{
+	function swap(arr, first_Index, second_Index)
+	{
+		var temp = arr[first_Index];
+		arr[first_Index] = arr[second_Index];
+		arr[second_Index] = temp;
+	}
+    var len = arr.length,
+        i, j, stop;
+    for (i=0; i < len; i++){
+        for (j=0, stop=len-i; j < stop; j++){
+            if (arr[j] > arr[j+1]){
+                swap(arr, j, j+1);
+            }
+        }
+    }
+    return arr;
+}
 
 function Login(usernames, passwords) //used to log a user into the main page
 {
@@ -401,13 +420,35 @@ function deleteCognitoUser()
 function changeUserPassword(oldPass, newPass)
 {
 	cognitoUser = getCognitoUser()
-	cognitoUser.changePassword('oldPassword', 'newPassword', function(err, result) {
+	cognitoUser.changePassword(oldPass, newPass, function(err, result) {
 		if (err) {
-			alert(err.message || JSON.stringify(err));
+			//alert(err.message || JSON.stringify(err));
+			$("#passChangeMsg").html(err.message || JSON.stringify(err))
+			$("#passChangeMsg").css('color', 'red');
 			return;
 		}
-		console.log('call result: ' + result);
+		else
+		{
+			console.log('call result: ' + result);
+			$("#passChangeMsg").html(result)
+			$("#passChangeMsg").css('color', 'green');
+		}
 	});
+}
+function confirmAndChangePass()
+{
+	if($("#confirmNewPass").val()==$("#newPass").val())
+	{
+		$("#passChangeMsg").html("Changing Password...")
+		$("#passChangeMsg").css('color', 'black');
+		changeUserPassword($("#oldPass").val(),$("#newPass").val())
+	}
+	else
+	{
+		$("#passChangeMsg").html("Your passwords do not match.")
+		$("#passChangeMsg").css('color', 'red');
+	}
+	
 }
 
 function dynamicGenerateUpcomingBookings(data)//dynamically generate the list for upcoming Bookings and then append it to the main page
@@ -5518,6 +5559,10 @@ function openSettingsNav()//opening side navigation bar for settings
 		document.getElementById("settingsTitleCard").style.left = "400px";
 		document.getElementById("mainSettingsPanel").style.width = "68.75%";
 		document.getElementById("settingsTitleCard").style.width = "68.75%";
+		if(settingsSlideIndex == 3)
+		{
+			document.getElementById("activityslideDivID").style.width = "68.75%";
+		}
         document.getElementById("settingSideNav").style.width = "400px";
 	}
 	else if($(window).width() >= 1280)
@@ -5526,6 +5571,10 @@ function openSettingsNav()//opening side navigation bar for settings
 		document.getElementById("settingsTitleCard").style.left = "31.25%";
 		document.getElementById("mainSettingsPanel").style.width = "68.75%";
 		document.getElementById("settingsTitleCard").style.width = "68.75%";
+		if(settingsSlideIndex == 3)
+		{
+			document.getElementById("activityslideDivID").style.width = "68.75%";
+		}
         document.getElementById("settingSideNav").style.width = "31.25%";
 	}
 	else if($(window).width() < 1150)
@@ -5543,6 +5592,10 @@ function closeSettingsNav()//closing side navigation bar for settings
 	document.getElementById("settingsTitleCard").style.left = "0px";
 	document.getElementById("mainSettingsPanel").style.width = "100%";
 	document.getElementById("settingsTitleCard").style.width = "100%";
+	if(settingsSlideIndex == 3)
+		{
+			document.getElementById("activityslideDivID").style.width = "100%";
+		}
 	$("#closeSideNavSettings").hide()
 }
 
@@ -7181,7 +7234,7 @@ function sendMailMyResosData()
     });
 }
 
-function generateHistory(userID, divID)
+function generateHistory(userID, divID)//generates activity HTML and populates it in the divID 
 {
 	getAllRooms();
     waitOutFetching();
@@ -7222,13 +7275,15 @@ function generateHistory(userID, divID)
 			{
 				if(roomData[i].BookingSchedule[j][1] == userID)
 				{
-					if(!tempAllWeekBeginings.includes(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1]))
+					if(!tempAllWeekBeginings.includes(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1])) //will populate array only ONCE. 
 					{
 						tempArr2 = [];
 						
 						tempArr2.push(transformCurrentWeek(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1]))
 						tempArr2.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1])
 						tempAllWeekBeginings.push(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1])
+						
+						activityBubbleSortDates.push(transformCurrentWeek(roomData[i].BookingSchedule[j][roomData[i].BookingSchedule[j].length-1]))
 						
 						alltheWeekBeginings.push(tempArr2)
 					}
@@ -7255,12 +7310,14 @@ function generateHistory(userID, divID)
 		allBookingsUserMade = bubble_Sort2DArray(allBookingsUserMade, 5)
 		allBookingsUserMade = bubble_Sort2DArray(allBookingsUserMade, 0)
 		alltheWeekBeginings = bubble_Sort2DArray(alltheWeekBeginings, 0)
+		activityBubbleSortDates = bubble_Sort(activityBubbleSortDates)
 		//console.log(alltheWeekBeginings)
 		
 		
 		for(var i =0; i<alltheWeekBeginings.length; i++)
 		{
-			listOfBookings += '<div><center><strong><h4>'+alltheWeekBeginings[i][1]+'</h4></strong><ul class="listOfItemsButtons">'
+			console.log('<div id=\''+alltheWeekBeginings[i][1].replace(/\s/g,'').replace(',','')+'\'>')
+			listOfBookings += '<div id=\''+alltheWeekBeginings[i][1].replace(/\s/g,'').replace(',','')+'\'><center><strong><h4>Week Begining: '+alltheWeekBeginings[i][1]+'</h4></strong><ul class="listOfItemsButtons">'
 			for(var j =0; j<allBookingsUserMade.length; j++)
 			{
 				if(alltheWeekBeginings[i][1]==allBookingsUserMade[j][1])
@@ -7272,6 +7329,7 @@ function generateHistory(userID, divID)
 			listOfBookings += '</ul></center></div><br><br>'
 		}
 		$("#"+divID).html(listOfBookings)
+		ActivtyScrollTo(transformCurrentWeek(getWeekBegining(new Date())))
 		
 		/*<div>
 				<center>
@@ -7324,10 +7382,45 @@ function generateHistory(userID, divID)
 }
 function checkIfHistoryOpen()
 {
+	if(localStorage.getItem("historyResosAvailable") == null)
+	{
+		localStorage.setItem("historyResosAvailable","false")
+	}
 	if(JSON.parse(localStorage.getItem("historyResosAvailable")))
 	{
 		localStorage.setItem("historyResosAvailable","false")
 		var resosParas = localStorage.getItem("openHistoryReos").split(',');
 		viewResos(resosParas[0],resosParas[1],transformYYYYMMDDtoDate(resosParas[2]))
 	}
+}//will run when page loads on makebookings to see if you clicked on an activity. 
+function searchMyActivity()//searches and scrolls to the date. 
+{
+	ActivtyScrollTo(transformCurrentWeek($("#searchActivityInput").val()))
+}
+function ActivtyScrollTo(dateBegining) //will take date input as integer YYYYMMDD form
+{
+	var scrollToIndex = 0;
+	//console.log(activityBubbleSortDates);
+	for(var i =0; i<activityBubbleSortDates.length;i++)
+	{
+		if(dateBegining>=activityBubbleSortDates[i])
+		{
+			scrollToIndex = i;	
+		}
+	}
+	var idOfDIV = getWeekBegining(transformYYYYMMDDtoDate(activityBubbleSortDates[scrollToIndex].toString())).replace(/\s/g,'').replace(',','')
+	console.log(idOfDIV)
+	window.location.hash = '#'+idOfDIV;
+
+}
+
+function loadInAccDetails()//will run when settings loads in to populate the front page. 
+{
+	$("#emailOfUserP").html("User Email: "+userEmail)
+	$("#accountStatusP").html("Account Status: "+individualData.Items[0].account)
+	$("#accountCredentialsP").html("Account Credentials: "+individualData.Items[0].role)
+	$("#superUserP").html("Super User: ...")
+	$("#noOfBMResosP").html("No. Of Bookmarked Resources: "+individualData.Items[0].bookmarkedResources.length)
+	$("#noOfCreatedResosP").html("No. Of Created Resources: "+individualData.Items[0].userControlledResources.length)
+	console.log(individualData)
 }

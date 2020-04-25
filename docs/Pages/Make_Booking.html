@@ -396,11 +396,43 @@
 			if(userEmail==null)
 			{
 				window.setTimeout(checkEmailVar, 1000);
+				getAllAdmins()
+				validateAdminFetch()
 			}
 			else
 			{
 				firstLoginCheck();
 				NProgress.inc();
+			}
+		}
+		function validateAdminFetch()//get all admin users
+		{
+			if(allMasterAdmins.length!=0)
+			{
+				NProgress.inc();
+				checkIfAdmin();
+			}
+			else
+			{
+				window.setTimeout(validateAdminFetch,1000);
+			}
+		}
+		function checkIfAdmin()//see if you are an admin
+		{
+			for(var i = 0; i<allMasterAdmins.length; i++)
+			{
+				if(userEmail.trim().toLowerCase()==allMasterAdmins[i].trim().toLowerCase())
+				{
+					masterAdmin= true;
+				}
+			}
+			if(masterAdmin)
+			{
+				$("#adminSettings").show();
+			}
+			else
+			{
+				$("#adminSettings").hide();
 			}
 		}
 		function validateCheckIfExistandDelete()//makes sure the current user info is the most up to dataEmail
@@ -445,7 +477,7 @@
 		// When the user clicks the button, open the modal
 		function openAddResos()
 		{
-			if((individualData.Items[0].rolez == "Teacher" && individualData.Items[0].credentialStatus == "confirmed") || masterAdmin)
+			if((individualData.Items[0].rolez == "Teacher" && individualData.Items[0].credentialStatus == "confirmed")||masterAdmin)
 			{
 				AddResosModal.style.display = "block";
 				addRoomClearAll()

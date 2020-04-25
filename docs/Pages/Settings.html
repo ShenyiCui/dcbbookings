@@ -604,6 +604,7 @@
 		{
 			NProgress.inc();
 			checkIfAdmin()
+			NProgress.done();
 			$("#Loader").fadeOut();
 		}
 		else
@@ -613,7 +614,6 @@
 	}
 	function checkIfAdmin()//see if you are an admin
 	{
-		NProgress.done();
 		openedSettingsCheckPrelim();
 		loadInAccDetails();
 		for(var i = 0; i<allMasterAdmins.length; i++)

@@ -176,6 +176,11 @@ function createNewUser(emails,password) //CreateNewUser
 
 function createNewUserAddtoDB(emailz,rolez,CUSER) // Used to create a new user on the DynamoDB side, adding to the user list to be mananged on the main landing page
 {
+	var credentialStats = "confirmed"
+	if(rolez == "Teacher")
+	{
+		credentialStats = "pending"
+	}
 	$.ajax({
 		type:'POST',
 		url:DCBBookingsCreateUserDBAPI,
@@ -184,9 +189,10 @@ function createNewUserAddtoDB(emailz,rolez,CUSER) // Used to create a new user o
 			"account":"Active",
 			"bookmarkedResources":["Empty List"],
 			"recentlyBookedResources":["Empty List"],
-			"role":rolez,
-			userBookings:["Empty List"],
-			userControlledResources:["Empty List"]
+			"rolez":rolez,
+			"userBookings":["Empty List"],
+			"userControlledResources":["Empty List"],
+			"credentialStatus":credentialStats
 		}),
 		contentType:"application/json",
 		success:function(data)
@@ -205,6 +211,11 @@ function createNewUserAddtoDB(emailz,rolez,CUSER) // Used to create a new user o
 
 function createNewUserAddtoDB2(emailz,rolez)// Used to create a new user on the DynamoDB side, adding to the user list to be mananged on the make booking page
 {
+	var credentialStats = "confirmed"
+	if(rolez == "Teacher")
+	{
+		credentialStats = "pending"
+	}
 	$.ajax({
 		type:'POST',
 		url:DCBBookingsCreateUserDBAPI,
@@ -213,9 +224,10 @@ function createNewUserAddtoDB2(emailz,rolez)// Used to create a new user on the 
 			"account":"Active",
 			"bookmarkedResources":["Empty List"],
 			"recentlyBookedResources":["Empty List"],
-			"role":rolez,
-			userBookings:["Empty List"],
-			userControlledResources:["Empty List"]
+			"rolez":rolez,
+			"userBookings":["Empty List"],
+			"userControlledResources":["Empty List"],
+			"credentialStatus":credentialStats
 		}),
 		contentType:"application/json",
 		success:function(data)
@@ -525,7 +537,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 
 	//console.log(userData);
 	//console.log(dataRoom); AccessRights RoomAdmin
-	var userCred = userData.role//user creditials "Student or Teacher"
+	var userCred = userData.rolez//user creditials "Student or Teacher"
 	// !!IMPORTATNT design fallback in the generate allresos section if the array is empty
 	if(dataRoom.length!=0) // will sort room array if its not empty
 	{
@@ -2106,7 +2118,12 @@ function removeTimetableEventListeners() //used in viewRoom's document functions
 	$(document).off('click', '#lessonLockBtn')
 	$(document).off('click', '#quickLockBtn')
 	$(document).off('click', '#rLockBtn')
-	$(document).off('click', '#addUserBtn')
+	$(document).off('click', '.btn_edit')
+	$(document).off('click', '.btn_cancel')
+	$(document).off('click', '.btn_save')
+	$(document).off('click', '.btn_approve')
+	$(document).off('click', '.btn_disable')
+	$(document).off('click', '.btn_enable')
 	$(document).off('focusout', '.row_data')
 }
 function timetableDocFunctionsRoom()
@@ -2678,7 +2695,7 @@ function timetableDocFunctionsRoom()
 				}
 				else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
 				{
-					if(individualData.Items[0].role=="Student")
+					if(individualData.Items[0].rolez=="Student")
 					{
 						newPeriodObject.push(pendingval)
 					}
@@ -3864,7 +3881,7 @@ function timetableDocFunctionsRoom()
 				}
 				else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
 				{
-					if(individualData.Items[0].role=="Student")
+					if(individualData.Items[0].rolez=="Student")
 					{
 						newPeriodObject.push(pendingval)
 					}
@@ -3914,7 +3931,7 @@ function timetableDocFunctionsRoom()
 					}
 					else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
 					{
-						if(individualData.Items[0].role=="Student")
+						if(individualData.Items[0].rolez=="Student")
 						{
 							newPeriodObject.push(pendingval)
 						}
@@ -4891,7 +4908,7 @@ function Search() //search all resos list code
 		var searchResos = "";
 		var bookMarkFunction = "";
 		var buttonViewFunction = "";
-		var userCred = individualData.Items[0].role//user creditials "Student or Teacher"
+		var userCred = individualData.Items[0].rolez//user creditials "Student or Teacher"
 		for(var i = 0; i<dataOfRoomsList.length; i++)
 		{
 			var ResosID = ""
@@ -6730,7 +6747,7 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			else
 			{
 				$("#canvasHere").html("")
-				$("#canvasHere").html('<div id="listOfUsers"><center><h3>Users that booked the room</h3><select class="SelectMultipleInput" multiple><option>Loading...</option></select></center></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
+				$("#canvasHere").html('<br><div id="listOfUsers"><center><h3>Users that booked the room</h3><select class="SelectMultipleInput" multiple><option>Loading...</option></select></center></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
 				firstWeekIs = currentWeek;
 				roger();
 				
@@ -7316,7 +7333,7 @@ function generateHistory(userID, divID)//generates activity HTML and populates i
 		
 		for(var i =0; i<alltheWeekBeginings.length; i++)
 		{
-			console.log('<div id=\''+alltheWeekBeginings[i][1].replace(/\s/g,'').replace(',','')+'\'>')
+		//	console.log('<div id=\''+alltheWeekBeginings[i][1].replace(/\s/g,'').replace(',','')+'\'>')
 			listOfBookings += '<div id=\''+alltheWeekBeginings[i][1].replace(/\s/g,'').replace(',','')+'\'><center><strong><h4>Week Begining: '+alltheWeekBeginings[i][1]+'</h4></strong><ul class="listOfItemsButtons">'
 			for(var j =0; j<allBookingsUserMade.length; j++)
 			{
@@ -7409,18 +7426,391 @@ function ActivtyScrollTo(dateBegining) //will take date input as integer YYYYMMD
 		}
 	}
 	var idOfDIV = getWeekBegining(transformYYYYMMDDtoDate(activityBubbleSortDates[scrollToIndex].toString())).replace(/\s/g,'').replace(',','')
-	console.log(idOfDIV)
+	//console.log(idOfDIV)
 	window.location.hash = '#'+idOfDIV;
 
 }
 
 function loadInAccDetails()//will run when settings loads in to populate the front page. 
 {
-	$("#emailOfUserP").html("User Email: "+userEmail)
-	$("#accountStatusP").html("Account Status: "+individualData.Items[0].account)
-	$("#accountCredentialsP").html("Account Credentials: "+individualData.Items[0].role)
-	$("#superUserP").html("Super User: ...")
-	$("#noOfBMResosP").html("No. Of Bookmarked Resources: "+individualData.Items[0].bookmarkedResources.length)
-	$("#noOfCreatedResosP").html("No. Of Created Resources: "+individualData.Items[0].userControlledResources.length)
+	$("#emailOfUserP").html("<strong>User Email:</strong> "+userEmail)
+	$("#accountStatusP").html("<strong>Account Status:</strong> "+individualData.Items[0].account)
+	$("#accountCredentialsP").html("<strong>Account Credentials:</strong> "+individualData.Items[0].rolez)
+	$("#superUserP").html("<strong>Super User:</strong> " + masterAdmin)
+	$("#noOfBMResosP").html("<strong>No. Of Bookmarked Resources:</strong> "+individualData.Items[0].bookmarkedResources.length)
+	$("#noOfCreatedResosP").html("<strong>No. Of Created Resources:</strong> "+individualData.Items[0].userControlledResources.length)
 	console.log(individualData)
+	if(individualData.Items[0].credentialStatus == "pending")
+	{
+		$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus + " <em><br>[Wait for a Teacher or Master Admin to authenticate you]</em>")
+	}
+	else
+	{
+		$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus)
+	}
+	
+}
+
+function generateUserManagementTable()//generates user admin table and the functions that come with it
+{
+	removeTimetableEventListeners()
+	userInfoFetchSuccess = false; 
+	getAllUsers();
+	waitOut1();
+	var allDataOfUsers;
+	var tableOfUsers = "";
+	
+	var originalEntry = []
+	var newEntry = [];
+	
+	var updateVals = [];
+	var temp = [];
+	var noOfUpdates = 0;
+	var counter =0;
+	
+	var alreadyCheckedAndUpdated = false; // this is where it sees whether or not it's already checked if he's a student going to a teacher. if true is means already checked
+	
+	function waitOut1()
+	{
+		if(userInfoFetchSuccess)
+		{
+			userInfoFetchSuccess = false; 
+			allDataOfUsers = userDataFull;
+			
+			//generate table
+			tableOfUsers += '<table style="background-color:white;" class="table table-hover">'
+			//--->create table header > start
+			tableOfUsers += '<thead>';
+				tableOfUsers += '<tr>';
+					tableOfUsers += '<th>Email</th>';
+					tableOfUsers += '<th>Account Status</th>';
+					tableOfUsers += '<th>Account Credentials</th>';
+					tableOfUsers += '<th>Credentials Status</th>';
+					tableOfUsers += '<th>Options</th>';
+				tableOfUsers += '</tr>';
+			tableOfUsers += '</thead>';
+			//--->create table header > end
+			
+			//--->create table body > start
+			tableOfUsers += '<tbody>';
+			$.each(allDataOfUsers.Items, function (index, val)
+			{
+				//you can replace with your database row id
+				row_id = random_id();
+				//loop through ajax row data
+				tableOfUsers += '<tr id="' + row_id + '" row_id="' + row_id + '">';
+					//console.log(val)
+					tableOfUsers += '<td ><div col_name="email">' + val.email + '</div></td>';
+					tableOfUsers += '<td ><div class="row_data" col_name="account">' + val.account + '</div></td>';
+					tableOfUsers += '<td ><div class="row_data" col_name="rolez">' + val.rolez + '</div></td>';
+					tableOfUsers += '<td ><div col_name="credentialStatus">' + val.credentialStatus + '</div></td>';
+				//--->edit options > start
+				tableOfUsers += '<td>';
+
+				tableOfUsers += '<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="' + row_id + '" > Edit</a> | </span>';
+				if(val.credentialStatus == "pending")
+				{
+					tableOfUsers += '<span class="btn_approve"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Confirm</a> </span>';
+				}
+				else
+				{
+					if(val.account == "Disabled")
+					{
+						tableOfUsers += '<span class="btn_enable"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Enable</a> </span>';
+					}
+					else
+					{
+						tableOfUsers += '<span class="btn_disable"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Disable</a> </span>';
+					}
+				}
+				
+				
+				
+				//only show this button if edit button is clicked
+				tableOfUsers += '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="' + row_id + '"> Save</a> | </span>';
+				tableOfUsers += '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="' + row_id + '"> Cancel</a></span>';
+
+				tableOfUsers += '</td>';
+				//--->edit options > end
+
+				tableOfUsers += '</tr>';
+			});
+			
+			//--->create table body rows > end
+
+			tableOfUsers += '</tbody>';
+			//--->create table body > end
+
+			tableOfUsers += '</table>'
+			//--->create data table > end
+
+			//out put table data
+			$(document).find('#userManagementTable').html(tableOfUsers);
+
+			$(document).find('.btn_save').hide();
+			$(document).find('.btn_cancel').hide();			
+		}
+		else
+		{
+			window.setTimeout(waitOut1,1000)
+		}
+	}
+	
+	//--->button > edit > start
+	$(document).on('click', '.btn_edit', function(event)
+	{
+		event.preventDefault();
+		var tbl_row = $(this).closest('tr');
+
+		var row_id = tbl_row.attr('row_id');
+
+		tbl_row.find('.btn_save').show();
+		tbl_row.find('.btn_cancel').show();
+
+		//hide edit button
+		tbl_row.find('.btn_edit').hide();
+		tbl_row.find('.btn_approve').hide();
+		tbl_row.find('.btn_disable').hide();
+		tbl_row.find('.btn_enable').hide();
+		
+		originalEntry = []
+		//--->add the original entry > start
+		//console.log(tbl_row.find('.row_data'))
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			//this will help in case user decided to click on cancel button
+			originalEntry.push($(this).html())
+		});
+		//--->add the original entry > end
+		
+		var col_name = $(this).attr('col_name');
+		var col_val  =  $(this).html();
+
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");		
+		
+		var ActiveDisableSelect = "<div class='row_data' col_name='account'><select id='accountSelect'><option value = 'Active'>Active</option value = 'Disabled'>Disabled<option>Disabled</option></select></div>"
+		Cells[1].innerHTML = ActiveDisableSelect;
+		
+		var roleSelect = "<div class='row_data' col_name='rolez'><select id='roleSelect'><option value='Teacher'>Teacher</option><option value='Student'>Student</option></select></div>"
+		Cells[2].innerHTML = roleSelect;
+	});
+	//--->button > edit > end
+
+	//--->button > cancel > start
+	$(document).on('click', '.btn_cancel', function(event)
+	{
+		event.preventDefault();
+
+		var tbl_row = $(this).closest('tr');
+
+		var row_id = tbl_row.attr('row_id');
+
+		//hide save and cacel buttons
+		tbl_row.find('.btn_save').hide();
+		tbl_row.find('.btn_cancel').hide();
+
+		//show edit button
+		tbl_row.find('.btn_edit').show();
+		tbl_row.find('.btn_approve').show();
+		tbl_row.find('.btn_disable').show();
+		tbl_row.find('.btn_enable').show();
+
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			$(this).html( originalEntry[index] );
+			//console.log($(this).attr('original_entry'))
+		});
+		//generateUserManagementTable()
+	});
+	//--->button > cancel > end
+
+	//--->save whole row entery > start
+	$(document).on('click', '.btn_save', function(event)
+	{
+		updateVals = [];
+		newEntry = [];
+		noOfUpdates = 0;
+		
+		event.preventDefault();
+		var tbl_row = $(this).closest('tr');
+		var row_id = tbl_row.attr('row_id');
+		//hide save and cacel buttons
+		tbl_row.find('.btn_save').hide();
+		tbl_row.find('.btn_cancel').hide();
+
+		//show edit button
+		tbl_row.find('.btn_edit').show();
+		tbl_row.find('.btn_approve').show();
+		tbl_row.find('.btn_disable').show();
+		
+		tbl_row.find('select').each(function(index, val)
+		{
+			//this will help in case user decided to click on cancel button
+			newEntry.push($(this).val());
+		});
+		tbl_row.find('.row_data').each(function(index, val)
+		{
+			$(this).html( newEntry[index] );
+		});
+
+		//--->get row data > start
+		var arr = {};
+		tbl_row.find('.row_data').each(function(index, val) // normal Text Data Save
+		{
+			var col_name = $(this).attr('col_name');
+			var col_val  =  $(this).html();
+			//console.log(col_name)
+			var Row = document.getElementById(row_id);
+			var Cells = Row.getElementsByTagName("td");
+			var colEmail = Cells[0].textContent;
+			//console.log(colEmail + " , " + col_name + " , " + Cells[index+1].textContent)
+			//console.log(newEntry)
+			//console.log(originalEntry)
+			console.log(newEntry[index])
+			console.log(originalEntry[index])
+			console.log(newEntry[index]!=originalEntry[index])
+			if(newEntry[index]!=originalEntry[index])
+			{
+				temp = []
+				temp.push(colEmail)
+				temp.push(col_name)
+				temp.push(Cells[index+1].textContent)
+				updateVals.push(temp)
+				noOfUpdates += 1;
+				if(temp[2] == "Teacher")
+				{
+					Cells[3].innerHTML = "Loading..."
+				}
+			}
+		});
+		//--->get row data > end
+		updateNow()
+	});
+	//--->save whole row entery > end
+	
+	function updateNow()
+	{
+		if(counter < noOfUpdates)
+		{
+			userInfoUpdateSuccess = false;
+			//console.log(updateVals[counter][0] + " , " + updateVals[counter][1] + " , " + updateVals[counter][2])
+			updateAnyUserInfo(updateVals[counter][0], updateVals[counter][1], updateVals[counter][2])
+			//console.log(updateVals)
+			waitout()
+			function waitout()
+			{
+				if(userInfoUpdateSuccess)
+				{
+					userInfoUpdateSuccess = false;
+					if(!alreadyCheckedAndUpdated)
+					{
+						//console.log(updateVals)
+						alreadyCheckedAndUpdated = true;
+						if(updateVals[counter][2] == "Teacher")
+						{
+							updateAnyUserInfo(updateVals[counter][0],"credentialStatus","pending")
+							waitout()
+						}
+						else if(updateVals[counter][2] == "Student")
+						{
+							updateAnyUserInfo(updateVals[counter][0],"credentialStatus","confirmed")
+							waitout()
+						}
+						else
+						{
+							counter += 1;
+							updateNow()
+						}
+					}
+					else
+					{
+						counter += 1;
+						updateNow()
+					}
+				}
+				else
+				{
+					window.setTimeout(waitout,1000)
+				}
+			}
+		}
+		else
+		{
+			generateUserManagementTable();
+		}
+	}
+	//--->Delete whole row entry > start
+	$(document).on('click', '.btn_approve', function(event)
+	{
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+
+		var colEmail = Cells[0].textContent;
+		Cells[3].innerHTML = "Loading...";
+		updateAnyUserInfo(colEmail,"credentialStatus","confirmed")
+		userInfoUpdateSuccess = false; 
+		checkIfUpdateFinish()
+		
+	});
+	$(document).on('click', '.btn_disable', function(event)
+	{
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+
+		var colEmail = Cells[0].textContent;
+		Cells[1].innerHTML = "Loading...";
+		updateAnyUserInfo(colEmail,"account","Disabled")
+		userInfoUpdateSuccess = false; 
+		checkIfUpdateFinish()
+		
+	});
+	$(document).on('click', '.btn_enable', function(event)
+	{
+		var row_id = $(this).closest('tr').attr('row_id');
+		var row_div = $(this)
+
+		var col_name = row_div.attr('col_name');
+		var col_val = row_div.html();
+
+		var Row = document.getElementById(row_id);
+		var Cells = Row.getElementsByTagName("td");
+
+		var colEmail = Cells[0].textContent;
+		Cells[1].innerHTML = "Loading...";
+		updateAnyUserInfo(colEmail,"account","Active")
+		userInfoUpdateSuccess = false; 
+		checkIfUpdateFinish()
+	});
+	function checkIfUpdateFinish()
+	{
+		if(!userInfoUpdateSuccess)
+		{
+			window.setTimeout(checkIfUpdateFinish,1000)
+		}
+		else
+		{
+			generateUserManagementTable();
+		}
+	}
+}
+
+function FilterUserDBTable(filterIndex,filterValue) //filterIndex is the colum index you want to filter
+{
+	if(filterIndex == 1)
+	{
+		filterWord = ""
+	}
 }

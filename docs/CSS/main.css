@@ -1506,6 +1506,12 @@ viewPort_Content
 {
 	margin:0;
 }
+.sectionedDivNoColor
+{
+	margin-left: 50px;
+	margin-top:0;
+	margin-right:50px;
+}
 #currentMilestones
 {
 	background-color:white;
@@ -1744,4 +1750,8 @@ viewPort_Content
 	width: 68.75%;
 	top: 40px;
 	height: 60px;
+}
+#teacherNAdminSettings
+{
+	display: none;
 }

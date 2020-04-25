@@ -66,35 +66,34 @@
 			<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 		</div>
 		<br><br>
-
-		<div id="adminSettings">
-			<div onClick="generateMilestoneTable(); currentSettingsSlide(5); changeSettingTitle('Change Current Week &nbsp;<i onClick=\'showHelpMessageCW()\' class=\'fa fa-question-circle imgBtn\' aria-hidden=\'true\'></i>');" class="settingsPageBtn imgBtn edit_hover_class">
+		
+		<div id="teacherNAdminSettings">
+			<div onClick="generateUserManagementTable();currentSettingsSlide(5);changeSettingTitle('User Management');" class="settingsPageBtn imgBtn edit_hover_class">
+				<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User Management</p>
+				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+			</div>
+			<div onClick="generateMilestoneTable(); currentSettingsSlide(6); changeSettingTitle('Change Current Week &nbsp;<i onClick=\'showHelpMessageCW()\' class=\'fa fa-question-circle imgBtn\' aria-hidden=\'true\'></i>');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-sliders" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Change Current Week</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(6);generateAdminTable();changeSettingTitle('Admin Users');" class="settingsPageBtn imgBtn edit_hover_class">
+		</div>
+		
+		<div id="adminSettings">
+			<div onClick="currentSettingsSlide(7);generateAdminTable();changeSettingTitle('Admin Users');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-user-md" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Admin Users</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(7);changeSettingTitle('Teachers');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Teachers</p>
-				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
-			</div>
-			<div onClick="currentSettingsSlide(8);changeSettingTitle('Students');" class="settingsPageBtn imgBtn edit_hover_class">
-				<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Students</p>
-				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
-			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(9);changeSettingTitle('All Resources Settings');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(8);changeSettingTitle('All Resources Settings');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resources Settings</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(10);changeSettingTitle('User\'s Activity');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(9);changeSettingTitle('User\'s Activity');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User's Activity</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(11);changeSettingTitle('All Resource\'s Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="currentSettingsSlide(10);changeSettingTitle('All Resource\'s Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resource's Analysis</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
@@ -116,7 +115,8 @@
 						<p id="emailOfUserP">User Email: ...</p>
 						<p id="accountStatusP">Account Status: </p>
 						<p id="accountCredentialsP">Account Credentials: </p>
-						<p id="superUserP">Super User: </p>
+						<p id="credStatus">Credential Status: ...</p>
+						<p id="superUserP">Master Admin: </p>
 				  	</div>
 				  	<div class="column">
 						<p id="noOfBMResosP">No. Of Bookmarked Resources: </p>
@@ -137,9 +137,16 @@
 				  	</div>
 				  	<div class="column">
 						<h3>Change User Credentials</h3>
-						<br><br><br><br><br><br><br>
-						<h3 style="margin:0;">Delete My Account</h3>
-						<button class="btnDangerOutline">Delete Account</button>
+						<div class="custom-select">
+							<select id="userCredentialsSelect">
+								<option>Loading...</option>
+							</select>
+						</div>
+						<br><br>
+						<button style="width: 100%;" class="btnSuccessOutline" >Change User Credentials</button>
+						<br><br>
+						<h3 style="margin:9px 0px 0px 0px;">Delete My Account</h3>
+						<button style="width: 100%;" class="btnDangerOutline">Delete Account</button>
 				  	</div>
 				</div>
 			</div>
@@ -218,9 +225,33 @@
 			<div id="canvasHere" class="sectionedSettingsDiv">
 				
 			</div>
+			<br><br>
 		</div>
-
-		<!--Change Current Week 5-->
+		
+		<!--User Management 5-->
+		<div class="SettingsSlide">
+			
+			
+			<div class="sectionedDivNoColor">
+				<input style="width: 100%;" type="text" id="searchUsersDB" onChange="" placeholder="Search users...">
+				<br><br>
+				<h3 style="margin:0px 0px 10px 0px;">Filter users by:</h3>
+				<div class="custom-select">
+					<select style="margin: 0;" id="usersFilterInfo" onChange="">
+						<option>Show all Users</option>
+						<option>Show pending Users</option>
+						<option>Show only Teachers</option>
+						<option>Show only Students</option>
+					</select>
+				</div>
+			</div>
+			<div class="sectionedDivNoColor">
+				<br><br>
+				<div id="userManagementTable"><p align="center"><em>Loading...</em></p></div>
+			</div>
+			<br><br>
+		</div>
+		<!--Change Current Week 6-->
 		<div class="SettingsSlide">
 			<div id="addAMilestone" class="sectionedSettingsDiv">
 				<br>
@@ -278,7 +309,8 @@
 				<br><br>
 			</div>
 		</div>
-		<!--Admin Users 6-->
+		
+		<!--Admin Users 7-->
 		<div class="SettingsSlide">
 			<center>
 				<input type="text" placeholder="Email" id="emailInput">
@@ -288,17 +320,12 @@
 				<div id="AdminUserTable"></div>
 			</center>
 		</div>
-		<!--Teachers 7-->
-		<div class="SettingsSlide"></div>
-		<!--Students 8-->
-		<div class="SettingsSlide"></div>
-
 		
-		<!--All Resources 9-->
+		<!--All Resources 8-->
 		<div class="SettingsSlide"></div>
-		<!--User Data Analysis 10-->
+		<!--User Data Analysis 9-->
 		<div class="SettingsSlide"></div>
-		<!--Resource Data Analysis 11-->
+		<!--Resource Data Analysis 10-->
 		<div class="SettingsSlide"></div>
 
 	</div>
@@ -533,7 +560,15 @@
 		{
 			$("#adminSettings").hide();
 		}
-		$("#superUserP").html("Super User: "+ masterAdmin)
+		checkIfTeacher();
+		loadInAccDetails();
+	}
+	function checkIfTeacher()//see if you are a teacher
+	{
+		if((individualData.Items[0].credentialStatus == "confirmed" && individualData.Items[0].role == "Teacher") || masterAdmin)
+		{
+			$("#teacherNAdminSettings").show();
+		}
 	}
 </script>
 <script>//Resos Settings SLide Code
@@ -640,5 +675,81 @@
 	}
 	
 	//openEmailModal();
+</script>
+<script>//custom select element code
+	var x, i, j, selElmnt, a, b, c;
+	/* Look for any elements with the class "custom-select": */
+	x = document.getElementsByClassName("custom-select");
+	for (i = 0; i < x.length; i++) {
+	  selElmnt = x[i].getElementsByTagName("select")[0];
+	  /* For each element, create a new DIV that will act as the selected item: */
+	  a = document.createElement("DIV");
+	  a.setAttribute("class", "select-selected");
+	  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+	  x[i].appendChild(a);
+	  /* For each element, create a new DIV that will contain the option list: */
+	  b = document.createElement("DIV");
+	  b.setAttribute("class", "select-items select-hide");
+	  for (j = 1; j < selElmnt.length; j++) {
+		/* For each option in the original select element,
+		create a new DIV that will act as an option item: */
+		c = document.createElement("DIV");
+		c.innerHTML = selElmnt.options[j].innerHTML;
+		c.addEventListener("click", function(e) {
+			/* When an item is clicked, update the original select box,
+			and the selected item: */
+			var y, i, k, s, h;
+			s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+			h = this.parentNode.previousSibling;
+			for (i = 0; i < s.length; i++) {
+			  if (s.options[i].innerHTML == this.innerHTML) {
+				s.selectedIndex = i;
+				h.innerHTML = this.innerHTML;
+				y = this.parentNode.getElementsByClassName("same-as-selected");
+				for (k = 0; k < y.length; k++) {
+				  y[k].removeAttribute("class");
+				}
+				this.setAttribute("class", "same-as-selected");
+				break;
+			  }
+			}
+			h.click();
+		});
+		b.appendChild(c);
+	  }
+	  x[i].appendChild(b);
+	  a.addEventListener("click", function(e) {
+		/* When the select box is clicked, close any other select boxes,
+		and open/close the current select box: */
+		e.stopPropagation();
+		closeAllSelect(this);
+		this.nextSibling.classList.toggle("select-hide");
+		this.classList.toggle("select-arrow-active");
+	  });
+	}
+
+	function closeAllSelect(elmnt) {
+	  /* A function that will close all select boxes in the document,
+	  except the current select box: */
+	  var x, y, i, arrNo = [];
+	  x = document.getElementsByClassName("select-items");
+	  y = document.getElementsByClassName("select-selected");
+	  for (i = 0; i < y.length; i++) {
+		if (elmnt == y[i]) {
+		  arrNo.push(i)
+		} else {
+		  y[i].classList.remove("select-arrow-active");
+		}
+	  }
+	  for (i = 0; i < x.length; i++) {
+		if (arrNo.indexOf(i)) {
+		  x[i].classList.add("select-hide");
+		}
+	  }
+	}
+
+	/* If the user clicks anywhere outside the select box,
+	then close all select boxes: */
+	document.addEventListener("click", closeAllSelect);
 </script>
 </html>

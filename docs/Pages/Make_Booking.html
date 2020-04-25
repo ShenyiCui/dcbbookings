@@ -367,12 +367,12 @@
 		
 		<div id="emailModal" class="HigherModal"> <!--email module, its at a higher z-index than everyone-->
 			<div class="emailModal-content">
-				<span class="close1">&times;</span>
+				<span id="emailModalCloseBtn" class="close1">&times;</span>
 				<input disabled type="email" id="toEmail"><br>
 				<input placeHolder="Subject" type="text" id="subject">
 				<textarea id="emailText"></textarea>
-				<button id="sendBtn">Send</button>
-				<p id="emailErrMsg"></p>
+				<button id="sendBtn" class="buttonSmallLong">Send</button>
+				<p id="emailErrMsg">&nbsp;</p>
 			</div>
 		</div>
 	</body>
@@ -536,6 +536,10 @@
 		  {
 			recurringBookingModal.style.display = "none";
 		  }
+		  else if (event.target == emailModal)
+		  {
+			emailModal.style.display = "none";
+		  }
 		}
 	</script>
 	<script>//Modal Code for recurring bookings
@@ -562,6 +566,30 @@
 		{
 		  recurringBookingModal.style.display = "none";
 		}
+	</script>
+	<script>//email modal code
+		var emailModal = document.getElementById("emailModal");
+
+		// Get the <span> element that closes the modal
+		var closeEmailModalBtn = document.getElementById("emailModalCloseBtn");
+
+		// When the user clicks the button, open the modal
+		function openEmailModal()
+		{
+			emailModal.style.display = "block";
+		}
+		function closeEmailModal()
+		{
+			emailModal.style.display = "none";
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		closeEmailModalBtn.onclick = function()
+		{
+			emailModal.style.display = "none";
+		}
+	
+	//openEmailModal();
 	</script>
 	<script>//complete signup Procedure
 		function completeSignUp()

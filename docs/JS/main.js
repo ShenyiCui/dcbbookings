@@ -2543,7 +2543,44 @@ function timetableDocFunctionsRoom()
 		//populating the viewport with extracted information from the cell >>>> end
 	});
 	//--->Editing Viewport > end
+	
+	//contact button start
+	$(document).on('click', '#contactBtn', function(event){
+		openEmailModal();
+		nicEditors.findEditor( "emailText" ).setContent( '' );//set empty
+		$("#toEmail").val("")
+		$("#subject").val("")		
+		$("#toEmail").val("To: "+clickBookedEmail);
+	});
+	//contact button end
+	
+	//send button start
+	$(document).on('click', '#sendBtn', function(event){
+		$("#emailErrMsg").html("Sending...")
+		var nicE = new nicEditors.findEditor('emailText');
+		var emailTxt = nicE.getContent();
+		
+		var template_params = 
+		{
+		   "toEmail": clickBookedEmail,
+		   "fromEmail": userEmail,
+		   "subject": $("#subject").val(),
+		   "text": emailTxt
+		}
 
+		var service_id = "default_service";
+		var template_id = "dcbbookingssendemail";
+		
+		emailjs.send(service_id, template_id, template_params)
+		.then(function(response) {
+		   $("#emailErrMsg").html('Email Sent Sucessfully, please check your mailbox.')
+		   window.setTimeout(closeEmailModal,2500)
+		}, function(error) {
+		   $("#emailErrMsg").html('Error: ' +  JSON.stringify(error));
+		});
+	});
+	//send button end
+	
 	//--->MakingviewPort Dissapear when user clicks away > start
 	$(document).mouseup(function(e)
 	{

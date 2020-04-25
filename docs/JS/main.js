@@ -7478,7 +7478,7 @@ function generateUserManagementTable()//generates user admin table and the funct
 			allDataOfUsers = userDataFull;
 			
 			//generate table
-			tableOfUsers += '<table style="background-color:white;" class="table table-hover">'
+			tableOfUsers += '<table id="userDBTbl" style="background-color:white;" class="table table-hover">'
 			//--->create table header > start
 			tableOfUsers += '<thead>';
 				tableOfUsers += '<tr>';
@@ -7807,10 +7807,54 @@ function generateUserManagementTable()//generates user admin table and the funct
 	}
 }
 
-function FilterUserDBTable(filterIndex,filterValue) //filterIndex is the colum index you want to filter
+function FilterUserDBTable(filterValue) //filterIndex is the colum index you want to filter
 {
-	if(filterIndex == 1)
+	var filterIndex = 0;
+	if(filterValue == "NIL")
 	{
-		filterWord = ""
+		generateUserManagementTable()
 	}
+	else if(filterValue == "pending"||filterValue =="confirmed")
+	{
+		filterIndex = 3
+	}
+	else
+	{
+		filterIndex = 2;
+	}
+	var input, filter, table, tr, td, i, txtValue;
+	  input = filterValue;
+	  filter = input.toUpperCase();
+	  table = document.getElementById("userDBTbl");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[filterIndex];
+		if (td) {
+		  txtValue = td.textContent || td.innerText;
+		  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+}
+function searchUserDBTable()
+{
+	var input, filter, table, tr, td, i, txtValue;
+	  input = document.getElementById("searchUsersDB");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("userDBTbl");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[0];
+		if (td) {
+		  txtValue = td.textContent || td.innerText;
+		  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
 }

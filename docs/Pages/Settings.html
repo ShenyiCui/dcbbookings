@@ -231,19 +231,17 @@
 		<!--User Management 5-->
 		<div class="SettingsSlide">
 			
-			
 			<div class="sectionedDivNoColor">
-				<input style="width: 100%;" type="text" id="searchUsersDB" onChange="" placeholder="Search users...">
+				<input style="width: 100%;" type="text" id="searchUsersDB" onkeyup="searchUserDBTable()" placeholder="Search users...">
 				<br><br>
 				<h3 style="margin:0px 0px 10px 0px;">Filter users by:</h3>
-				<div class="custom-select">
-					<select style="margin: 0;" id="usersFilterInfo" onChange="">
-						<option>Show all Users</option>
-						<option>Show pending Users</option>
-						<option>Show only Teachers</option>
-						<option>Show only Students</option>
-					</select>
-				</div>
+				<select style="margin: 0; width: 100%; padding: 10px;" id="usersFilterInfo" onChange="FilterUserDBTable($('#usersFilterInfo').val())">
+					<option value="NIL">Show all Users</option>
+					<option value="pending">Show pending Users</option>
+					<option value="confirmed">Show confirmed Users</option>
+					<option value="Teacher">Show only Teachers</option>
+					<option value="Student">Show only Students</option>
+				</select>
 			</div>
 			<div class="sectionedDivNoColor">
 				<br><br>

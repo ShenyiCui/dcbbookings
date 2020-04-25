@@ -8046,3 +8046,67 @@ function allResosDataStart()
 		}
 	}
 }
+
+function ChangeUserCreds()
+{
+	$("#ChangeCredsMsg").html("Changing Credentials...")
+	var newRole = "";
+	var newCredStatus = "";
+	console.log(individualData)
+	if($("#userCredentialsSelect").val() == "NIL")
+	{
+		$("#ChangeCredsMsg").html("Pick an option")
+	}
+	else
+	{
+		if( $("#userCredentialsSelect").val() != individualData.Items[0].rolez )
+		{
+			if($("#userCredentialsSelect").val() == "Teacher")
+			{
+				newRole = "Teacher"
+				newCredStatus = "pending"
+				updateNow()
+			}
+			if($("#userCredentialsSelect").val() == "Student")
+			{
+				newRole = "Student"
+				newCredStatus = "confirmed"
+				updateNow()
+			}
+		}
+		else
+		{
+			$("#ChangeCredsMsg").html("Your new credential must be different")
+		}
+	}
+	function updateNow()
+	{
+		userInfoUpdateSuccess = false
+		updateUserInfo("rolez",newRole)
+		waitOutRoles()
+		function waitOutRoles()
+		{
+			if(userInfoUpdateSuccess)
+			{
+				userInfoUpdateSuccess = false
+				updateUserInfo("credentialStatus",newCredStatus)
+				waitOutCredStatus()
+			}
+			else
+			{
+				window.setTimeout(waitOutRoles,1000)
+			}
+		}
+		function waitOutCredStatus()
+		{
+			if(userInfoUpdateSuccess)
+			{
+				location.reload();
+			}
+			else
+			{
+				window.setTimeout(waitOutCredStatus,1000)
+			}
+		}
+	}
+}

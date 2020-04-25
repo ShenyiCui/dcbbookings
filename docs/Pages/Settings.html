@@ -137,15 +137,16 @@
 				  	</div>
 				  	<div class="column">
 						<h3>Change User Credentials</h3>
-						<div class="custom-select">
-							<select id="userCredentialsSelect">
-								<option>Loading...</option>
-							</select>
-						</div>
-						<br><br>
-						<button style="width: 100%;" class="btnSuccessOutline" >Change User Credentials</button>
-						<br><br>
-						<h3 style="margin:9px 0px 0px 0px;">Delete My Account</h3>
+						<select style="width: 100%" id="userCredentialsSelect">
+							<option value="NIL">Choose a New Credential</option>
+							<option value="Teacher">Teacher</option>
+							<option value="Student">Student</option>
+						</select>
+						<br><br><br><br>
+						<p style="margin: 0;" id="ChangeCredsMsg">&nbsp;</p>
+						<button style="width: 100%; margin: 0;" onClick="ChangeUserCreds();" class="btnSuccessOutline" >Change User Credentials</button>
+						<br>
+						<h3 style="margin:11px 0px 0px 0px;">Delete My Account</h3>
 						<button style="width: 100%;" class="btnDangerOutline">Delete Account</button>
 				  	</div>
 				</div>

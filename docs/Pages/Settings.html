@@ -636,7 +636,7 @@
 	}
 	function checkIfTeacher()//see if you are a teacher
 	{
-		if((individualData.Items[0].credentialStatus == "confirmed" && individualData.Items[0].role == "Teacher") || masterAdmin)
+		if((individualData.Items[0].credentialStatus == "confirmed" && individualData.Items[0].rolez == "Teacher") || masterAdmin)
 		{
 			$("#teacherNAdminSettings").show();
 		}

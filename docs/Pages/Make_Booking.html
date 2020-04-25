@@ -445,11 +445,19 @@
 		// When the user clicks the button, open the modal
 		function openAddResos()
 		{
-			AddResosModal.style.display = "block";
-			addRoomClearAll()
-			currentAResosSlide(1)
-			$("#addresosContent").addClass("width700");
-			$("#addresosContent").removeClass("width80Percent");
+			if((individualData.Items[0].rolez == "Teacher" && individualData.Items[0].credentialStatus == "confirmed") || masterAdmin)
+			{
+				AddResosModal.style.display = "block";
+				addRoomClearAll()
+				currentAResosSlide(1)
+				$("#addresosContent").addClass("width700");
+				$("#addresosContent").removeClass("width80Percent");
+			}
+			else
+			{
+				showHelpMessage("No Access For Students","Sorry! <br>you have to be a Teacher or a Master Admin to access this feature. If you are already a teacher please make sure that your credentials have been confirmed by either a master admin or any other teacher in: <br><em>[Settings --> User Management]</em>. <br><br> Until you are a confirmed Teacher you will not have access to your the full functionality of the site. ")
+			}
+			
 		}
 		function closeAddResos()
 		{
@@ -706,6 +714,20 @@
 				$("#startDate").val(getWeekBegining(new Date(currentWeekBegining)))
 				ChangeToWeekBegining_BR_SD();
 			}
+		}
+	</script>
+	<script>
+		function showHelpMessage(title, message)//will show a help modal containing information on the Change Week Settings
+		{
+			$.alert
+			({
+				theme: 'modern',
+				boxWidth: '700px',
+				useBootstrap: false,
+				icon: 'fa fa-question-circle',
+				title: "<strong><p align=\"center\" class=\"indent\">"+title+"</p></strong>",
+				content: "<center><p class=\"indent\">"+message+"</p></center>",
+			});
 		}
 	</script>
 </html>

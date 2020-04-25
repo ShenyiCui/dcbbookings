@@ -538,6 +538,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 	//console.log(userData);
 	//console.log(dataRoom); AccessRights RoomAdmin
 	var userCred = userData.rolez//user creditials "Student or Teacher"
+	var userCredStatus = userData.credentialStatus;
 	// !!IMPORTATNT design fallback in the generate allresos section if the array is empty
 	if(dataRoom.length!=0) // will sort room array if its not empty
 	{
@@ -570,7 +571,7 @@ function dynamicGenerateAllResos(dataRoom,dataDevice,dataSub,userData) //require
 		//checking if the user can view this room or not
 		if(allResos[i][2]!="TeacherStudent")
 		{
-			if(allResos[i][2] == userCred || allResos[i][3].includes(userEmail)) //if user can view room
+			if((allResos[i][2] == userCred && userCredStatus == "confrimed")|| allResos[i][3].includes(userEmail)) //if user can view room
 			{
 				buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+allResos[i][0]+'\',\''+allResos[i][1]+'\',\''+new Date()+'\');">View</button>'
 			}
@@ -2695,7 +2696,7 @@ function timetableDocFunctionsRoom()
 				}
 				else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
 				{
-					if(individualData.Items[0].rolez=="Student")
+					if(individualData.Items[0].rolez=="Student" || (individualData.Items[0].rolez == "Teacher" && individualData.Items[0].credentialStatus == "pending"))
 					{
 						newPeriodObject.push(pendingval)
 					}
@@ -3881,7 +3882,7 @@ function timetableDocFunctionsRoom()
 				}
 				else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
 				{
-					if(individualData.Items[0].rolez=="Student")
+					if(individualData.Items[0].rolez=="Student" || (individualData.Items[0].rolez == "Teacher" && individualData.Items[0].credentialStatus == "pending"))
 					{
 						newPeriodObject.push(pendingval)
 					}
@@ -3931,7 +3932,7 @@ function timetableDocFunctionsRoom()
 					}
 					else if(indiRoomData.Items[0].BookingRights=="StudentValidation")
 					{
-						if(individualData.Items[0].rolez=="Student")
+						if(individualData.Items[0].rolez=="Student" || (individualData.Items[0].rolez == "Teacher" && individualData.Items[0].credentialStatus == "pending"))
 						{
 							newPeriodObject.push(pendingval)
 						}
@@ -4909,6 +4910,7 @@ function Search() //search all resos list code
 		var bookMarkFunction = "";
 		var buttonViewFunction = "";
 		var userCred = individualData.Items[0].rolez//user creditials "Student or Teacher"
+		var userCredStatus = individualData.Items[0].credentialStatus;
 		for(var i = 0; i<dataOfRoomsList.length; i++)
 		{
 			var ResosID = ""
@@ -4948,7 +4950,7 @@ function Search() //search all resos list code
 			//checking if the user can view this room or not
 			if(dataOfRoomsList[i][2]!="TeacherStudent")
 			{
-				if(dataOfRoomsList[i][2] == userCred || dataOfRoomsList[i][3].includes(userEmail)) //if user can view room
+				if((dataOfRoomsList[i][2] == userCred && userCredStatus == "confirmed")|| dataOfRoomsList[i][3].includes(userEmail)) //if user can view room
 				{
 					buttonViewFunction = '<button class="btnSuccessOutline" onClick="viewResos(\''+dataOfRoomsList[i][0]+'\',\''+dataOfRoomsList[i][1]+'\',\''+new Date()+'\');">View</button>'
 				}

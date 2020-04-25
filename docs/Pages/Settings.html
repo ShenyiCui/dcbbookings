@@ -93,7 +93,7 @@
 				<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User's Activity</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(10);changeSettingTitle('All Resource\'s Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="allResosDataStart();currentSettingsSlide(10);changeSettingTitle('All Resource\'s Data Analysis');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resource's Analysis</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
@@ -217,7 +217,7 @@
 						&nbsp;&nbsp;&nbsp;
 					</div>
 					<br>
-					<button class="btnSuccessOutline largerWidthButton" onClick="startCalculationOfMyResos();">Calculate Data</button>
+					<button class="btnSuccessOutline largerWidthButton" onClick="startCalculationOfMyResos('canvasHere','My');">Calculate Data</button>
 					<br><br>
 				</center>
 			</div>
@@ -341,8 +341,63 @@
 			</div>
 		</div>
 		<!--Resource Data Analysis 10-->
-		<div class="SettingsSlide"></div>
+		<div class="SettingsSlide">
+			<div class="sectionedSettingsDiv">
+				<br>
+				<p style="font-size:18px;" align="center">Pick a resource and indicate the data range:</p>
+				<br>
+				<center>
+					<p></p>
+					<div class="sameLine">
+						<label>Pick a resource:
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<div id="AllResosDataSelectDiv" class="sameLine">
+							<select id="AllResosDataSelect" class="smallInput smallPadding">
+								<option>Loading...</option>
+							</select>
+						</div>
+						&nbsp;&nbsp;&nbsp;
+					</div>
 
+					<div class="sameLine">
+						<label>Start From:
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input onChange="findWkBegin('AllResosDateStart');" id="AllResosDateStart" class="smallInput datepicker smallPadding">
+						&nbsp;&nbsp;&nbsp;
+					</div>
+
+					<div class="sameLine">
+						<label>End At:
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</label><br>
+						<input onChange="findWkBegin('AllResosDateEnd');" id="AllResosDateEnd" class = "smallInput datepicker smallPadding">
+						&nbsp;&nbsp;&nbsp;
+					</div>
+					<br>
+					<button class="btnSuccessOutline largerWidthButton" onClick="startCalculationOfMyResos('canvasAllResos','All');">Calculate Data</button>
+					<br><br>
+				</center>
+			</div>
+			<br><br>
+			<div id="canvasAllResos" class="sectionedSettingsDiv">
+				
+			</div>
+			<br><br>
+		</div>
 	</div>
 
 	<div id="resosSettingsModal" class="Modal">

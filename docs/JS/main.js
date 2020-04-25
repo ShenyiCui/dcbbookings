@@ -6467,29 +6467,29 @@ function myResosDataStart()
 		}
 	}
 }
-function startCalculationOfMyResos()
+function startCalculationOfMyResos(idOfCanvas, allOrMy)
 {	
-	$("#canvasHere").html("")
-	if($("#MyResosDateStart").val.length != 0 && $("#MyResosDateEnd").val().length != 0)
+	$("#"+idOfCanvas).html("")
+	if($("#"+allOrMy+"ResosDateStart").val.length != 0 && $("#"+allOrMy+"ResosDateEnd").val().length != 0)
 	{
-		console.log($("#MyResosDataSelect").val());
-		if($("#MyResosDataSelect").val() != "null,null")
+		console.log($("#"+allOrMy+"ResosDataSelect").val());
+		if($("#"+allOrMy+"ResosDataSelect").val() != "null,null")
 		{
-			var temp = $("#MyResosDataSelect").val().split(",")
+			var temp = $("#"+allOrMy+"ResosDataSelect").val().split(",")
 			
-			var startDateString = getWeekBegining($('#MyResosDateStart').datepicker('getDate'))
-			var endDateString = getWeekBegining($('#MyResosDateEnd').datepicker('getDate'))
+			var startDateString = getWeekBegining($("#"+allOrMy+'ResosDateStart').datepicker('getDate'))
+			var endDateString = getWeekBegining($("#"+allOrMy+'ResosDateEnd').datepicker('getDate'))
 			
-			$('#MyResosDateStart').val(startDateString);
-			$('#MyResosDateEnd').val(endDateString);
+			$("#"+allOrMy+'ResosDateStart').val(startDateString);
+			$("#"+allOrMy+'ResosDateEnd').val(endDateString);
 			
-			calculateDATA(temp[0],temp[1],[startDateString,endDateString])
-			$("#canvasHere").html('<br><br><br><br><em><p align="center">Loading....</p></em><br><br><br><br>')
+			calculateDATA(temp[0],temp[1],[startDateString,endDateString],idOfCanvas)
+			$("#"+idOfCanvas).html('<br><br><br><br><em><p align="center">Loading....</p></em><br><br><br><br>')
 
 		}
 	}
 }
-function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of strings ["week begining 1", "week begining 2"]
+function calculateDATA(resosID, resosType, dataRange, idOfCanvas) //dataRange is an array of strings ["week begining 1", "week begining 2"]
 {	
     var PopularWeeklyResourceRoom = [] //stores the ID of the rooms
     var PopularAllTimeResourceRoom = [] // stores the ID of the rooms
@@ -6760,8 +6760,8 @@ function calculateDATA(resosID, resosType, dataRange) //dataRange is an array of
 			}
 			else
 			{
-				$("#canvasHere").html("")
-				$("#canvasHere").html('<br><div id="listOfUsers"><center><h3>Users that booked the room</h3><select class="SelectMultipleInput" multiple><option>Loading...</option></select></center></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
+				$("#"+idOfCanvas).html("")
+				$("#"+idOfCanvas).html('<br><div id="listOfUsers"><center><h3>Users that booked the room</h3><select class="SelectMultipleInput" multiple><option>Loading...</option></select></center></div><br><canvas id="mostFrequentUsersData"></canvas><br><canvas id="BusyPeriodsData"></canvas><br><canvas id="BusyDaysData"></canvas><br><canvas id="PieOverall"></canvas><br><canvas id="PieWk1"></canvas><br><canvas id="PieWk2"></canvas><br><br>')
 				firstWeekIs = currentWeek;
 				roger();
 				
@@ -8020,3 +8020,29 @@ function searchAllActivity()
 	ActivtyScrollTo(transformCurrentWeek($("#searchAllActivityInput").val()))
 }
 
+function allResosDataStart()
+{
+	$("#AllResosDateEnd").val(getWeekBegining(addMonths(new Date(),6)))
+	$("#AllResosDateStart").val(getWeekBegining(addMonths(new Date(),-12)))
+	allRooms = null;
+	getAllRooms()
+	validateIndiFetch();
+	function validateIndiFetch()
+	{
+		if(allRooms!=null)
+		{
+			var myResos = allRooms.Items;
+			var selectCode='<select id="AllResosDataSelect" class="smallInput smallPadding"><option value = "null,null">Choose a resource</option>'
+			for(var i =0; i<myResos.length; i ++)
+			{
+				selectCode+="<option value='"+myResos[i].RoomID+",room'>"+myResos[i].RoomID+":room</option>"
+			}
+			selectCode += "</select>"
+			$("#AllResosDataSelectDiv").html(selectCode);
+		}
+		else
+		{
+			window.setTimeout(validateIndiFetch,1000)
+		}
+	}
+}

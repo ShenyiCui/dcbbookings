@@ -5580,6 +5580,10 @@ function openSettingsNav()//opening side navigation bar for settings
 		{
 			document.getElementById("activityslideDivID").style.width = "68.75%";
 		}
+		if(settingsSlideIndex == 9)
+		{
+			document.getElementById("allactivityslideDivID").style.width = "68.75%";
+		}
         document.getElementById("settingSideNav").style.width = "400px";
 	}
 	else if($(window).width() >= 1280)
@@ -5591,6 +5595,10 @@ function openSettingsNav()//opening side navigation bar for settings
 		if(settingsSlideIndex == 3)
 		{
 			document.getElementById("activityslideDivID").style.width = "68.75%";
+		}
+		if(settingsSlideIndex == 9)
+		{
+			document.getElementById("allactivityslideDivID").style.width = "68.75%";
 		}
         document.getElementById("settingSideNav").style.width = "31.25%";
 	}
@@ -5610,9 +5618,15 @@ function closeSettingsNav()//closing side navigation bar for settings
 	document.getElementById("mainSettingsPanel").style.width = "100%";
 	document.getElementById("settingsTitleCard").style.width = "100%";
 	if(settingsSlideIndex == 3)
-		{
-			document.getElementById("activityslideDivID").style.width = "100%";
-		}
+	{
+		document.getElementById("activityslideDivID").style.width = "100%";
+	}
+	if(settingsSlideIndex == 9)
+	{
+		document.getElementById("allactivityslideDivID").style.width = "100%";
+	}
+	
+	
 	$("#closeSideNavSettings").hide()
 }
 
@@ -7439,7 +7453,7 @@ function loadInAccDetails()//will run when settings loads in to populate the fro
 	$("#superUserP").html("<strong>Super User:</strong> " + masterAdmin)
 	$("#noOfBMResosP").html("<strong>No. Of Bookmarked Resources:</strong> "+individualData.Items[0].bookmarkedResources.length)
 	$("#noOfCreatedResosP").html("<strong>No. Of Created Resources:</strong> "+individualData.Items[0].userControlledResources.length)
-	console.log(individualData)
+	//console.log(individualData)
 	if(individualData.Items[0].credentialStatus == "pending")
 	{
 		$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus + " <em><br>[Wait for a Teacher or Master Admin to authenticate you]</em>")
@@ -7858,3 +7872,151 @@ function searchUserDBTable()
 		}       
 	  }
 }
+
+function generateAllResosSettings()
+{
+	$("#AllResosList").html("<em>Processing Data...</em>")
+	var listOfMyResos = "";
+	var myResosArray = [];
+	allRooms = null;
+	getAllRooms();
+	validateIndiFetch();
+	function validateIndiFetch()
+	{
+		if(allRooms!=null)
+		{
+			//console.log(allRooms)
+			
+			var temp = []
+			for(var i =0; i<allRooms.Items.length; i++)
+			{
+				temp = []
+				temp.push(allRooms.Items[i].RoomID)
+				temp.push("room")
+				myResosArray.push(temp)
+			}
+			myResosArray = bubble_Sort2DArray(myResosArray,0);
+			if(myResosArray!="Empty List")
+			{
+				for(var i = 0; i<myResosArray.length;i++)
+				{
+					listOfMyResos += '<li><a class="imgBtn" onClick="openResosSettings(\''+myResosArray[i][0]+'\',\''+myResosArray[i][1]+'\'); checkAvailableUpload(); $(\'#customUploadDocs\').hide(); $(\'#SimUploadDocs\').hide();">'+myResosArray[i][0]+': <em>'+myResosArray[i][1]+'</em></a></li>'
+				}
+				$("#AllResosList").html(listOfMyResos);
+			}
+			else
+			{
+				$("#AllResosList").html("<em>There are no resources on the server</em>")
+			}
+			
+		}
+		else
+		{
+			window.setTimeout(validateIndiFetch,1000)
+		}
+	}
+}
+
+function searchMyResos()
+{
+	var input, filter, table, tr, td, i, txtValue;
+	  input = document.getElementById("searchResosInput");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("myResosList");
+	  tr = table.getElementsByTagName("li");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("a")[0];
+		if (td) {
+		  txtValue = td.textContent || td.innerText;
+		  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+}
+function searchAllResos()
+{
+	var input, filter, table, tr, td, i, txtValue;
+	  input = document.getElementById("searchAllResosInput");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("AllResosList");
+	  tr = table.getElementsByTagName("li");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("a")[0];
+		if (td) {
+		  txtValue = td.textContent || td.innerText;
+		  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+}
+function searchAllUsersForActivity()
+{
+	var input, filter, table, tr, td, i, txtValue;
+	  input = document.getElementById("searchAllUsers");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("AllUsersList");
+	  tr = table.getElementsByTagName("li");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("a")[0];
+		if (td) {
+		  txtValue = td.textContent || td.innerText;
+		  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+}
+
+function generateAllUsers()
+{
+	$("#AllUsersList").html("<em>Processing Data...</em>")
+	var listOfAllUsers = "";
+	var myUsersArray = [];
+	userDataFull = null;
+	getAllUsers();
+	validateIndiFetch();
+	function validateIndiFetch()
+	{
+		if(userDataFull!=null)
+		{
+			//console.log(allRooms)
+			
+			for(var i =0; i<userDataFull.Items.length; i++)
+			{
+				myUsersArray.push(userDataFull.Items[i].email)
+			}
+			myUsersArray = bubble_Sort(myUsersArray);
+			if(myUsersArray!="Empty List")
+			{
+				for(var i = 0; i<myUsersArray.length;i++)
+				{
+					listOfAllUsers += '<li><a class="imgBtn" onClick="generateHistory(\''+myUsersArray[i]+'\',\'putAllUserActivityHere\')">'+myUsersArray[i]+'</a></li>'
+				}
+				$("#AllUsersList").html(listOfAllUsers);
+			}
+			else
+			{
+				$("#AllResosList").html("<em>There are no users on the server</em>")
+			}
+			
+		}
+		else
+		{
+			window.setTimeout(validateIndiFetch,1000)
+		}
+	}
+}
+
+function searchAllActivity()
+{
+	ActivtyScrollTo(transformCurrentWeek($("#searchAllActivityInput").val()))
+}
+

@@ -85,11 +85,11 @@
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
 			<br><br>
-			<div onClick="currentSettingsSlide(8);changeSettingTitle('All Resources Settings');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="generateAllResosSettings();currentSettingsSlide(8);changeSettingTitle('All Resources Settings');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;All Resources Settings</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
-			<div onClick="currentSettingsSlide(9);changeSettingTitle('User\'s Activity');" class="settingsPageBtn imgBtn edit_hover_class">
+			<div onClick="generateAllUsers();currentSettingsSlide(9);changeSettingTitle('User\'s Activity');" class="settingsPageBtn imgBtn edit_hover_class">
 				<p><i class="fa fa-history" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User's Activity</p>
 				<p align="right"><a><i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
 			</div>
@@ -320,9 +320,26 @@
 		</div>
 		
 		<!--All Resources 8-->
-		<div class="SettingsSlide"></div>
+		<div class="SettingsSlide">
+			<center>
+				<input type="text" id="searchAllResosInput" onkeyup="searchAllResos()" placeholder="Search Resources..."><br><br>
+				<ul id="AllResosList" class="listOfItemsButtons"></ul>
+			</center>
+		</div>
 		<!--User Data Analysis 9-->
-		<div class="SettingsSlide"></div>
+		<div class="SettingsSlide">
+			
+			<div id="allactivityslideDivID" class="searchActivityDiv">
+				<center>
+					<input type="text" id="searchAllUsers" onkeyup="searchAllUsersForActivity()" placeholder="Search Users..."><br><br>
+					<ul style="height: 100px;" id="AllUsersList" class="listOfItemsButtons"></ul>
+					<input type="text" id="searchAllActivityInput" onChange="searchAllActivity()" placeholder="Search Activity..." class="datepicker">
+				</center>
+			</div>
+			<br><br>
+			<div style="margin-top: 200px;" id="putAllUserActivityHere">
+			</div>
+		</div>
 		<!--Resource Data Analysis 10-->
 		<div class="SettingsSlide"></div>
 

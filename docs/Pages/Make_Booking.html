@@ -640,6 +640,7 @@
 		// When the user clicks the button, open the modal
 		function openCalendarModal(resosid, resostype)
 		{
+			$("#copyconfirm").html("&nbsp;")
 			$("#copytextele").hide();
 			var resosT; 
 			if(resostype == "room")
@@ -651,6 +652,7 @@
 			calendarModal.style.display = "block";
 		}
 		function openCalendarModalPersonal(){
+			$("#copyconfirm").html("&nbsp;")
 			$("#copytextele").hide();
 			var email = userEmail
 			copyText = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20");

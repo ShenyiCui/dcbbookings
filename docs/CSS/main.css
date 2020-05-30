@@ -1207,6 +1207,13 @@ viewPort_Content
 	display: inline-block;
 	margin: 0;
 }
+#suscribeRoomCalendar/*settings btn for admins*/
+{
+	cursor: pointer;
+	font-size: 22.5px;
+	display: inline-block;
+	margin: 0;
+}
 
 .timeTableModal-content
 {
@@ -1669,6 +1676,17 @@ viewPort_Content
     border: 3px solid #555;
 }
 
+.calendarModal-content 
+{
+    background-color: white;/*rgba(245,245,245,1.00);*/
+    margin: 10% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+	border-radius: 25px;
+    width: 900px; /* Could be more or less, depending on screen size */
+	height: 550px;
+	overflow: auto;
+}
 .emailModal-content 
 {
     background-color: white;/*rgba(245,245,245,1.00);*/

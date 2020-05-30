@@ -91,8 +91,9 @@
 					<a href="javascript:populateAllResos();">All Resources</a>
 					<a href="javascript:populateYourResos();">My Resources</a>
 					<a href="javascript:openAddResos();">New Resource</a>
-					<!--<a href="#">Upcoming Bookings</a>-->
-		   			<a href="#">Report a Bug</a>
+					<a href="javascript:openCalendarModalPersonal();">Personal Calendar</a>
+					<a href="#">Report a Bug</a>
+					<a href="javascript:Logout();">Logout</a>
 			    </div>
 			</div>
 			
@@ -105,7 +106,7 @@
  	 		</div>
  	 		
  	 		<div id="HomeBtnTopNav">
- 	 			<i style="font-size: 40px; color:black;" class="fa fa-home imgBtn" title="Home"></i>
+ 	 			<i onClick="goBackToRV();" style="font-size: 40px; color:black;" class="fa fa-home imgBtn" title="Home"></i>
  	 		</div>
  	 		
 		</div>
@@ -306,7 +307,9 @@
 			<span id="closeTimetableModal" class="Modalclose">&times;</span>
 				<h3 id="timeTableTitle">Timetable:</h3>&nbsp;&nbsp;&nbsp;
 				<input id="whichWeekBtn" class="datepicker" style="cursor: pointer; text-align: center;" title="Change Week">
+			  <div id="suscribeRoomCalendar" onclick=""><i class="fa fa-calendar-plus-o" aria-hidden="true"></i>&nbsp;&nbsp;</div>
 				<div id="timetableSettings" onclick=""><i class="fa fa-cog" aria-hidden="true"></i></div>
+			    
 				<div id="viewPort">
 					<div id="viewPort_Content"> <!--Viewport, where all the buttons and eca infomation shows-->
 						<div id="DivDescription">
@@ -317,9 +320,9 @@
 						<label id="bookingStatus">.......</label><br>
 						<br>
 						<button id="bookBtn">Quick Book</button>
-						<button id="rbookBtn">Book Recurringly</button>
+						<button id="rbookBtn">Book Recurring</button>
 						<button id="quickLockBtn">Quick Lock</button>
-						<button id="rLockBtn">Lock Recurringly</button>
+						<button id="rLockBtn">Lock Recurring</button>
 						<button id="lessonLockBtn">Lesson</button>
 						<button id="deleteBtn">Delete</button>
 						<button id="contactBtn">Contact</button>
@@ -373,6 +376,39 @@
 				<textarea id="emailText"></textarea>
 				<button id="sendBtn" class="buttonSmallLong">Send</button>
 				<p id="emailErrMsg">&nbsp;</p>
+			</div>
+		</div>
+		
+		<div id="calendarModal" class="HigherModal"> <!--email module, its at a higher z-index than everyone-->
+			<div class="calendarModal-content">
+				<span id="calendarModalCloseBtn" class="close1">&times;</span>
+					<br><br>
+					<strong><p style="text-indent: 37px; margin: 0;font-size: 18px;">&nbsp;Online Dynamic Calendar Subscription Link:</p></strong>
+					
+					<p style="margin: 0; text-indent: 39px; display: inline-block;">&nbsp;</p><a href="javascript:copyTextNow();" id="CalLinkRoom">Loading...</a>
+					<em><p style="text-indent: 39px;" id="copyconfirm">&nbsp;</p></em>
+					<center><img src="../Images/previewExampleCal.png" width="90%"></center>
+					<br>
+					<strong><p style="font-size: 18px;">How Do You Subscribe to a Calendar?</p></strong>
+					<p align="justify">
+						Suscribing to your room and or personal booking calendar allows you to sync your room timeable and your personal bookings timetable automatically with your personal calendar application.<br><br>
+						
+						On the server side room/device Calendars are updated whenever someone opens up a room.
+						<br>On the server side personal Calendars are updated every 2 hours
+						
+						<br><br>It is recommended that in your personal calendar app, whether it be Apple Calendar, Google Calendar or Outlook Calendar, you set the auto update interval to <em>"every 5 minutes"</em> for room calendars and <em>"every hour"</em> for personal calendars.
+						
+						<br><br><strong><p style="text-indent: 44px;">Please refer to the images below on how to subscribe to a calendar:</p></strong>
+				    </p>
+					<em><p style="text-indent: 37px; margin: 5px;">Step 1: Navigate to your applications "subscription" option</p></em>
+					<center><img width="90%"  src="../Images/step 1.png"></center><br><br>
+					<em><p style="text-indent: 37px; margin: 5px;">Step 2: Copy paste the above URL inside</p></em>
+					<center><img width="90%"  src="../Images/step 2.png"></center><br><br>
+					<em><p style="text-indent: 37px; margin: 5px;">Step 3: Pick and choose your options. Below is the recommended options.</p></em>
+					<center><img width="90%"  src="../Images/step 3.png"></center>
+				
+					<input id="copytextele">
+					
 			</div>
 		</div>
 	</body>
@@ -540,6 +576,10 @@
 		  {
 			emailModal.style.display = "none";
 		  }
+		  else if (event.target == calendarModal)
+		  {
+			calendarModal.style.display = "none";
+		  }
 		}
 	</script>
 	<script>//Modal Code for recurring bookings
@@ -590,6 +630,61 @@
 		}
 	
 	//openEmailModal();
+	</script>
+	<script>
+		var calendarModal = document.getElementById("calendarModal");
+
+		// Get the <span> element that closes the modal
+		var closeCalModalBtn = document.getElementById("calendarModalCloseBtn");
+
+		// When the user clicks the button, open the modal
+		function openCalendarModal(resosid, resostype)
+		{
+			$("#copytextele").hide();
+			var resosT; 
+			if(resostype == "room")
+				resosT = "Room"
+			
+			copyText = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+resosid+"%20("+resosT+")/"+resosT).trim().replace(/ /g,"%20");
+				
+			document.getElementById("CalLinkRoom").innerHTML = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+resosid+"%20("+resosT+")/"+resosT).trim().replace(/ /g,"%20") + '&nbsp&nbsp<i class="fa fa-clone" aria-hidden="true"></i>';
+			calendarModal.style.display = "block";
+		}
+		function openCalendarModalPersonal(){
+			$("#copytextele").hide();
+			var email = userEmail
+			copyText = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20");
+			
+			
+			document.getElementById("CalLinkRoom").innerHTML = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20") + '&nbsp&nbsp<i class="fa fa-clone" aria-hidden="true"></i>';
+			
+			calendarModal.style.display = "block";
+			
+		}
+		function closeCalendarModal()
+		{
+			calendarModal.style.display = "none";
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		closeCalModalBtn.onclick = function()
+		{
+			calendarModal.style.display = "none";
+		}	
+		
+		function copyTextNow() {
+			$("#copytextele").show();
+			var copyTextEle = document.getElementById("copytextele");
+			$("#copytextele").val(copyText)
+			copyTextEle.select();
+			copyTextEle.setSelectionRange(0, 99999)
+		    /* Copy the text inside the text field */
+			document.execCommand("copy");
+			$("#copyconfirm").html("Link Copied" + '<i class="fa fa-check" aria-hidden="true"></i>')
+			window.setTimeout(function(){$("#copytextele").hide()}, 500);
+
+		  /* Alert the copied text */
+		}
 	</script>
 	<script>//complete signup Procedure
 		function completeSignUp()

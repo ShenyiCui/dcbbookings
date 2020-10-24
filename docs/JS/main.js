@@ -4344,8 +4344,8 @@ function generateCalendar(bookingSched, permaSched, min30, calendarName, type, o
 		console.log(type)
 		console.log(ownerEmail)*/
 		$.ajax({
-			//url: "https://calendar.avenseguim.info/createCalendar/dcbbookings/submitData",
-			url: "calendar.avenseguim.info:443/dcbbookings/api/createCalendar/submitData",
+			//url: "http://calendar.avenseguim.info/createCalendar/dcbbookings/submitData",
+			url: "http://calendar.avenseguim.info/dcbbookings/api/createCalendar/submitData",
 			type: "POST",
 			data: JSON.stringify({
 				"newSched": bookingSched,

@@ -1,0 +1,37 @@
+{
+	deviceID:
+	allDeviceArray:[
+		{
+			serial: "xxxx",
+			nickname: "xxxx"
+			model: ""
+			brand: ""
+		},
+		{
+			serial: "xxxx",
+			nickname: "xxxx"
+			model: ""
+			brand: ""
+		}
+	]
+	BookingSchedule:[
+		{
+			status: ["reserved"/"returned"/"pending"/"unbooked"/"locked"],
+			email: "xxx@email.com",
+			week: "Week1"/"Week2",
+			weekBeginningEnding:[
+						"Mon, 13 Jul 2020",
+						"Mon, 13 Jul 2020"
+					],
+			timeStamp: "2020/4/23 Thur 10:16 PM",
+			coordinates: [0,1],
+			description: ["TITLE","DESCRIPTION"] 
+		}
+	],
+	Description: "hello"
+	AccessRights: "TeacherStudent"
+	BookingRights "StudentValidation"
+	RoomAdmins:["emails"]
+	planAhead: "30"
+
+}

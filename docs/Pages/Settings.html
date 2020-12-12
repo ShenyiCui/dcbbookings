@@ -631,8 +631,21 @@
 		{
 			$("#adminSettings").hide();
 		}
-		checkIfTeacher();
-		loadInAccDetails();
+		individualData = null;
+		getUserInfo(userEmail);
+		validateIndiFetch();
+	}
+	function validateIndiFetch()
+	{
+		if(individualData!=null)
+		{
+			checkIfTeacher();
+			loadInAccDetails();
+		}
+		else
+		{
+			window.setTimeout(validateIndiFetch,1000)
+		}
 	}
 	function checkIfTeacher()//see if you are a teacher
 	{

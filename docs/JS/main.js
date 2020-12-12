@@ -835,8 +835,20 @@ function firstLoginCheck()//called as an initilizer in the main login page, Will
             }
             else // user exists, calling the check if exist feature to see if a resource as been deleted. Making sure user info is the most up to date
             {
-                checkIfResosExists();
-                validateCheckIfExistandDelete();
+	            getUserInfo(userEmail);
+	            validateIndiFetch();
+		        function validateIndiFetch()
+		        {
+			        if(individualData!=null)
+			        {
+				        checkIfResosExists();
+				        validateCheckIfExistandDelete();
+			        }
+			        else
+			        {
+				        window.setTimeout(validateIndiFetch,1000)
+			        }
+		        }
             }
         },
         error: function (data)
@@ -1497,10 +1509,10 @@ function readSimsUploadCSV() //read data and populate it in an giant linked list
 	{
 		var textFromFileLoaded = fileLoadedEvent.target.result;
 		var timetable_data = textFromFileLoaded.split(/\r?\n|\r/); // only need rows index 7 onwards, exclusive
-
-		//console.log("Width: "+timetable_data[0].length)
-		//console.log("Height: "+timetable_data.length)
-
+		//console.log(timetable_data)
+		console.log("Width: "+timetable_data[0].length)
+		console.log("Height: "+timetable_data.length)
+		//10 27
 		if(timetable_data[0].length == 10 && timetable_data.length == 27)
 		{
 			timetable_data.splice(22, 5); //deleting row 22, bus row, useless.
@@ -2160,6 +2172,7 @@ function generateRecentlyVisitedHTML(data)
 		allResosHTML = "<em>[Please Visit a Resource]</em>"
 	}
 	$("#SearchResultsAndRV").html(allResosHTML);
+	$("#SearchResultsAndRV").css("color","white");
 }
 
 function removeTimetableEventListeners() //used in viewRoom's document functions to for listening for user activity
@@ -5204,7 +5217,7 @@ function getMyResos()//gets user resos and populates it on the search feature in
 	$("#myResosList").html("<em>Processing Data...</em>")
 	var listOfMyResos = "";
 	var myResosArray = [];
-	individualData = null;
+	firstLoginCheck = null;
 	getUserInfo(userEmail);
 	validateIndiFetch();
 	function validateIndiFetch()
@@ -5348,7 +5361,9 @@ function resosSaveChanges()
 		temp = ["AccessRights",AccessRightsUserData];
 		changedVariables.push(temp)
 	}
-	if(!compareArray(PermaScheduleUserData,roomItemFromData.PermaSchedule))
+	console.log(PermaScheduleUserData)
+	console.log(roomItemFromData.PermaSchedule)
+	if(JSON.stringify(PermaScheduleUserData)!==JSON.stringify(roomItemFromData.PermaSchedule))
 	{
 		temp = ["PermaSchedule",PermaScheduleUserData];
 		changedVariables.push(temp)
@@ -7670,22 +7685,23 @@ function ActivtyScrollTo(dateBegining) //will take date input as integer YYYYMMD
 
 function loadInAccDetails()//will run when settings loads in to populate the front page. 
 {
-	$("#emailOfUserP").html("<strong>User Email:</strong> "+userEmail)
-	$("#accountStatusP").html("<strong>Account Status:</strong> "+individualData.Items[0].account)
-	$("#accountCredentialsP").html("<strong>Account Credentials:</strong> "+individualData.Items[0].rolez)
-	$("#superUserP").html("<strong>Super User:</strong> " + masterAdmin)
-	$("#noOfBMResosP").html("<strong>No. Of Bookmarked Resources:</strong> "+individualData.Items[0].bookmarkedResources.length)
-	$("#noOfCreatedResosP").html("<strong>No. Of Created Resources:</strong> "+individualData.Items[0].userControlledResources.length)
-	//console.log(individualData)
-	if(individualData.Items[0].credentialStatus == "pending")
-	{
-		$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus + " <em><br>[Wait for a Teacher or Master Admin to authenticate you]</em>")
+	if(individualData){
+		$("#emailOfUserP").html("<strong>User Email:</strong> "+userEmail)
+		$("#accountStatusP").html("<strong>Account Status:</strong> "+individualData.Items[0].account)
+		$("#accountCredentialsP").html("<strong>Account Credentials:</strong> "+individualData.Items[0].rolez)
+		$("#superUserP").html("<strong>Super User:</strong> " + masterAdmin)
+		$("#noOfBMResosP").html("<strong>No. Of Bookmarked Resources:</strong> "+individualData.Items[0].bookmarkedResources.length)
+		$("#noOfCreatedResosP").html("<strong>No. Of Created Resources:</strong> "+individualData.Items[0].userControlledResources.length)
+		//console.log(individualData)
+		if(individualData.Items[0].credentialStatus == "pending")
+		{
+			$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus + " <em><br>[Wait for a Teacher or Master Admin to authenticate you]</em>")
+		}
+		else
+		{
+			$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus)
+		}
 	}
-	else
-	{
-		$("#credStatus").html("<strong>Credential Status:</strong> " + individualData.Items[0].credentialStatus)
-	}
-	
 }
 
 function generateUserManagementTable()//generates user admin table and the functions that come with it

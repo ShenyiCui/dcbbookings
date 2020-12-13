@@ -1431,6 +1431,12 @@ viewPort_Content
   background-color: #eee;
 }
 
+.listOfItemsScroll
+{
+	height: 50px;
+	overflow-y: auto;
+}
+
 #backToMainPage .closebtn
 {
 	position: absolute;

@@ -646,19 +646,19 @@
 			if(resostype == "room")
 				resosT = "Room"
 			
-			copyText = ("http://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+resosid+"%20("+resosT+")/"+resosT).trim().replace(/ /g,"%20");
+			copyText = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+resosid+"%20("+resosT+")/"+resosT).trim().replace(/ /g,"%20");
 				
-			document.getElementById("CalLinkRoom").innerHTML = ("http://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+resosid+"%20("+resosT+")/"+resosT).trim().replace(/ /g,"%20") + '&nbsp&nbsp<i class="fa fa-clone" aria-hidden="true"></i>';
+			document.getElementById("CalLinkRoom").innerHTML = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+resosid+"%20("+resosT+")/"+resosT).trim().replace(/ /g,"%20") + '&nbsp&nbsp<i class="fa fa-clone" aria-hidden="true"></i>';
 			calendarModal.style.display = "block";
 		}
 		function openCalendarModalPersonal(){
 			$("#copyconfirm").html("&nbsp;")
 			$("#copytextele").hide();
 			var email = userEmail
-			copyText = ("http://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20");
+			copyText = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20");
 			
 			
-			document.getElementById("CalLinkRoom").innerHTML = ("http://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20") + '&nbsp&nbsp<i class="fa fa-clone" aria-hidden="true"></i>';
+			document.getElementById("CalLinkRoom").innerHTML = ("https://calendar.avenseguim.info/dcbbookings/api/calendarsubscription/"+email).trim().replace(/ /g,"%20") + '&nbsp&nbsp<i class="fa fa-clone" aria-hidden="true"></i>';
 			
 			calendarModal.style.display = "block";
 			

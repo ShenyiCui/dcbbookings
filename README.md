@@ -26,7 +26,8 @@ Quickbook functions as a quickway to book a period. Booking can be achieved from
 ```
 #### Book Recurring
 ```
-The same as Quickbook but a description must be provided along with the booking. The user will have the option to choose between booking this room every alternate week or every week.
+The same as Quickbook but a description must be provided along with the booking. 
+The user will have the option to choose between booking this room every alternate week or every week.
 ```
 #### Lock
 ```

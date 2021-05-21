@@ -1,6 +1,8 @@
 # DCB BOOKINGS User Documentation
 Welcome to the site! 
-It's purpose is to help the school better manage its many resources. 
+It's purpose is to help the school better manage its many resources.
+
+Visit the Design Process here: https://www.ivykang.com/uiux/dcb-bookings
 
 *The official DCB bookings site to manage school resources*
 *@Created by Ivy Kang [Art Prefect] & Shenyi Cui [MIT Prefect] DCB Class of 2019*

@@ -24,8 +24,8 @@ As a room admin you will see 4 options in the viewport when a period is selected
 ```
 Quickbook functions as a quickway to book a period. 
 Booking can be achieved from a single click of a button without the need to provide a description or reason for the booking. 
-However do note that depending on the booking rights set by the user - 
-  some students or even teachers may be required to get approval from the admin user before they're allowed to book the room.
+However do note that depending on the booking rights set by the user.
+As some students or even teachers may be required to get approval from the admin user before they're allowed to book the room.
 ```
 #### Book Recurring
 ```

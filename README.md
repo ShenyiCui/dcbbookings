@@ -22,8 +22,21 @@ note that only the super-admin will have the ability to edit resource settings.
 As a room admin you will see 4 options in the viewport when a period is selected.
 #### Quickbook
 ```
-
+Quickbook functions as a quickway to book a period. Booking can be achieved from a single click of a button without the need to provide a description or reason for the booking. However do note that depending on the booking rights set by the user, some students or even teachers may be required to get approval from the admin user before they're allowed to book the room.
 ```
-- Book Recurring
-- Lock
-- Lesson
+#### Book Recurring
+```
+The same as Quickbook but a description must be provided along with the booking. The user will have the option to choose between booking this room every alternate week or every week.
+```
+#### Lock
+```
+Lock is a room admin function used to lock a period to prevent it from being booked for any reason. 
+```
+#### Lock Recurring
+```
+Recurring Lock is the same as lock but it locks a particular period for every Week 1 or Week 2.
+```
+#### Lesson
+```
+Same function as Lock Recurring but instead it displays a particular period has been taken up by a lesson.
+```

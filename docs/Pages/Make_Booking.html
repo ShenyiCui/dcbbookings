@@ -1,5 +1,6 @@
 <!doctype html>
-<html> <!--Need to Clear users from userpool and dynamo DB everyyear to prevent memory overflow-->
+<html>
+	<!--Need to Clear users from userpool and dynamo DB every year to prevent memory overflow-->
 	<head>
 		<meta charset="UTF-8">
 		<title>DCB BOOKINGS</title>
@@ -311,7 +312,8 @@
 				<div id="timetableSettings" onclick=""><i class="fa fa-cog" aria-hidden="true"></i></div>
 			    
 				<div id="viewPort">
-					<div id="viewPort_Content"> <!--Viewport, where all the buttons and eca infomation shows-->
+					<!--Viewport, where all the buttons and eca information shows-->
+					<div id="viewPort_Content">
 						<div id="DivDescription">
 							<label id="Description"></label>
 						</div>
@@ -367,8 +369,9 @@
 				<p id="RBookErrMsg"><br></p>
 			</div>
 		</div>
-		
-		<div id="emailModal" class="HigherModal"> <!--email module, its at a higher z-index than everyone-->
+
+		<!--email module, its at a higher z-index than everyone-->
+		<div id="emailModal" class="HigherModal">
 			<div class="emailModal-content">
 				<span id="emailModalCloseBtn" class="close1">&times;</span>
 				<input disabled type="email" id="toEmail"><br>
@@ -378,8 +381,9 @@
 				<p id="emailErrMsg">&nbsp;</p>
 			</div>
 		</div>
-		
-		<div id="calendarModal" class="HigherModal"> <!--email module, its at a higher z-index than everyone-->
+
+		<!--email module, its at a higher z-index than everyone-->
+		<div id="calendarModal" class="HigherModal">
 			<div class="calendarModal-content">
 				<span id="calendarModalCloseBtn" class="close1">&times;</span>
 					<br><br>
@@ -413,7 +417,8 @@
 		</div>
 	</body>
 
-	<script>//initilizers
+	<!--initializers-->
+	<script>
 		$(function()//initializing datepicker
 		{
 			$(".datepicker").datepicker({
@@ -493,7 +498,9 @@
 			}
 		}
 	</script>
-	<script>//modal Code for starter modal
+
+	<!--modal Code for starter modal-->
+	<script>
 		var modal = document.getElementById("StarterModal");
 
 		// When the user clicks the button, open the modal
@@ -503,8 +510,9 @@
 		}
 		//modal.style.display = "none";
 	</script>
-	<script>//modal Code for adding Resource
-		//modal Code LoginSignup
+
+	<!--modal Code for adding Resource-->
+	<script>
 		var AddResosModal = document.getElementById("addResourceModal");
 
 		// Get the <span> element that closes the modal
@@ -538,9 +546,9 @@
 		}
 
 	</script>
-	<script>//modal code for timetables
-		//modal Code LoginSignup
 
+	<!--modal code for timetables-->
+	<script>
 		var timetableModal = document.getElementById("timeTableModal");
 
 		// Get the <span> element that closes the modal
@@ -582,7 +590,9 @@
 		  }
 		}
 	</script>
-	<script>//Modal Code for recurring bookings
+
+	<!--modal Code for recurring bookings-->
+	<script>
 		var recurringBookingModal = document.getElementById("BookRecurring");
 
 		// Get the <span> element that closes the modal
@@ -607,7 +617,9 @@
 		  recurringBookingModal.style.display = "none";
 		}
 	</script>
-	<script>//email modal code
+
+	<!--email modal code-->
+	<script>
 		var emailModal = document.getElementById("emailModal");
 
 		// Get the <span> element that closes the modal
@@ -631,6 +643,8 @@
 	
 	//openEmailModal();
 	</script>
+
+	<!--calendar modal code-->
 	<script>
 		var calendarModal = document.getElementById("calendarModal");
 
@@ -688,14 +702,18 @@
 		  /* Alert the copied text */
 		}
 	</script>
-	<script>//complete signup Procedure
+
+	<!--complete sign up procedure-->
+	<script>
 		function completeSignUp()
 		{
 			$("#starterPgErrMsg").html("Updating user information...")
 			createNewUserAddtoDB2(userEmail,$("#whoAreYouSelect").val());
 		}
 	</script>
-	<script> //custom select code
+
+	<!--custom select code-->
+	<script>
 		var x, i, j, selElmnt, a, b, c;
 		/* Look for any elements with the class "custom-select": */
 		x = document.getElementsByClassName("custom-select");
@@ -772,7 +790,9 @@
 		then close all select boxes: */
 		document.addEventListener("click", closeAllSelect);
 	</script>
-	<script>//add resos slideshow code
+
+	<!--add resos slideshow code-->
+	<script>
 		var AResosslideIndex = 1;
 		showAResosSlides(AResosslideIndex);
 		// Next/previous controls
@@ -807,7 +827,9 @@
 			addRoomClearAll();
 		}
 	</script>
-	<script>//Book recuring for start date and end date. It'll change random dates to week beginings
+
+	<!--Book recurring for start date and end date. It'll change random dates to week beginnings-->
+	<script>
 		function ChangeToWeekBegining_BR_SD()
 		{
 			$("#RBookErrMsg").html("");
@@ -873,8 +895,10 @@
 			}
 		}
 	</script>
+
+	<!--will show a help modal containing information on the Change Week Settings-->
 	<script>
-		function showHelpMessage(title, message)//will show a help modal containing information on the Change Week Settings
+		function showHelpMessage(title, message)
 		{
 			$.alert
 			({

@@ -12,9 +12,24 @@
 //write and figure out the 30 min upload code and table
 
 //you need to change how you store your data in each hidden span.
-
-
 //YOU NEED TO WORK OUT THE VIEWPORT FOR RECURRING BOOKINGS, THE STRUCTURe IS FUCKED
+
+/*
+https://ai18n4h2ec.execute-api.ap-southeast-1.amazonaws.com/Resos/resource/device
+API URL for Device ^^
+
+PATCH Description:
+	Patch - Get specific Device/Room
+	Request Body:
+		Key: String of the Database field you want to search
+		searchAttr: object you are searching for
+
+DELETE Description:
+	Delete - Delete specific Device/Room
+	Request Body:
+		DeviceID: Device ID you are Deleting
+		RoomID: Room ID you are Deleting
+*/
 
 
 function bubble_Sort2DArray(a,sortIndex)//bubble sort algorithm, used throughout to sort arrays.

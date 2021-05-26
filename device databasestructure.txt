@@ -24,8 +24,11 @@
 						"Mon, 13 Jul 2020"
 					],
 			timeStamp: "2020/4/23 Thur 10:16 PM",
-			coordinates: [0,1],
-			description: ["TITLE","DESCRIPTION"] 
+			coordinates: {
+				start:[0,1]
+				end:[0,5]
+			},
+			description: ["TITLE","DESCRIPTION"],
 		}
 	],
 	Description: "hello"
@@ -33,5 +36,4 @@
 	BookingRights "StudentValidation"
 	RoomAdmins:["emails"]
 	planAhead: "30"
-
 }

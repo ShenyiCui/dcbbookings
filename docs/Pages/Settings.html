@@ -529,7 +529,8 @@
 
 </body>
 
-<script>//initilizers
+<!--Initializers-->
+<script>
 	FunnyloadingTxt("loaderTxt",true,2000);
 	$( function()//initializing datepicker
 	{
@@ -655,7 +656,9 @@
 		}
 	}
 </script>
-<script>//Resos Settings SLide Code
+
+<!--Resos Settings Slide Code-->
+<script>
 	settingsSlideIndex = 1;
 	showSettingsSlides(settingsSlideIndex);
 	// Next/previous controls
@@ -683,7 +686,9 @@
 	}
 
 </script>
-<script>//resos settings modal code
+
+<!--Resos settings modal code-->
+<script>
 	var resosSettingsModal = document.getElementById("resosSettingsModal");
 
 	// Get the <span> element that closes the modal
@@ -718,8 +723,10 @@
 		}
 	}
 </script>
+
+<!--will show a help modal containing information on the Change Week Settings-->
 <script>
-	function showHelpMessageCW()//will show a help modal containing information on the Change Week Settings
+	function showHelpMessageCW()
 	{
 		$.alert
 		({
@@ -736,7 +743,9 @@
 		});
 	}
 </script>
-<script>//email modal code
+
+<!--email modal code-->
+<script>
 	var emailModal = document.getElementById("emailModalz");
 
 	// Get the <span> element that closes the modal
@@ -760,7 +769,9 @@
 	
 	//openEmailModal();
 </script>
-<script>//custom select element code
+
+<!--custom select element code-->
+<script>
 	var x, i, j, selElmnt, a, b, c;
 	/* Look for any elements with the class "custom-select": */
 	x = document.getElementsByClassName("custom-select");
@@ -836,4 +847,5 @@
 	then close all select boxes: */
 	document.addEventListener("click", closeAllSelect);
 </script>
+
 </html>

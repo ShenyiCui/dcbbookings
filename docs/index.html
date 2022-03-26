@@ -481,7 +481,7 @@
     //Sign Up Logic Start -->
     function validifyPasswordEmailSignUp() {
       //first signup slide validification
-      if ($("#SignUpEmail").val().indexOf("@dulwich.org") < 0) {
+      if ($("#SignUpEmail").val().indexOf("dulwich.org") < 0) {
         // does it contain the dulwich email
         $("#SignupErrMsg1").css("color", "red");
         $("#SignupErrMsg1").html("You must use a school email");
@@ -517,9 +517,9 @@
 
     //forget Pass logic start -->
     function verifyNextForgetPass(email) {
-      if (email.indexOf("@dulwich.org") < 0) {
+      if (email.indexOf("dulwich.org") < 0) {
         $("#ForgotPassErrMsg1").css("color", "red");
-        $("#ForgotPassErrMsg1").html("Your email must contain '@dulwich.org'");
+        $("#ForgotPassErrMsg1").html("Your email must contain 'dulwich.org'");
       } else {
         $("#ForgotPassErrMsg2").css("color", "black");
         $("#ForgotPassErrMsg2").html("Verifying Email...");
